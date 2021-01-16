@@ -1,0 +1,48 @@
+{
+  "name": "marcocesarato/php-conventional-changelog",
+  "description": "Generate changelogs and release notes from a project's commit messages and metadata using php composer.",
+  "type": "library",
+  "license": "GPL-3.0-or-later",
+  "minimum-stability": "stable",
+  "bin": [
+    "conventional-changelog"
+  ],
+  "keywords": [
+    "conventional-changelog",
+    "readme",
+    "generation",
+    "git",
+    "php",
+    "conventional-commit",
+    "conventional-commits",
+    "conventionalcommits",
+    "changelog",
+    "history",
+    "tag",
+    "commit",
+    "commits",
+    "conventional",
+    "convention",
+    "conventional-changelog-preset"
+  ],
+  "authors": [
+    {
+      "name": "Marco Cesarato",
+      "email": "cesarato.developer@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "ConventionalChangelog\\": "src/"
+    }
+  },
+  "scripts": {
+    "fix-cs": "vendor/bin/php-cs-fixer fix --config=.php_cs"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.17"
+  },
+  "require": {
+    "php": ">=5.5"
+  }
+}
