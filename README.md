@@ -1,6 +1,6 @@
 # PHP Conventional Changelog
 
-![Version](https://img.shields.io/badge/version-1.0.2-brightgreen?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-1.1.0-brightgreen?style=for-the-badge)
 ![Requirements](https://img.shields.io/badge/php-%3E%3D%205.5-4F5D95?style=for-the-badge)
 ![Code Style](https://img.shields.io/badge/code%20style-PSR-blue?style=for-the-badge)
 ![License](https://img.shields.io/github/license/marcocesarato/php-conventional-changelog?style=for-the-badge)
@@ -37,23 +37,30 @@ Now you can just run `composer changelog` to generate your changelog.
 
 ## 💻 Usage
 
-> **PS:** all following commands must be run (working dir) on the root of the project or in the path where the changelog should be generated
+> **Note:** all following commands must be run (working dir) on the root of the project or in the path where the changelog should be generated
 
 The changelog generator will generate a log of changes from the date of the last tag *(if not specified with `--from-date`)* to the current date *(if not specified with `--to-date`)*,
 and it will put all commit logs in the latest version just created (at the moment it doesn't generate the entire git commit version release history).
 By default, will be added one to the patch semver part *(Example, if the last version is `1.0.2` the newer, if not specified the identity of the release, will be `1.0.3`)*.
 
-- Generate a changelog without committing files:
+- To generate your changelog for your first release run:
+  
+  > **Note:** If the version code (`--ver`) isn't specified it will be automatically `1.0.0`
+
+  `php vendor/bin/conventional-changelog --first-release`
+
+
+- To generate a changelog without committing files:
   
     `php vendor/bin/conventional-changelog`
 
 
-- Generate a changelog with auto commit and auto version tagging:
+- To generate a changelog with auto commit and auto version tagging:
 
     `php vendor/bin/conventional-changelog --commit`
 
 
-- Generate a changelog from a specified date to another specified date:
+- To generate a changelog from a specified date to another specified date:
 
     `php vendor/bin/conventional-changelog --from-date="2020-12-01" --to-date="2021-01-01"`
 
@@ -62,12 +69,12 @@ By default, will be added one to the patch semver part *(Example, if the last ve
 > You can have more info about running  `php vendor/bin/conventional-changelog --help`
 
 ```
--c      --commit        bool        Commit the new release once changelog is generated
--f      --from-date     str         Get commits from specified date [YYYY-MM-DD]
--h      --help          bool        Show the helper with all commands available
--m      --major         bool        Major release (important changes)
--n      --minor         bool        Minor release (add functionality)
--p      --patch         bool        Patch release (bug fixes) [default]
--t      --to-date       str         Get commits from last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
--v      --version       str         Specify next release version code (Semver)
+-c      --commit          bool        Commit the new release once changelog is generated
+-p      --patch           bool        Patch release (bug fixes) [default]
+-min    --minor           bool        Minor release (add functionality)
+-maj    --major           bool        Major release (important changes)
+        --first-release   bool        Run at first release (if --ver isn\'t specified version code will be 1.0.0)
+        --to-date         str         Get commits from last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
+        --from-date       str         Get commits from specified date [YYYY-MM-DD]
+        --ver             str         Define the next release version code (semver)
 ```
