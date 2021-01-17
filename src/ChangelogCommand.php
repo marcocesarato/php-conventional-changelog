@@ -93,27 +93,18 @@ class ChangelogCommand extends Command
 
         // Current Dates
         $today = new DateTime();
-        $todayString = $this->getDateString($today);
+        $todayString = Utils::getDateString($today);
 
         // First commit
-        $firstCommit = shell_exec('git rev-list --max-parents=0 HEAD');
-        $firstCommit = $this->clean($firstCommit);
+        $firstCommit = Git::getFirstCommit();
 
         if (!$firstRelease) {
-            // Last version
-            $lastVersion = shell_exec('git describe --tags --abbrev=0');
-            $lastVersion = $this->clean($lastVersion);
-
-            // Last version commit
-            $lastVersionCommit = shell_exec("git rev-parse --verify {$lastVersion}");
-            $lastVersionCommit = $this->clean($lastVersionCommit);
-
-            // Last version date
-            $lastVersionDate = shell_exec("git log -1 --format=%ai {$lastVersion}");
-            $lastVersionDate = $this->clean($lastVersionDate);
+            $lastVersion = Git::getLastTag(); // Last version
+            $lastVersionCommit = Git::getLastTagCommit(); // Last version commit
+            $lastVersionDate = Git::getCommitDate($lastVersionCommit); // Last version date
 
             // Generate new version code
-            $newVersion = $this->increaseSemVer($lastVersion, $majorRelease, $minorRelease, $patchRelease);
+            $newVersion = Utils::bumpVersion($lastVersion, $majorRelease, $minorRelease, $patchRelease);
         }
 
         $nextVersion = $input->getOption('ver');
@@ -127,10 +118,7 @@ class ChangelogCommand extends Command
         }
 
         // Remote url
-        $url = shell_exec('git config --get remote.origin.url');
-        $url = $this->clean($url);
-        $url = preg_replace("/\.git$/", '', $url);
-        $url = preg_replace('/^(https?:\/\/)([0-9a-z.\-_:%]+@)/i', '$1', $url);
+        $url = Git::getRemoteUrl();
 
         if ($firstRelease) {
             // Get all commits from the first one
@@ -151,12 +139,11 @@ class ChangelogCommand extends Command
                 $time = strtotime($toDate);
                 $additionalParams .= ' --before="' . date('Y-m-d', $time) . '"';
                 $today->setTimestamp($time);
-                $todayString = $this->getDateString($today);
+                $todayString = Utils::getDateString($today);
             }
         }
 
-        $gitLog = shell_exec("git log --format=%B%H----DELIMITER---- {$additionalParams}");
-        $commitsRaw = explode("----DELIMITER----\n", $gitLog);
+        $commitsRaw = Git::getCommits($additionalParams);
 
         // Get all commits information
         $commits = [];
@@ -164,8 +151,8 @@ class ChangelogCommand extends Command
             $rows = explode("\n", $commit);
             $count = count($rows);
             // Commit info
-            $head = $this->clean($rows[0]);
-            $sha = $this->clean($rows[$count - 1]);
+            $head = Utils::clean($rows[0]);
+            $sha = Utils::clean($rows[$count - 1]);
             $message = '';
             // Get message
             for ($i = 0; $i < $count; $i++) {
@@ -187,7 +174,7 @@ class ChangelogCommand extends Command
                 $commits[] = [
                     'sha' => $sha,
                     'head' => $head,
-                    'message' => $this->clean($message),
+                    'message' => Utils::clean($message),
                 ];
             }
         }
@@ -201,7 +188,7 @@ class ChangelogCommand extends Command
         // Group all changes to lists by type
         foreach ($commits as $commit) {
             foreach (self::$types as $key => $type) {
-                $head = $this->clean($commit['head']);
+                $head = Utils::clean($commit['head']);
                 $code = preg_quote($type['code'], '/');
                 if (preg_match('/^' . $code . '(\(.*?\))?[:]?\\s/i', $head)) {
                     $parse = $this->parseCommitHead($head, $type['code']);
@@ -314,121 +301,29 @@ class ChangelogCommand extends Command
     {
         $parse = [
             'context' => null,
-            'description' => $this->clean($head),
+            'description' => Utils::clean($head),
         ];
 
         $descriptionType = preg_quote(substr($parse['description'], 0, strlen($type)), '/');
         $parse['description'] = preg_replace('/^' . $descriptionType . '[:]?\s*/i', '', $parse['description']);
-        $parse['description'] = preg_replace('/^\((.*?)\)[!]?[:]?\s*/', '**$1**: ', $this->clean($parse['description']));
+        $parse['description'] = preg_replace('/^\((.*?)\)[!]?[:]?\s*/', '**$1**: ', Utils::clean($parse['description']));
         $parse['description'] = preg_replace('/\s+/m', ' ', $parse['description']);
 
         // Set context
         if (preg_match("/^\*\*(.*?)\*\*:(.*?)$/", $parse['description'], $match)) {
-            $parse['context'] = $this->clean($match[1]);
-            $parse['description'] = $this->clean($match[2]);
+            $parse['context'] = Utils::clean($match[1]);
+            $parse['description'] = Utils::clean($match[2]);
 
             // Unify context labels
             $parse['context'] = preg_replace('/[_]+/m', ' ', $parse['context']);
             $parse['context'] = ucfirst($parse['context']);
             $parse['context'] = preg_replace('/((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))/u', ' $0', $parse['context']);
             $parse['context'] = preg_replace('/\.(php|md|json|txt|csv)($|\s)/', '', $parse['context']);
-            $parse['context'] = $this->clean($parse['context']);
+            $parse['context'] = Utils::clean($parse['context']);
         }
 
         $parse['description'] = ucfirst($parse['description']);
 
         return $parse;
-    }
-
-    /**
-     * Clean string removing double spaces and trim.
-     *
-     * @param $string
-     *
-     * @return string
-     */
-    protected function clean($string)
-    {
-        $string = trim($string);
-
-        return preg_replace('/\s+/m', ' ', $string);
-    }
-
-    /**
-     *  Get today date string formatted.
-     *
-     * @param DateTime $today
-     *
-     * @return string
-     */
-    protected function getDateString($date)
-    {
-        $months = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'Semptember',
-            'October',
-            'Novembrer',
-            'December',
-        ];
-        $day = date('j', $date->getTimestamp());
-        $month = date('n', $date->getTimestamp());
-        $monthName = $months[$month - 1];
-        $year = date('Y', $date->getTimestamp());
-
-        return $day . ' ' . $monthName . ' ' . $year;
-    }
-
-    /**
-     * Increase SemVer.
-     *
-     * @param $version
-     * @param false $major
-     * @param false $minor
-     * @param bool $patch
-     *
-     * @return string
-     */
-    protected function increaseSemVer($version, $major = false, $minor = false, $patch = false)
-    {
-        $newVersion = [0, 0, 0];
-        $increaseKeys = [];
-
-        $version = preg_replace('#^v#i', '', $version);
-
-        // Generate new version code
-        $parts = explode('.', $version);
-
-        foreach ($parts as $key => $value) {
-            $newVersion[$key] = (int)$value;
-        }
-
-        // Increase major
-        if ($major) {
-            $increaseKeys[] = 0;
-        }
-
-        // Increase minor
-        if ($minor) {
-            $increaseKeys[] = 1;
-        }
-
-        // Increase patch
-        if ($patch || (!$major && !$minor && !$patch)) {
-            $increaseKeys[] = 2;
-        }
-
-        foreach ($increaseKeys as $key) {
-            $newVersion[$key]++;
-        }
-
-        // Recompose semver
-        return implode('.', $newVersion);
     }
 }
