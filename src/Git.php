@@ -121,7 +121,7 @@ class Git
             system("git add \"{$file}\"");
         }
         $message = str_replace('"', "'", $message); // Escape
-        system("git commit -m \"chore(release): {$message}\"");
+        system("git commit -m \"{$message}\"");
     }
 
     /**
