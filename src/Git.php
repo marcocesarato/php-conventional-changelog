@@ -108,4 +108,25 @@ class Git
 
         return $tagsArray;
     }
+
+    /**
+     * Commit.
+     *
+     * @param $message
+     */
+    public static function commit($message)
+    {
+        $message = str_replace('"', "'", $message); // Escape
+        system("git commit -m \"chore(release): {$message}\"");
+    }
+
+    /**
+     * Tag.
+     *
+     * @param $name
+     */
+    public static function tag($name)
+    {
+        system("git tag {$name}");
+    }
 }

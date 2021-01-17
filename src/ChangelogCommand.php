@@ -273,8 +273,9 @@ class ChangelogCommand extends Command
 
         // Create commit and add tag
         if ($autoCommit) {
-            system("git commit -m \"chore(release): {$newVersion}\"");
-            system("git tag v{$newVersion}");
+            Git::commit("chore(release): {$newVersion}");
+            Git::tag('v' . $newVersion);
+
             $output->success("Committed new version with tag: v{$newVersion}");
         }
 
