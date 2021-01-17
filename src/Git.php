@@ -117,12 +117,11 @@ class Git
      */
     public static function commit($message, $files = [])
     {
-        $message = str_replace('"', "'", $message); // Escape
-        $command = "git commit -m \"chore(release): {$message}\"";
-        if (empty($files)) {
-            $command .= ' -- ' . implode(' ', $files);
+        foreach ($files as $file) {
+            system("git add \"{$file}\"");
         }
-        system($command);
+        $message = str_replace('"', "'", $message); // Escape
+        system("git commit -m \"chore(release): {$message}\"");
     }
 
     /**
