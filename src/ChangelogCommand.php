@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ChangelogCommand extends Command
 {
@@ -67,7 +68,7 @@ class ChangelogCommand extends Command
                 new InputOption('major', 'maj', InputOption::VALUE_NONE, 'Major release (important changes)'),
                 new InputOption('minor', 'min', InputOption::VALUE_NONE, 'Minor release (add functionality)'),
                 new InputOption('patch', 'p', InputOption::VALUE_NONE, 'Patch release (bug fixes) [default]'),
-                new InputOption('next', null, InputOption::VALUE_REQUIRED, 'Define the next release version code (semver)'),
+                new InputOption('ver', null, InputOption::VALUE_REQUIRED, 'Define the next release version code (semver)'),
             ]);
     }
 
@@ -107,7 +108,7 @@ class ChangelogCommand extends Command
         // Generate new version code
         $newVersion = $this->increaseSemVer($lastVersion, $majorRelease, $minorRelease, $patchRelease);
 
-        $nextVersion = $input->getOption('next');
+        $nextVersion = $input->getOption('ver');
         if (!empty($nextVersion)) {
             $newVersion = $nextVersion;
         }
@@ -221,16 +222,20 @@ class ChangelogCommand extends Command
         // Add all changes list to new changelog
         $changelogNew .= $this->getMarkdownChanges($changes);
 
+        $io = new SymfonyStyle($input, $output);
+
         // Save new changelog prepending the current one
         file_put_contents($file, self::$header . "{$changelogNew}{$changelogCurrent}");
+        $io->success("Changelog generated to: {$file}");
 
         // Create commit and add tag
         if ($autoCommit) {
             system("git commit -m \"chore(release): {$newVersion}\"");
             system("git tag v{$newVersion}");
+            $output->success("Committed new version with tag: v{$newVersion}");
         }
 
-        return 1;
+        return Command::SUCCESS;
     }
 
     /**
