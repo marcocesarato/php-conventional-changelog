@@ -155,8 +155,7 @@ class ChangelogCommand extends Command
             $sha = Utils::clean($rows[$count - 1]);
             $message = '';
             // Get message
-            for ($i = 0; $i < $count; $i++) {
-                $row = $rows[$i];
+            foreach ($rows as $i => $row) {
                 if ($i !== 0 && $i !== $count - 1) {
                     $message .= $row . "\n";
                 }
@@ -192,13 +191,13 @@ class ChangelogCommand extends Command
                 $code = preg_quote($type['code'], '/');
                 if (preg_match('/^' . $code . '(\(.*?\))?[:]?\\s/i', $head)) {
                     $parse = $this->parseCommitHead($head, $type['code']);
-                    $context = $parse['context'];
+                    $scope = $parse['scope'];
                     $description = $parse['description'];
                     $sha = $commit['sha'];
                     $short = substr($sha, 0, 6);
                     // List item
                     $itemKey = strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '', $description));
-                    $changes[$key][$context][$itemKey][$sha] = [
+                    $changes[$key][$scope][$itemKey][$sha] = [
                         'description' => $description,
                         'short' => $short,
                         'url' => $url,
@@ -260,11 +259,11 @@ class ChangelogCommand extends Command
             }
             ksort($list);
             $changelog .= PHP_EOL . '### ' . self::$types[$type]['label'] . "\n\n";
-            foreach ($list as $context => $items) {
+            foreach ($list as $scope => $items) {
                 asort($items);
-                if (is_string($context) && !empty($context)) {
-                    // Context section
-                    $changelog .= PHP_EOL . "##### {$context}" . "\n\n";
+                if (is_string($scope) && !empty($scope)) {
+                    // scope section
+                    $changelog .= PHP_EOL . "##### {$scope}" . "\n\n";
                 }
                 foreach ($items as $itemsList) {
                     $description = '';
@@ -300,7 +299,7 @@ class ChangelogCommand extends Command
     protected function parseCommitHead($head, $type)
     {
         $parse = [
-            'context' => null,
+            'scope' => null,
             'description' => Utils::clean($head),
         ];
 
@@ -309,17 +308,17 @@ class ChangelogCommand extends Command
         $parse['description'] = preg_replace('/^\((.*?)\)[!]?[:]?\s*/', '**$1**: ', Utils::clean($parse['description']));
         $parse['description'] = preg_replace('/\s+/m', ' ', $parse['description']);
 
-        // Set context
+        // Set scope
         if (preg_match("/^\*\*(.*?)\*\*:(.*?)$/", $parse['description'], $match)) {
-            $parse['context'] = Utils::clean($match[1]);
+            $parse['scope'] = Utils::clean($match[1]);
             $parse['description'] = Utils::clean($match[2]);
 
-            // Unify context labels
-            $parse['context'] = preg_replace('/[_]+/m', ' ', $parse['context']);
-            $parse['context'] = ucfirst($parse['context']);
-            $parse['context'] = preg_replace('/((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))/u', ' $0', $parse['context']);
-            $parse['context'] = preg_replace('/\.(php|md|json|txt|csv)($|\s)/', '', $parse['context']);
-            $parse['context'] = Utils::clean($parse['context']);
+            // Unify scope labels
+            $parse['scope'] = preg_replace('/[_]+/m', ' ', $parse['scope']);
+            $parse['scope'] = ucfirst($parse['scope']);
+            $parse['scope'] = preg_replace('/((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))/u', ' $0', $parse['scope']);
+            $parse['scope'] = preg_replace('/\.(php|md|json|txt|csv|js)($|\s)/', '', $parse['scope']);
+            $parse['scope'] = Utils::clean($parse['scope']);
         }
 
         $parse['description'] = ucfirst($parse['description']);
