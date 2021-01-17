@@ -25,7 +25,7 @@ $command = new ChangelogCommand();
 $commandName = $command->getName();
 
 // Run application single command
-$application = new Application('conventional-changelog', '1.1.0');
+$application = new Application('conventional-changelog', '1.2.0');
 $application->add($command);
 $application->setDefaultCommand($commandName, true);
 $application->run();
