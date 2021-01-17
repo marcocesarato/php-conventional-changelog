@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+
+use ConventionalChangelog\Generator;
+
+// Inclusions
+$files = [
+    __DIR__ . '/../../autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/vendor/autoload.php',
+    __DIR__ .'/src/Generator.php', // (dev)
+];
+foreach ($files as $file) {
+    if (file_exists($file)) {
+        require_once $file;
+        break;
+    }
+}
+
+// Report only fatal errors
+error_reporting(2039);
+
+// Run generator
+$app = new Generator();
+$app->run();
