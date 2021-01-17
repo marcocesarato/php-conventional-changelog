@@ -14,9 +14,9 @@ You can install it easily with composer
 
 `composer require --dev marcocesarato/php-conventional-changelog`
 
-#### Composer script *(Optional)*
+#### Scripts *(Optional)*
 
-For easy use you can add to your `composer.json` the scripts:
+For easy use the changelog generator or release faster your new version you can add to your `composer.json` the scripts:
 
 > You can customize it according to your needs
 
@@ -24,10 +24,10 @@ For easy use you can add to your `composer.json` the scripts:
 {
   ...
   "scripts": {
-    "changelog": "php vendor/bin/conventional-changelog",
-    "release": "php vendor/bin/conventional-changelog --commit",
-    "release:minor": "php vendor/bin/conventional-changelog --minor --commit",
-    "release:major": "php vendor/bin/conventional-changelog --major --commit"
+    "changelog": "conventional-changelog",
+    "release": "conventional-changelog --commit",
+    "release:minor": "conventional-changelog --minor --commit",
+    "release:major": "conventional-changelog --major --commit"
   },
   ...
 }
