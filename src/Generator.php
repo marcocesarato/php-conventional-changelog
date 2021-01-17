@@ -6,6 +6,38 @@ use DateTime;
 
 class Generator
 {
+    /**
+     * Changelog filename.
+     * @var string 
+     */
+    public static $fileName = 'CHANGELOG.md';
+
+    /**
+     * Types allowed on changelog and labels (preserve the order).
+     * @var string[][] 
+     */
+    public static $types = [
+        'feat' => ['code' => 'feat', 'label' => 'Features'],
+        'fix' => ['code' => 'fix', 'label' => 'Fixes'],
+        'perf' => ['code' => 'perf', 'label' => 'Performance Features'],
+        'refactor' => ['code' => 'refactor', 'label' => 'Refactoring'],
+        'docs' => ['code' => 'docs', 'label' => 'Docs'],
+        'chore' => ['code' => 'chore', 'label' => 'Chores'],
+    ];
+
+    /**
+     * Changelog pattern.
+     * @var string
+     */
+    public static $header = "# Changelog\nAll notable changes to this project will be documented in this file.\n\n\n";
+
+    /**
+     * Ignore message commit patterns.
+     * @var string[]
+     */
+    public static $ignorePatterns = [
+        '/^chore\(release\):/i'
+    ];
 
     /**
      * Run generation.
@@ -13,31 +45,6 @@ class Generator
     public function run()
     {
         $root = getcwd(); // Root
-        $changelogFilename = 'CHANGELOG.md'; // Changelog filename
-
-        // Types allowed on changelog and labels (preserve the order)
-        $types = ['feat' => ['code' => 'feat', 'label' => 'Features'],
-            'fix' => ['code' => 'fix', 'label' => 'Fixes'],
-            'perf' => ['code' => 'perf', 'label' => 'Performance Features'],
-            'refactor' => ['code' => 'refactor', 'label' => 'Refactoring'],
-            'docs' => ['code' => 'docs', 'label' => 'Docs'],
-            'chore' => ['code' => 'chore', 'label' => 'Chores'],];
-
-        // Definitions
-        define('PHP_EOL2', PHP_EOL . PHP_EOL);
-        $DS = DIRECTORY_SEPARATOR;
-
-        // Changelog header
-        // PS: When change it remember to also remove it from the changelog file before running it
-        $changelogHeader = <<<EOL
-# Changelog
-All notable changes to this project will be documented in this file.
-EOL;
-
-        $changelogHeader .= PHP_EOL2;
-
-        // Ignore message commit patterns
-        $ignorePatterns = ['/^chore\(release\):/i', '/^chore\(changelog\):/i',];
 
         // Arguments
         $helper = <<<EOL
@@ -131,7 +138,7 @@ EOL;
             }
             // Check ignored commit
             $ignore = false;
-            foreach ($ignorePatterns as $pattern) {
+            foreach (self::$ignorePatterns as $pattern) {
                 if (preg_match($pattern, $head)) {
                     $ignore = true;
                     break;
@@ -149,13 +156,13 @@ EOL;
 
         // Changes groups
         $changes = [];
-        foreach ($types as $key => $type) {
+        foreach (self::$types as $key => $type) {
             $changes[$key] = [];
         }
 
         // Group all changes to lists by type
         foreach ($commits as $commit) {
-            foreach ($types as $key => $type) {
+            foreach (self::$types as $key => $type) {
                 $head = $this->clean($commit['head']);
                 $code = preg_quote($type['code'], '/');
                 if (preg_match('/^' . $code . '(\(.*?\))?[:]?\\s/i', $head)) {
@@ -177,7 +184,7 @@ EOL;
         }
 
         // File
-        $file = "{$root}{$DS}{$changelogFilename}";
+        $file = $root.DIRECTORY_SEPARATOR.self::$fileName;
 
         // Initialize changelogs
         $changelogCurrent = '';
@@ -185,7 +192,7 @@ EOL;
 
         // Get changelogs content
         if (file_exists($file)) {
-            $header = ltrim($changelogHeader);
+            $header = ltrim(self::$header);
             $header = preg_quote($header, '/');
             $changelogCurrent = file_get_contents($file);
             $changelogCurrent = ltrim($changelogCurrent);
@@ -196,7 +203,7 @@ EOL;
         $changelogNew .= $this->getMarkdownChanges($changes);
 
         // Save new changelog prepending the current one
-        file_put_contents($file, "{$changelogHeader}{$changelogNew}{$changelogCurrent}");
+        file_put_contents($file, self::$header."{$changelogNew}{$changelogCurrent}");
 
         // Create commit and add tag
         if ($autoCommit) {
@@ -214,7 +221,6 @@ EOL;
      */
     function getMarkdownChanges($changes)
     {
-        global $types;
         $changelog = '';
         // Add all changes list to new changelog
         foreach ($changes as $type => $list) {
@@ -222,12 +228,12 @@ EOL;
                 continue;
             }
             ksort($list);
-            $changelog .= PHP_EOL . "### {$types[$type]['label']}" . PHP_EOL2;
+            $changelog .= PHP_EOL . "### ".self::$types[$type]['label'] . "\n\n";
             foreach ($list as $context => $items) {
                 asort($items);
                 if (is_string($context) && !empty($context)) {
                     // Context section
-                    $changelog .= PHP_EOL . "##### {$context}" . PHP_EOL2;
+                    $changelog .= PHP_EOL . "##### {$context}" . "\n\n";
                 }
                 foreach ($items as $itemsList) {
                     $description = '';
@@ -247,7 +253,7 @@ EOL;
             }
         }
         // Add version separator
-        $changelog .= PHP_EOL . '---' . PHP_EOL2;
+        $changelog .= PHP_EOL . '---' . "\n\n";
 
         return $changelog;
     }
@@ -305,7 +311,7 @@ EOL;
     }
 
     /**
-     *  Get today date string with italian format.
+     *  Get today date string formatted.
      *
      * @param DateTime $today
      *
