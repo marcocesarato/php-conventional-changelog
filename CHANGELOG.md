@@ -1,6 +1,8 @@
+<!--- BEGIN HEADER -->
 # Changelog
-All notable changes to this project will be documented in this file.
 
+All notable changes to this project will be documented in this file.
+<!--- END HEADER -->
 
 ## [1.2.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.1.0...v1.2.0) (2021-01-17)
 
