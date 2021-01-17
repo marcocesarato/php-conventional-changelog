@@ -219,7 +219,7 @@ EOL;
      *
      * @return string
      */
-    function getMarkdownChanges($changes)
+    protected function getMarkdownChanges($changes)
     {
         $changelog = '';
         // Add all changes list to new changelog
@@ -266,7 +266,7 @@ EOL;
      *
      * @return array
      */
-    function parseCommitHead($head, $type)
+    protected function parseCommitHead($head, $type)
     {
         $parse = [
             'context' => null,
