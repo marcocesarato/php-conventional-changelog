@@ -1,6 +1,6 @@
 {
   "name": "marcocesarato/php-conventional-changelog",
-  "description": "Generate changelogs and release notes from a project's commit messages and metadata using php composer.",
+  "description": "Generate changelogs and release notes from a project's commit messages and metadata and automate versioning with semver.org and conventionalcommits.org",
   "type": "library",
   "license": "GPL-3.0-or-later",
   "minimum-stability": "stable",
@@ -39,7 +39,7 @@
   "scripts": {
     "fix-cs": "sh bin/fix-cs",
     "fix-cs-all": "sh bin/fix-cs-all",
-    "check-cs": "php bin/run vendor/bin/php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php_cs"
+    "check-cs": "php vendor/bin/php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php_cs"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.17"
