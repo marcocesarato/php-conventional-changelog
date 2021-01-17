@@ -70,7 +70,7 @@ class ChangelogCommand extends Command
                 new InputOption('minor', 'min', InputOption::VALUE_NONE, 'Minor release (add functionality)'),
                 new InputOption('patch', 'p', InputOption::VALUE_NONE, 'Patch release (bug fixes) [default]'),
                 new InputOption('ver', null, InputOption::VALUE_REQUIRED, 'Define the next release version code (semver)'),
-                new InputOption('history', null, InputOption::VALUE_NONE, 'Generate all releases changes history'),
+                new InputOption('history', null, InputOption::VALUE_NONE, 'Generate the entire history of changes of all releases'),
             ]);
     }
 
