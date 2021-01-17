@@ -7,8 +7,7 @@ use ConventionalChangelog\Generator;
 $files = [
     __DIR__ . '/../../autoload.php',
     __DIR__ . '/../vendor/autoload.php',
-    __DIR__ . '/vendor/autoload.php',
-    __DIR__ .'/src/Generator.php', // (dev)
+    __DIR__ . '/vendor/autoload.php'
 ];
 foreach ($files as $file) {
     if (file_exists($file)) {
@@ -16,6 +15,13 @@ foreach ($files as $file) {
         break;
     }
 }
+
+// Dev autoload
+spl_autoload_register(function ($name) {
+    $file = str_replace('\\', '', $name) . '.php';
+    $file = str_replace(['ConventionalChangelog\\', '/'], DIRECTORY_SEPARATOR, $file);
+    require_once $file;
+});
 
 // Report only fatal errors
 error_reporting(2039);
