@@ -1,5 +1,10 @@
 # PHP Conventional Changelog
 
+![Requirements](https://img.shields.io/badge/php-%3E%3D%205.5-4F5D95?style=for-the-badge)
+![Code Style](https://img.shields.io/badge/code%20style-PSR-blue?style=for-the-badge)
+![License](https://img.shields.io/github/license/marcocesarato/php-conventional-changelog?style=for-the-badge)
+[![GitHub](https://img.shields.io/badge/GitHub-Repo-6f42c1?style=for-the-badge)](https://github.com/marcocesarato/php-conventional-changelog)
+
 Generate changelogs and release notes from a project's commit messages and metadata using php composer.
 
 ## 📖 Installation
