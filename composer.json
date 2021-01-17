@@ -44,6 +44,7 @@
     "friendsofphp/php-cs-fixer": "^2.17"
   },
   "require": {
-    "php": ">=5.5"
+    "php": ">=7.2.5",
+    "symfony/console": "^5.2"
   }
 }

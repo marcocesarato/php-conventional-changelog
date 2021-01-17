@@ -3,18 +3,25 @@
 namespace ConventionalChangelog;
 
 use DateTime;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class Generator
+class ChangelogCommand extends Command
 {
     /**
      * Changelog filename.
-     * @var string 
+     *
+     * @var string
      */
     public static $fileName = 'CHANGELOG.md';
 
     /**
      * Types allowed on changelog and labels (preserve the order).
-     * @var string[][] 
+     *
+     * @var string[][]
      */
     public static $types = [
         'feat' => ['code' => 'feat', 'label' => 'Features'],
@@ -27,52 +34,59 @@ class Generator
 
     /**
      * Changelog pattern.
+     *
      * @var string
      */
     public static $header = "# Changelog\nAll notable changes to this project will be documented in this file.\n\n\n";
 
     /**
      * Ignore message commit patterns.
+     *
      * @var string[]
      */
     public static $ignorePatterns = [
-        '/^chore\(release\):/i'
+        '/^chore\(release\):/i',
     ];
 
     /**
-     * Run generation.
+     * Configure.
+     *
+     * @return void
      */
-    public function run()
+    protected function configure()
     {
-        $root = getcwd(); // Root
+        $this
+            ->setName('changelog')
+            ->setDescription("Generate changelogs and release notes from a project's commit messages" .
+                'and metadata and automate versioning with semver.org and conventionalcommits.org')
+            ->setDefinition([
+                new InputArgument('path', InputArgument::OPTIONAL, 'Define the path directory where generate changelog', getcwd()),
+                new InputOption('commit', 'c', InputOption::VALUE_NONE, 'Commit the new release once changelog is generated'),
+                new InputOption('from-date', null, InputOption::VALUE_REQUIRED, 'Get commits from specified date [YYYY-MM-DD]'),
+                new InputOption('to-date', null, InputOption::VALUE_REQUIRED, 'Get commits last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]'),
+                new InputOption('major', 'maj', InputOption::VALUE_NONE, 'Major release (important changes)'),
+                new InputOption('minor', 'min', InputOption::VALUE_NONE, 'Minor release (add functionality)'),
+                new InputOption('patch', 'p', InputOption::VALUE_NONE, 'Patch release (bug fixes) [default]'),
+                new InputOption('next', null, InputOption::VALUE_REQUIRED, 'Define the next release version code (semver)'),
+            ]);
+    }
 
-        // Arguments
-        $helper = <<<EOL
--c      --commit        bool        Commit the new release once changelog is generated
--f      --from-date     str         Get commits from specified date [YYYY-MM-DD]
--h      --help          bool        Show the helper with all commands available
--m      --major         bool        Major release (important changes)
--n      --minor         bool        Minor release (add functionality)
--p      --patch         bool        Patch release (bug fixes) [default]
--t      --to-date       str         Get commits last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
--v      --version       str         Specify next release version code (Semver)
-EOL;
+    /**
+     * Execute command.
+     *
+     * @return int
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $root = $input->getArgument('path'); // Root
 
-        $this->arg($helper);
+        $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
+        $fromDate = $input->getOption('from-date');
+        $toDate = $input->getOption('to-date');
 
-        // Help command
-        $help = $this->arg('help', false);
-        if ($help) {
-            exit("\n======= CHANGELOG HELPER =======\n\n{$helper}\n");
-        }
-
-        $autoCommit = $this->arg('commit', false); // Commit once changelog is generated
-        $fromDate = $this->arg('from-date', null);
-        $toDate = $this->arg('to-date', null);
-
-        $patchRelease = $this->arg('patch', false);
-        $minorRelease = $this->arg('minor', false);
-        $majorRelease = $this->arg('major', false);
+        $patchRelease = $input->getOption('patch');
+        $minorRelease = $input->getOption('minor');
+        $majorRelease = $input->getOption('major');
 
         // Current Dates
         $today = new DateTime();
@@ -92,7 +106,12 @@ EOL;
 
         // Generate new version code
         $newVersion = $this->increaseSemVer($lastVersion, $majorRelease, $minorRelease, $patchRelease);
-        $newVersion =$this-> arg('version', $newVersion);
+
+        $nextVersion = $input->getOption('next');
+        if (!empty($nextVersion)) {
+            $newVersion = $nextVersion;
+        }
+
         $newVersion = preg_replace('#^v#i', '', $newVersion);
 
         // Remote url
@@ -184,7 +203,7 @@ EOL;
         }
 
         // File
-        $file = $root.DIRECTORY_SEPARATOR.self::$fileName;
+        $file = $root . DIRECTORY_SEPARATOR . self::$fileName;
 
         // Initialize changelogs
         $changelogCurrent = '';
@@ -203,13 +222,15 @@ EOL;
         $changelogNew .= $this->getMarkdownChanges($changes);
 
         // Save new changelog prepending the current one
-        file_put_contents($file, self::$header."{$changelogNew}{$changelogCurrent}");
+        file_put_contents($file, self::$header . "{$changelogNew}{$changelogCurrent}");
 
         // Create commit and add tag
         if ($autoCommit) {
             system("git commit -m \"chore(release): {$newVersion}\"");
             system("git tag v{$newVersion}");
         }
+
+        return 1;
     }
 
     /**
@@ -228,7 +249,7 @@ EOL;
                 continue;
             }
             ksort($list);
-            $changelog .= PHP_EOL . "### ".self::$types[$type]['label'] . "\n\n";
+            $changelog .= PHP_EOL . '### ' . self::$types[$type]['label'] . "\n\n";
             foreach ($list as $context => $items) {
                 asort($items);
                 if (is_string($context) && !empty($context)) {
@@ -386,96 +407,5 @@ EOL;
 
         // Recompose semver
         return implode('.', $newVersion);
-    }
-
-    /**
-     * Argument.
-     *
-     * @param string $x
-     * @param null $default
-     *
-     * @return array|mixed|null
-     */
-    protected function arg($x = '', $default = null)
-    {
-        static $arginfo = [];
-
-        /* helper */
-        $contains = function ($h, $n) {
-            return false !== strpos($h, $n);
-        };
-        /* helper */
-        $valuesOf = function ($s) {
-            return explode(',', $s);
-        };
-
-        //  called with a multiline string --> parse arguments
-        if ($contains($x, "\n")) {
-            //  parse multiline text input
-            $args = $GLOBALS['argv'] ?: [];
-            $rows = preg_split('/\s*\n\s*/', trim($x));
-            $data = $valuesOf('char,word,type,help');
-            foreach ($rows as $row) {
-                list($char, $word, $type, $help) = preg_split('/\s\s+/', $row);
-                $char = trim($char, '-');
-                $word = trim($word, '-');
-                $key = $word ?: $char ?: '';
-                if ($key === '') {
-                    continue;
-                }
-                $arginfo[$key] = compact($data);
-                $arginfo[$key]['value'] = null;
-            }
-
-            $nr = 0;
-            while ($args) {
-                $x = array_shift($args);
-                if ($x[0] != '-') {
-                    $arginfo[$nr++]['value'] = $x;
-                    continue;
-                }
-                $x = ltrim($x, '-');
-                $v = null;
-                if ($contains($x, '=')) {
-                    list($x, $v) = explode('=', $x, 2);
-                }
-                $k = '';
-                foreach ($arginfo as $k => $arg) {
-                    if (($arg['char'] == $x) || ($arg['word'] == $x)) {
-                        break;
-                    }
-                }
-                $t = $arginfo[$k]['type'];
-                switch ($t) {
-                    case 'bool':
-                        $v = true;
-                        break;
-                    case 'str':
-                        if (is_null($v)) {
-                            $v = array_shift($args);
-                        }
-                        break;
-                    case 'int':
-                        if (is_null($v)) {
-                            $v = array_shift($args);
-                        }
-                        $v = (int)$v;
-                        break;
-                }
-                $arginfo[$k]['value'] = $v;
-            }
-
-            return $arginfo;
-        }
-
-        //  called with a question --> read argument value
-        if ($x === '') {
-            return $arginfo;
-        }
-        if (isset($arginfo[$x]['value'])) {
-            return $arginfo[$x]['value'];
-        }
-
-        return $default;
     }
 }

@@ -1,13 +1,14 @@
 #!/usr/bin/env php
 <?php
 
-use ConventionalChangelog\Generator;
+use ConventionalChangelog\ChangelogCommand;
+use Symfony\Component\Console\Application;
 
-// Inclusions
+// Autoload
 $files = [
     __DIR__ . '/../../autoload.php',
     __DIR__ . '/../vendor/autoload.php',
-    __DIR__ . '/vendor/autoload.php'
+    __DIR__ . '/vendor/autoload.php',
 ];
 foreach ($files as $file) {
     if (file_exists($file)) {
@@ -16,16 +17,13 @@ foreach ($files as $file) {
     }
 }
 
-// Dev autoload
-spl_autoload_register(function ($name) {
-    $file = str_replace('\\', '', $name) . '.php';
-    $file = str_replace(['ConventionalChangelog\\', '/'], DIRECTORY_SEPARATOR, $file);
-    require_once $file;
-});
-
 // Report only fatal errors
 error_reporting(2039);
 
-// Run generator
-$app = new Generator();
-$app->run();
+// Run application single command
+$command = new ChangelogCommand();
+$commandName = $command->getName();
+$application = new Application();
+$application->add($command);
+$application->setDefaultCommand($commandName, true);
+$application->run();
