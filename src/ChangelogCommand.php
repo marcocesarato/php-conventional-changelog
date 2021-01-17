@@ -70,6 +70,7 @@ class ChangelogCommand extends Command
                 new InputOption('minor', 'min', InputOption::VALUE_NONE, 'Minor release (add functionality)'),
                 new InputOption('patch', 'p', InputOption::VALUE_NONE, 'Patch release (bug fixes) [default]'),
                 new InputOption('ver', null, InputOption::VALUE_REQUIRED, 'Define the next release version code (semver)'),
+                new InputOption('history', null, InputOption::VALUE_NONE, 'Generate all releases changes history'),
             ]);
     }
 
@@ -85,11 +86,26 @@ class ChangelogCommand extends Command
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
         $fromDate = $input->getOption('from-date');
         $toDate = $input->getOption('to-date');
+        $history = $input->getOption('history');
 
         $firstRelease = $input->getOption('first-release');
         $patchRelease = $input->getOption('patch');
         $minorRelease = $input->getOption('minor');
         $majorRelease = $input->getOption('major');
+
+        // Initialize changelogs
+        $file = $root . DIRECTORY_SEPARATOR . self::$fileName;
+        $changelogCurrent = '';
+        $changelogNew = '';
+
+        // Get changelogs content
+        if (file_exists($file)) {
+            $header = ltrim(self::$header);
+            $header = preg_quote($header, '/');
+            $changelogCurrent = file_get_contents($file);
+            $changelogCurrent = ltrim($changelogCurrent);
+            $changelogCurrent = preg_replace("/^$header/i", '', $changelogCurrent);
+        }
 
         // Current Dates
         $today = new DateTime();
@@ -120,111 +136,134 @@ class ChangelogCommand extends Command
         // Remote url
         $url = Git::getRemoteUrl();
 
-        if ($firstRelease) {
-            // Get all commits from the first one
-            $additionalParams = "{$firstCommit}..HEAD";
-            $lastVersion = $firstCommit;
-        } else {
-            // Get latest commits from last version date
-            $additionalParams = "{$lastVersion}..HEAD";
-        }
+        $options = []; // Git retrieve options per version
 
-        if (!empty($fromDate) ||
-            !empty($toDate)) {
-            $additionalParams = '';
-            if (!empty($fromDate)) {
-                $additionalParams .= ' --since="' . date('Y-m-d', strtotime($fromDate)) . '"';
-            }
-            if (!empty($toDate)) {
-                $time = strtotime($toDate);
-                $additionalParams .= ' --before="' . date('Y-m-d', $time) . '"';
-                $today->setTimestamp($time);
-                $todayString = Utils::getDateString($today);
-            }
-        }
+        if ($history) {
+            $changelogCurrent = ''; // Clean changelog file
+            $tags = Git::getTags();
 
-        $commitsRaw = Git::getCommits($additionalParams);
-
-        // Get all commits information
-        $commits = [];
-        foreach ($commitsRaw as $commit) {
-            $rows = explode("\n", $commit);
-            $count = count($rows);
-            // Commit info
-            $head = Utils::clean($rows[0]);
-            $sha = Utils::clean($rows[$count - 1]);
-            $message = '';
-            // Get message
-            foreach ($rows as $i => $row) {
-                if ($i !== 0 && $i !== $count - 1) {
-                    $message .= $row . "\n";
+            $previousTag = null;
+            foreach ($tags as $key => $toTag) {
+                $fromTag = $firstCommit;
+                if (!empty($previousTag) && $key !== 0) {
+                    $fromTag = $previousTag;
                 }
-            }
-            // Check ignored commit
-            $ignore = false;
-            foreach (self::$ignorePatterns as $pattern) {
-                if (preg_match($pattern, $head)) {
-                    $ignore = true;
-                    break;
-                }
-            }
-            // Add commit
-            if (!empty($sha) && !$ignore) {
-                $commits[] = [
-                    'sha' => $sha,
-                    'head' => $head,
-                    'message' => Utils::clean($message),
+                $options[$toTag] = [
+                    'from' => $fromTag,
+                    'to' => $toTag,
+                    'date' => Git::getCommitDate($toTag),
+                    'options' => "{$fromTag}..{$toTag}",
                 ];
+                $previousTag = $toTag;
             }
+            $options[$lastVersion] = [
+                'from' => $lastVersion,
+                'to' => $newVersion,
+                'date' => $today->format('Y-m-d'),
+                'options' => "{$lastVersion}..HEAD",
+            ];
+            $options = array_reverse($options);
+        } else {
+            if ($firstRelease) {
+                // Get all commits from the first one
+                $additionalParams = "{$firstCommit}..HEAD";
+                $lastVersion = $firstCommit;
+            } else {
+                // Get latest commits from last version date
+                $additionalParams = "{$lastVersion}..HEAD";
+            }
+
+            if (!empty($fromDate) ||
+                !empty($toDate)) {
+                $additionalParams = '';
+                if (!empty($fromDate)) {
+                    $additionalParams .= ' --since="' . date('Y-m-d', strtotime($fromDate)) . '"';
+                }
+                if (!empty($toDate)) {
+                    $time = strtotime($toDate);
+                    $additionalParams .= ' --before="' . date('Y-m-d', $time) . '"';
+                    $today->setTimestamp($time);
+                    $todayString = Utils::getDateString($today);
+                }
+            }
+            $options[$lastVersion] = [
+                'from' => $lastVersion,
+                'to' => $newVersion,
+                'date' => $today->format('Y-m-d'),
+                'options' => $additionalParams,
+            ];
         }
 
-        // Changes groups
-        $changes = [];
-        foreach (self::$types as $key => $type) {
-            $changes[$key] = [];
-        }
+        foreach ($options as $version => $params) {
+            $commitsRaw = Git::getCommits($params['options']);
 
-        // Group all changes to lists by type
-        foreach ($commits as $commit) {
-            foreach (self::$types as $key => $type) {
-                $head = Utils::clean($commit['head']);
-                $code = preg_quote($type['code'], '/');
-                if (preg_match('/^' . $code . '(\(.*?\))?[:]?\\s/i', $head)) {
-                    $parse = $this->parseCommitHead($head, $type['code']);
-                    $scope = $parse['scope'];
-                    $description = $parse['description'];
-                    $sha = $commit['sha'];
-                    $short = substr($sha, 0, 6);
-                    // List item
-                    $itemKey = strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '', $description));
-                    $changes[$key][$scope][$itemKey][$sha] = [
-                        'description' => $description,
-                        'short' => $short,
-                        'url' => $url,
+            // Get all commits information
+            $commits = [];
+            foreach ($commitsRaw as $commit) {
+                $rows = explode("\n", $commit);
+                $count = count($rows);
+                // Commit info
+                $head = Utils::clean($rows[0]);
+                $sha = Utils::clean($rows[$count - 1]);
+                $message = '';
+                // Get message
+                foreach ($rows as $i => $row) {
+                    if ($i !== 0 && $i !== $count - 1) {
+                        $message .= $row . "\n";
+                    }
+                }
+                // Check ignored commit
+                $ignore = false;
+                foreach (self::$ignorePatterns as $pattern) {
+                    if (preg_match($pattern, $head)) {
+                        $ignore = true;
+                        break;
+                    }
+                }
+                // Add commit
+                if (!empty($sha) && !$ignore) {
+                    $commits[] = [
                         'sha' => $sha,
+                        'head' => $head,
+                        'message' => Utils::clean($message),
                     ];
                 }
             }
+
+            // Changes groups
+            $changes = [];
+            foreach (self::$types as $key => $type) {
+                $changes[$key] = [];
+            }
+
+            // Group all changes to lists by type
+            foreach ($commits as $commit) {
+                foreach (self::$types as $key => $type) {
+                    $head = Utils::clean($commit['head']);
+                    $code = preg_quote($type['code'], '/');
+                    if (preg_match('/^' . $code . '(\(.*?\))?[:]?\\s/i', $head)) {
+                        $parse = $this->parseCommitHead($head, $type['code']);
+                        $scope = $parse['scope'];
+                        $description = $parse['description'];
+                        $sha = $commit['sha'];
+                        $short = substr($sha, 0, 6);
+                        // List item
+                        $itemKey = strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '', $description));
+                        $changes[$key][$scope][$itemKey][$sha] = [
+                            'description' => $description,
+                            'short' => $short,
+                            'url' => $url,
+                            'sha' => $sha,
+                        ];
+                    }
+                }
+            }
+
+            // Initialize changelogs
+            $changelogNew .= "## [{$params['to']}]($url/compare/{$params['from']}...v{$params['to']}) ({$params['date']})\n\n";
+            // Add all changes list to new changelog
+            $changelogNew .= $this->getMarkdownChanges($changes);
         }
-
-        // File
-        $file = $root . DIRECTORY_SEPARATOR . self::$fileName;
-
-        // Initialize changelogs
-        $changelogCurrent = '';
-        $changelogNew = "## [{$newVersion}]($url/compare/{$lastVersion}...v{$newVersion}) ({$today->format('Y-m-d')})\n\n";
-
-        // Get changelogs content
-        if (file_exists($file)) {
-            $header = ltrim(self::$header);
-            $header = preg_quote($header, '/');
-            $changelogCurrent = file_get_contents($file);
-            $changelogCurrent = ltrim($changelogCurrent);
-            $changelogCurrent = preg_replace("/^$header/i", '', $changelogCurrent);
-        }
-
-        // Add all changes list to new changelog
-        $changelogNew .= $this->getMarkdownChanges($changes);
 
         $io = new SymfonyStyle($input, $output);
 

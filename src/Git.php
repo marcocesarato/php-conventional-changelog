@@ -2,6 +2,8 @@
 
 namespace ConventionalChangelog;
 
+use DateTime;
+
 class Git
 {
     /**
@@ -45,7 +47,10 @@ class Git
      */
     public static function getCommitDate($hash)
     {
-        return self::shellExec("git log -1 --format=%ai {$hash}");
+        $date = self::shellExec("git log -1 --format=%aI {$hash}");
+        $today = new DateTime($date);
+
+        return $today->format('Y-m-d');
     }
 
     /**
@@ -83,8 +88,24 @@ class Git
      */
     public static function getCommits($options = '')
     {
-        $commits = self::shellExec("git log --format=%B%H----DELIMITER---- {$options}");
+        $commits = self::shellExec("git log --format=%B%H----DELIMITER---- {$options}") . "\n";
+        $commitsArray = explode("----DELIMITER----\n", $commits);
+        array_pop($commitsArray);
 
-        return explode("----DELIMITER----\n", $commits);
+        return $commitsArray;
+    }
+
+    /**
+     * Get tags.
+     *
+     * @return array
+     */
+    public static function getTags()
+    {
+        $tags = self::shellExec('git tag --list --format=%(refname:strip=2)----DELIMITER----') . "\n";
+        $tagsArray = explode("----DELIMITER----\n", $tags);
+        array_pop($tagsArray);
+
+        return $tagsArray;
     }
 }
