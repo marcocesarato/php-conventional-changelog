@@ -39,11 +39,6 @@ Now you can just run `composer changelog` to generate your changelog.
 
 > **PS:** all following commands must be run (working dir) on the root of the project or in the path where the changelog should be generated
 
-The changelog generator will generate a log of changes from the date of the last tag (if not specified with `--from-date`) to the current date (if not specified with` --to-date`),
-and it will put all commit logs in the latest version just created (at the moment it doesn't generate the entire git commit version release history)
-
-> **PS:** all following commands must be run (working dir) on the root of the project or in the path where the changelog should be generated
-
 The changelog generator will generate a log of changes from the date of the last tag *(if not specified with `--from-date`)* to the current date *(if not specified with `--to-date`)*,
 and it will put all commit logs in the latest version just created (at the moment it doesn't generate the entire git commit version release history).
 By default, will be added one to the patch semver part *(Example, if the last version is `1.0.2` the newer, if not specified the identity of the release, will be `1.0.3`)*.
