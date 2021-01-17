@@ -1,5 +1,7 @@
 # PHP Conventional Changelog
 
+Generate changelogs and release notes from a project's commit messages and metadata using php composer.
+
 ## 📖 Installation
 
 You can install it easily with composer
