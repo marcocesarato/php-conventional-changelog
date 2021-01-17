@@ -1,7 +1,7 @@
 # PHP Conventional Changelog
 
 ![Version](https://img.shields.io/badge/version-1.2.0-brightgreen?style=for-the-badge)
-![Requirements](https://img.shields.io/badge/php-%3E%3D%205.5-4F5D95?style=for-the-badge)
+![Requirements](https://img.shields.io/badge/php-%3E%3D%207.2.5-4F5D95?style=for-the-badge)
 ![Code Style](https://img.shields.io/badge/code%20style-PSR-blue?style=for-the-badge)
 ![License](https://img.shields.io/github/license/marcocesarato/php-conventional-changelog?style=for-the-badge)
 [![GitHub](https://img.shields.io/badge/GitHub-Repo-6f42c1?style=for-the-badge)](https://github.com/marcocesarato/php-conventional-changelog)
@@ -34,6 +34,41 @@ For easy use the changelog generator or release faster your new version you can 
 ```
 
 Now you can just run `composer changelog` to generate your changelog.
+
+## 📘 Configuration
+
+> **Note:** This procedure is *optional* and permit to overwriting/merging the default settings
+
+Create a file named `.changelog` on the root of your project or on the working dir.
+
+#### Config Example
+```php
+<?php
+return [
+  'headerTitle' => 'My changelog',
+  'headerDescription' => 'This is my changelog file.',
+  'types' => [
+    // Add style type
+    'style' => [
+      'label' => 'Styles'
+    ],
+    'chore' => [
+      // Change chore default label
+      'label' => 'Others'
+    ],
+  ],
+  // Exclude refactor type
+  'excludedTypes' => ['refactor'],
+  // File changelog (relative to the working dir)
+  'fileName' => 'docs/CHANGELOG.md',
+  'ignorePatterns' => [
+    // Exclude all commit these commits
+    'chore(deps): update dependencies',
+    // You can also use regex to exclude all commit like 'chore(changelog): updated'
+    '/chore\(changelog\)[:].*/i'
+  ],
+];
+```
 
 ## 💻 Usage
 
