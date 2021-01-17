@@ -21,7 +21,13 @@ foreach ($files as $file) {
 error_reporting(2039);
 
 // Command
-$command = new DefaultCommand();
+$config = [];
+$configFile = getcwd() . '/.changelog';
+if (is_file($configFile)) {
+    $config = require $configFile;
+}
+
+$command = new DefaultCommand($config);
 $commandName = $command->getName();
 
 // Run application single command
