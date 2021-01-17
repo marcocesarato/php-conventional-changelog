@@ -12,6 +12,31 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class DefaultCommand extends Command
 {
     /**
+     * Command name.
+     *
+     * @var string
+     */
+    protected static $defaultName = 'changelog';
+
+    /**
+     * Changelog.
+     *
+     * @var Changelog
+     */
+    public $changelog;
+
+    /**
+     * Constructor.
+     */
+    public function __construct(array $settings = [])
+    {
+        parent::__construct(self::$defaultName);
+
+        $config = new Configuration($settings);
+        $this->changelog = new Changelog($config);
+    }
+
+    /**
      * Configure.
      *
      * @return void
@@ -19,7 +44,6 @@ class DefaultCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('changelog')
             ->setDescription('Generate changelogs and release notes from a project\'s commit messages' .
                 'and metadata and automate versioning with semver.org and conventionalcommits.org')
             ->setDefinition([
@@ -45,9 +69,8 @@ class DefaultCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $changelog = new Changelog();
         $outputStyle = new SymfonyStyle($input, $output);
 
-        return $changelog->generate($input, $outputStyle);
+        return $this->changelog->generate($input, $outputStyle);
     }
 }

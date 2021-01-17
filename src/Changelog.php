@@ -10,41 +10,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class Changelog
 {
     /**
-     * Changelog filename.
-     *
-     * @var string
+     * @var Configuration
      */
-    public static $fileName = 'CHANGELOG.md';
+    protected $config;
 
     /**
-     * Types allowed on changelog and labels (preserve the order).
-     *
-     * @var string[][]
+     * Changelog constructor.
      */
-    public static $types = [
-        'feat' => ['code' => 'feat', 'label' => 'Features'],
-        'perf' => ['code' => 'perf', 'label' => 'Performance Features'],
-        'fix' => ['code' => 'fix', 'label' => 'Fixes'],
-        'refactor' => ['code' => 'refactor', 'label' => 'Refactoring'],
-        'docs' => ['code' => 'docs', 'label' => 'Docs'],
-        'chore' => ['code' => 'chore', 'label' => 'Chores'],
-    ];
-
-    /**
-     * Changelog pattern.
-     *
-     * @var string
-     */
-    public static $header = "# Changelog\nAll notable changes to this project will be documented in this file.\n\n\n";
-
-    /**
-     * Ignore message commit patterns.
-     *
-     * @var string[]
-     */
-    public static $ignorePatterns = [
-        '/^chore\(release\):/i',
-    ];
+    public function __construct(Configuration $config)
+    {
+        $this->config = $config;
+    }
 
     /**
      * Generate changelog.
@@ -70,24 +46,35 @@ class Changelog
 
         // Exclude types
         if ($excludeChores) {
-            unset(self::$types['chore']);
+            unset($this->config->types['chore']);
         }
         if ($excludeRefactor) {
-            unset(self::$types['refactor']);
+            unset($this->config->types['refactor']);
         }
 
         // Initialize changelogs
-        $file = $root . DIRECTORY_SEPARATOR . self::$fileName;
+        $file = $root . DIRECTORY_SEPARATOR . $this->config->getFileName();
         $changelogCurrent = '';
         $changelogNew = '';
 
+        $mainHeaderPrefix = "<!--- BEGIN HEADER -->\n# ";
+        $mainHeaderSuffix = "\n<!--- END HEADER -->\n\n";
+        $mainHeaderContent = $this->config->getHeaderTitle() . "\n\n" . $this->config->getHeaderDescription();
+        $mainHeader = $mainHeaderPrefix . $mainHeaderContent . $mainHeaderSuffix;
+
         // Get changelogs content
         if (file_exists($file)) {
-            $header = ltrim(self::$header);
-            $header = preg_quote($header, '/');
             $changelogCurrent = file_get_contents($file);
             $changelogCurrent = ltrim($changelogCurrent);
-            $changelogCurrent = preg_replace("/^$header/i", '', $changelogCurrent);
+
+            // Remove header
+            $beginHeader = preg_quote($mainHeaderPrefix, '/');
+            $endHeader = preg_quote($mainHeaderSuffix, '/');
+
+            $pattern = '/^(' . $beginHeader . '(.*)' . $endHeader . ')/si';
+            $pattern = preg_replace(['/[\n]+/', '/[\s]+/'], ['[\n]+', '[\s]+'], $pattern);
+
+            $changelogCurrent = preg_replace($pattern, '', $changelogCurrent);
         }
 
         // Current Dates
@@ -199,7 +186,7 @@ class Changelog
                 }
                 // Check ignored commit
                 $ignore = false;
-                foreach (self::$ignorePatterns as $pattern) {
+                foreach ($this->config->getIgnorePatterns() as $pattern) {
                     if (preg_match($pattern, $head)) {
                         $ignore = true;
                         break;
@@ -217,24 +204,24 @@ class Changelog
 
             // Changes groups
             $changes = [];
-            foreach (self::$types as $key => $type) {
+            foreach ($this->config->getTypes() as $key => $type) {
                 $changes[$key] = [];
             }
 
             // Group all changes to lists by type
             foreach ($commits as $commit) {
-                foreach (self::$types as $key => $type) {
+                foreach ($this->config->getTypes() as $name => $type) {
                     $head = Utils::clean($commit['head']);
-                    $code = preg_quote($type['code'], '/');
+                    $code = preg_quote($name, '/');
                     if (preg_match('/^' . $code . '(\(.*?\))?[:]?\\s/i', $head)) {
-                        $parse = $this->parseCommitHead($head, $type['code']);
+                        $parse = $this->parseCommitHead($head, $name);
                         $scope = $parse['scope'];
                         $description = $parse['description'];
                         $sha = $commit['sha'];
                         $short = substr($sha, 0, 6);
                         // List item
                         $itemKey = strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '', $description));
-                        $changes[$key][$scope][$itemKey][$sha] = [
+                        $changes[$name][$scope][$itemKey][$sha] = [
                             'description' => $description,
                             'short' => $short,
                             'url' => $url,
@@ -251,7 +238,7 @@ class Changelog
         }
 
         // Save new changelog prepending the current one
-        file_put_contents($file, self::$header . "{$changelogNew}{$changelogCurrent}");
+        file_put_contents($file, $mainHeader . "{$changelogNew}{$changelogCurrent}");
         $output->success("Changelog generated to: {$file}");
 
         // Create commit and add tag
@@ -281,7 +268,7 @@ class Changelog
                 continue;
             }
             ksort($list);
-            $changelog .= PHP_EOL . '### ' . self::$types[$type]['label'] . "\n\n";
+            $changelog .= PHP_EOL . '### ' . $this->config->getTypeLabel($type) . "\n\n";
             foreach ($list as $scope => $items) {
                 asort($items);
                 if (is_string($scope) && !empty($scope)) {
