@@ -291,7 +291,7 @@ class ChangelogCommand extends Command
             Git::commit("chore(release): {$newVersion}", [$file]);
             Git::tag('v' . $newVersion);
 
-            $output->success("Committed new version with tag: v{$newVersion}");
+            $io->success("Committed new version with tag: v{$newVersion}");
         }
 
         return Command::SUCCESS;
