@@ -53,7 +53,7 @@ class Generator
 -h      --help          bool        Show the helper with all commands available
 -m      --major         bool        Major release (important changes)
 -n      --minor         bool        Minor release (add functionality)
--p      --patch         bool        Patch release (bug fixes)
+-p      --patch         bool        Patch release (bug fixes) [default]
 -t      --to-date       str         Get commits last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
 -v      --version       str         Specify next release version code (Semver)
 EOL;
