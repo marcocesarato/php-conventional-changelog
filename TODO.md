@@ -1,6 +1,6 @@
 # TODO
 
-- First release (`--first-release`)
+- Pre release (`--pre-release`)
 - Add `⚠ BREAKING CHANGES` list on top of the version release changes
 - Add `Refs` and `Closes` on changes line
 - Generate entire git release history (`--history`)
