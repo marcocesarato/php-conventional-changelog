@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use ConventionalChangelog\ChangelogCommand;
+use ConventionalChangelog\DefaultCommand;
 use Symfony\Component\Console\Application;
 
 // Autoload
@@ -21,7 +21,7 @@ foreach ($files as $file) {
 error_reporting(2039);
 
 // Command
-$command = new ChangelogCommand();
+$command = new DefaultCommand();
 $commandName = $command->getName();
 
 // Run application single command
