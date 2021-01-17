@@ -4,6 +4,27 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.3.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.2.0...v1.3.0) (2021-01-17)
+
+
+### Features
+
+* Add config file inclusion from working dir ([2cbb9f](https://github.com/marcocesarato/php-conventional-changelog/commit/2cbb9ff0bae2d25d4801845fec46d01d529fafe9))
+* Implement configuration system ([28001b](https://github.com/marcocesarato/php-conventional-changelog/commit/28001b4fa9de6da256641a5cf377a72f281bbc2a))
+
+### Refactoring
+
+* Split changelog command class into default command and changelog class ([cd3e0e](https://github.com/marcocesarato/php-conventional-changelog/commit/cd3e0e8562e2a3ec014461a005ac646bea71765a))
+
+### Docs
+
+
+##### Readme
+
+* Add configuration section with an example ([bc6aa3](https://github.com/marcocesarato/php-conventional-changelog/commit/bc6aa3ea23d0cef82c150620d33fb6d50f4125c0))
+
+---
+
 ## [1.2.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.1.0...v1.2.0) (2021-01-17)
 
 
