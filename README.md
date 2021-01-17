@@ -43,26 +43,39 @@ The changelog generator will generate a log of changes from the date of the last
 and it will put all commit logs in the latest version just created (at the moment it doesn't generate the entire git commit version release history).
 By default, will be added one to the patch semver part *(Example, if the last version is `1.0.2` the newer, if not specified the identity of the release, will be `1.0.3`)*.
 
-- To generate your changelog for your first release run:
+- To generate your changelog for your first release:
   
   > **Note:** If the version code (`--ver`) isn't specified it will be automatically `1.0.0`
 
   `php vendor/bin/conventional-changelog --first-release`
 
 
-- To generate a changelog without committing files:
+- To generate your changelog without committing files:
   
     `php vendor/bin/conventional-changelog`
 
 
-- To generate a changelog with auto commit and auto version tagging:
+- To generate your changelog with auto commit and auto version tagging:
 
     `php vendor/bin/conventional-changelog --commit`
 
 
-- To generate a changelog from a specified date to another specified date:
+- To generate your changelog from a specified date to another specified date:
 
     `php vendor/bin/conventional-changelog --from-date="2020-12-01" --to-date="2021-01-01"`
+
+
+- To generate your changelog with a specific version code:
+
+  `php vendor/bin/conventional-changelog --ver="2.0.1"`
+
+
+- To generate your changelog with the entire history of changes of all releases:
+
+  > **Warn:** This operation will overwrite the `CHANGELOG.md` file if it already exists
+
+  `php vendor/bin/conventional-changelog --history`
+
 
 ### Commands List
 
@@ -73,8 +86,9 @@ By default, will be added one to the patch semver part *(Example, if the last ve
 -p      --patch           bool        Patch release (bug fixes) [default]
 -min    --minor           bool        Minor release (add functionality)
 -maj    --major           bool        Major release (important changes)
-        --first-release   bool        Run at first release (if --ver isn\'t specified version code will be 1.0.0)
+        --first-release   bool        Run at first release (if --ver isn't specified version code will be 1.0.0)
         --to-date         str         Get commits from last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
         --from-date       str         Get commits from specified date [YYYY-MM-DD]
         --ver             str         Define the next release version code (semver)
+        --history         bool        Generate the entire history of changes of all releases
 ```
