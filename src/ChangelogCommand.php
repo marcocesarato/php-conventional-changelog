@@ -156,12 +156,14 @@ class ChangelogCommand extends Command
                 ];
                 $previousTag = $toTag;
             }
-            $options[$lastVersion] = [
-                'from' => $lastVersion,
-                'to' => $newVersion,
-                'date' => $today->format('Y-m-d'),
-                'options' => "{$lastVersion}..HEAD",
-            ];
+            if ($autoCommit) {
+                $options[$lastVersion] = [
+                    'from' => $lastVersion,
+                    'to' => $newVersion,
+                    'date' => $today->format('Y-m-d'),
+                    'options' => "{$lastVersion}..HEAD",
+                ];
+            }
             $options = array_reverse($options);
         } else {
             if ($firstRelease) {
