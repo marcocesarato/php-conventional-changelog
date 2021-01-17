@@ -58,11 +58,12 @@ class ChangelogCommand extends Command
     {
         $this
             ->setName('changelog')
-            ->setDescription("Generate changelogs and release notes from a project's commit messages" .
+            ->setDescription('Generate changelogs and release notes from a project\'s commit messages' .
                 'and metadata and automate versioning with semver.org and conventionalcommits.org')
             ->setDefinition([
                 new InputArgument('path', InputArgument::OPTIONAL, 'Define the path directory where generate changelog', getcwd()),
                 new InputOption('commit', 'c', InputOption::VALUE_NONE, 'Commit the new release once changelog is generated'),
+                new InputOption('first-release', null, InputOption::VALUE_NONE, 'Run at first release (if --ver isn\'t specified version code it will be 1.0.0)'),
                 new InputOption('from-date', null, InputOption::VALUE_REQUIRED, 'Get commits from specified date [YYYY-MM-DD]'),
                 new InputOption('to-date', null, InputOption::VALUE_REQUIRED, 'Get commits last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]'),
                 new InputOption('major', 'maj', InputOption::VALUE_NONE, 'Major release (important changes)'),
@@ -85,6 +86,7 @@ class ChangelogCommand extends Command
         $fromDate = $input->getOption('from-date');
         $toDate = $input->getOption('to-date');
 
+        $firstRelease = $input->getOption('first-release');
         $patchRelease = $input->getOption('patch');
         $minorRelease = $input->getOption('minor');
         $majorRelease = $input->getOption('major');
@@ -93,27 +95,36 @@ class ChangelogCommand extends Command
         $today = new DateTime();
         $todayString = $this->getDateString($today);
 
-        // Last version
-        $lastVersion = shell_exec('git describe --tags --abbrev=0');
-        $lastVersion = $this->clean($lastVersion);
+        // First commit
+        $firstCommit = shell_exec('git rev-list --max-parents=0 HEAD');
+        $firstCommit = $this->clean($firstCommit);
 
-        // Last version commit
-        $lastVersionCommit = shell_exec("git rev-parse --verify {$lastVersion}");
-        $lastVersionCommit = $this->clean($lastVersionCommit);
+        if (!$firstRelease) {
+            // Last version
+            $lastVersion = shell_exec('git describe --tags --abbrev=0');
+            $lastVersion = $this->clean($lastVersion);
 
-        // Last version date
-        $lastVersionDate = shell_exec("git log -1 --format=%ai {$lastVersion}");
-        $lastVersionDate = $this->clean($lastVersionDate);
+            // Last version commit
+            $lastVersionCommit = shell_exec("git rev-parse --verify {$lastVersion}");
+            $lastVersionCommit = $this->clean($lastVersionCommit);
 
-        // Generate new version code
-        $newVersion = $this->increaseSemVer($lastVersion, $majorRelease, $minorRelease, $patchRelease);
+            // Last version date
+            $lastVersionDate = shell_exec("git log -1 --format=%ai {$lastVersion}");
+            $lastVersionDate = $this->clean($lastVersionDate);
+
+            // Generate new version code
+            $newVersion = $this->increaseSemVer($lastVersion, $majorRelease, $minorRelease, $patchRelease);
+        }
 
         $nextVersion = $input->getOption('ver');
         if (!empty($nextVersion)) {
             $newVersion = $nextVersion;
         }
-
         $newVersion = preg_replace('#^v#i', '', $newVersion);
+
+        if (empty($newVersion)) {
+            $newVersion = '1.0.0';
+        }
 
         // Remote url
         $url = shell_exec('git config --get remote.origin.url');
@@ -121,8 +132,15 @@ class ChangelogCommand extends Command
         $url = preg_replace("/\.git$/", '', $url);
         $url = preg_replace('/^(https?:\/\/)([0-9a-z.\-_:%]+@)/i', '$1', $url);
 
-        // Get latest commits from last version date to current date
-        $additionalParams = "{$lastVersion}..HEAD";
+        if ($firstRelease) {
+            // Get all commits from the first one
+            $additionalParams = "{$firstCommit}..HEAD";
+            $lastVersion = $firstCommit;
+        } else {
+            // Get latest commits from last version date
+            $additionalParams = "{$lastVersion}..HEAD";
+        }
+
         if (!empty($fromDate) ||
             !empty($toDate)) {
             $additionalParams = '';
