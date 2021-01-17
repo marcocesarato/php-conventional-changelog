@@ -37,8 +37,7 @@
     }
   },
   "scripts": {
-    "fix-cs": "sh bin/fix-cs",
-    "fix-cs-all": "sh bin/fix-cs-all",
+    "fix-cs": "php-cs-fixer fix --config=.php_cs --verbose",
     "check-cs": "php vendor/bin/php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php_cs"
   },
   "require-dev": {
