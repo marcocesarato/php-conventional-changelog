@@ -1,5 +1,6 @@
 # TODO
 
+- Amend to commit `--amend`
 - Pre release (`--pre-release`)
 - Add `⚠ BREAKING CHANGES` list on top of the version release changes
 - Add `Refs` and `Closes` on changes line
