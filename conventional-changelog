@@ -20,10 +20,12 @@ foreach ($files as $file) {
 // Report only fatal errors
 error_reporting(2039);
 
-// Run application single command
+// Command
 $command = new ChangelogCommand();
 $commandName = $command->getName();
-$application = new Application();
+
+// Run application single command
+$application = new Application('conventional-changelog', '1.1.0');
 $application->add($command);
 $application->setDefaultCommand($commandName, true);
 $application->run();
