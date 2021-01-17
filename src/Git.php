@@ -113,11 +113,16 @@ class Git
      * Commit.
      *
      * @param $message
+     * @param $files
      */
-    public static function commit($message)
+    public static function commit($message, $files = [])
     {
         $message = str_replace('"', "'", $message); // Escape
-        system("git commit -m \"chore(release): {$message}\"");
+        $command = "git commit -m \"chore(release): {$message}\"";
+        if (empty($files)) {
+            $command .= ' -- ' . implode(' ', $files);
+        }
+        system($command);
     }
 
     /**

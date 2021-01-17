@@ -26,8 +26,8 @@ class ChangelogCommand extends Command
      */
     public static $types = [
         'feat' => ['code' => 'feat', 'label' => 'Features'],
-        'fix' => ['code' => 'fix', 'label' => 'Fixes'],
         'perf' => ['code' => 'perf', 'label' => 'Performance Features'],
+        'fix' => ['code' => 'fix', 'label' => 'Fixes'],
         'refactor' => ['code' => 'refactor', 'label' => 'Refactoring'],
         'docs' => ['code' => 'docs', 'label' => 'Docs'],
         'chore' => ['code' => 'chore', 'label' => 'Chores'],
@@ -71,6 +71,8 @@ class ChangelogCommand extends Command
                 new InputOption('patch', 'p', InputOption::VALUE_NONE, 'Patch release (bug fixes) [default]'),
                 new InputOption('ver', null, InputOption::VALUE_REQUIRED, 'Define the next release version code (semver)'),
                 new InputOption('history', null, InputOption::VALUE_NONE, 'Generate the entire history of changes of all releases'),
+                new InputOption('no-chores', null, InputOption::VALUE_NONE, 'Exclude chores type from changelog'),
+                new InputOption('no-refactor', null, InputOption::VALUE_NONE, 'Exclude refactor type from changelog'),
             ]);
     }
 
@@ -92,6 +94,17 @@ class ChangelogCommand extends Command
         $patchRelease = $input->getOption('patch');
         $minorRelease = $input->getOption('minor');
         $majorRelease = $input->getOption('major');
+
+        $excludeChores = $input->getOption('no-chores');
+        $excludeRefactor = $input->getOption('no-refactor');
+
+        // Exclude types
+        if ($excludeChores) {
+            unset(self::$types['chore']);
+        }
+        if ($excludeRefactor) {
+            unset(self::$types['refactor']);
+        }
 
         // Initialize changelogs
         $file = $root . DIRECTORY_SEPARATOR . self::$fileName;
@@ -275,7 +288,7 @@ class ChangelogCommand extends Command
 
         // Create commit and add tag
         if ($autoCommit) {
-            Git::commit("chore(release): {$newVersion}");
+            Git::commit("chore(release): {$newVersion}", [$file]);
             Git::tag('v' . $newVersion);
 
             $output->success("Committed new version with tag: v{$newVersion}");
