@@ -37,5 +37,6 @@ return PhpCsFixer\Config::create()
                         ->setFinder(PhpCsFixer\Finder::create()
                                                      ->in(__DIR__)
                                                      ->name('*.php')
+                                                     ->name('conventional-changelog')
                                                      ->ignoreDotFiles(true)
                                                      ->ignoreVCS(true));
