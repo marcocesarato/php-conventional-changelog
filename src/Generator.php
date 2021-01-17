@@ -49,12 +49,12 @@ class Generator
         // Arguments
         $helper = <<<EOL
 -c      --commit        bool        Commit the new release once changelog is generated
--f      --from-date     str         Get commits from specified date
+-f      --from-date     str         Get commits from specified date [YYYY-MM-DD]
 -h      --help          bool        Show the helper with all commands available
 -m      --major         bool        Major release (important changes)
 -n      --minor         bool        Minor release (add functionality)
 -p      --patch         bool        Patch release (bug fixes)
--t      --to-date       str         Get commits from today (or specified on --from-date) to specified date
+-t      --to-date       str         Get commits last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
 -v      --version       str         Specify next release version code (Semver)
 EOL;
 

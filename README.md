@@ -16,23 +16,29 @@ You can install it easily with composer
 
 ## 💻 Usage
 
-Generate a changelog without committing files:
+- Generate a changelog without committing files:
+  
+    `php vendor/bin/conventional-changelog`
 
-`php vendor/bin/conventional-changelog`
 
-or with auto commit and auto version tagging:
+- Generate a changelog with auto commit and auto version tagging:
 
-`php vendor/bin/conventional-changelog --commit`
+    `php vendor/bin/conventional-changelog --commit`
+
+
+- Generate a changelog from a specified date to another specified date:
+
+    `php vendor/bin/conventional-changelog --from-date="2020-12-01" --to-date="2021-01-01"`
 
 ### Commands List
 
 ```
 -c      --commit        bool        Commit the new release once changelog is generated
--f      --from-date     str         Get commits from specified date
+-f      --from-date     str         Get commits from specified date [YYYY-MM-DD]
 -h      --help          bool        Show the helper with all commands available
 -m      --major         bool        Major release (important changes)
 -n      --minor         bool        Minor release (add functionality)
 -p      --patch         bool        Patch release (bug fixes)
--t      --to-date       str         Get commits from today (or specified on --from-date) to specified date
+-t      --to-date       str         Get commits from last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
 -v      --version       str         Specify next release version code (Semver)
 ```
