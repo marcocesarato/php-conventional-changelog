@@ -69,7 +69,7 @@ return [
   // File changelog (relative to the working dir)
   'fileName' => 'docs/CHANGELOG.md',
   'ignorePatterns' => [
-    // Exclude all commit these commits
+    // Exclude all commits with this message
     'chore(deps): update dependencies',
     // You can also use regex to exclude all commit like 'chore(changelog): updated'
     '/chore\(changelog\)[:].*/i'
