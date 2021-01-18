@@ -1,0 +1,7 @@
+<?php
+
+return [
+    'ignorePatterns' => [
+        '/chore\(changelog\)[:].*/i'
+    ],
+];
