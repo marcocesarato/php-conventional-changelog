@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 * Implement configuration system ([28001b](https://github.com/marcocesarato/php-conventional-changelog/commit/28001b4fa9de6da256641a5cf377a72f281bbc2a))
 
 
-### Docs
+### Documentation
 
 
 ##### Readme
@@ -30,7 +30,7 @@ All notable changes to this project will be documented in this file.
 * Add history option ([d53555](https://github.com/marcocesarato/php-conventional-changelog/commit/d53555442dbff0375db46649a306234309ba60ae))
 * Add commit type exclusions options and add changelog file on commit ([055497](https://github.com/marcocesarato/php-conventional-changelog/commit/0554976a445d82db914cd256cc931f70b5923db6))
 
-### Fixes
+### Bug Fixes
 
 * Add current release on history only with commit option flagged ([bac00d](https://github.com/marcocesarato/php-conventional-changelog/commit/bac00d478a9a93831af797080841c6991c6d660b))
 * Git commit add files to the repository ([301184](https://github.com/marcocesarato/php-conventional-changelog/commit/301184dc9d17649b25db06f4e4d45ac316533c74))
@@ -38,7 +38,7 @@ All notable changes to this project will be documented in this file.
 * Git commit release message ([b6f3e4](https://github.com/marcocesarato/php-conventional-changelog/commit/b6f3e461d348e21fbfde278385a8a7119defdf98))
 
 
-### Docs
+### Documentation
 
 
 ##### Readme
@@ -66,7 +66,7 @@ All notable changes to this project will be documented in this file.
 * Implementing symfony console ([78e11b](https://github.com/marcocesarato/php-conventional-changelog/commit/78e11be242147cee1f7ab8ce526a9b969ef79b09))
 * Add first release option ([143d6b](https://github.com/marcocesarato/php-conventional-changelog/commit/143d6b7828c8989e33ef23d22476ed14a7d4d935))
 
-### Docs
+### Documentation
 
 * Update description and add new instructions on readme ([3e1086](https://github.com/marcocesarato/php-conventional-changelog/commit/3e1086f844bd4af6609911333cbf97b0ed99cdee))
 
@@ -90,7 +90,7 @@ All notable changes to this project will be documented in this file.
 ## [v1.0.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.0.1...vv1.0.2) (2021-01-17)
 
 
-### Docs
+### Documentation
 
 * Specified date format to use on commands ([cdb712](https://github.com/marcocesarato/php-conventional-changelog/commit/cdb71211ce49c04e8789338b700839aaeb5303e1))
 
@@ -105,7 +105,7 @@ All notable changes to this project will be documented in this file.
 ## [v1.0.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.0.0...vv1.0.1) (2021-01-17)
 
 
-### Docs
+### Documentation
 
 
 ##### Readme
