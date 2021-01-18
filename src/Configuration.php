@@ -31,12 +31,17 @@ class Configuration
      * @var string[][]
      */
     public $types = [
-        'feat' => ['label' => 'Features'],
-        'perf' => ['label' => 'Performance Features'],
-        'fix' => ['label' => 'Fixes'],
-        'refactor' => ['label' => 'Refactoring'],
-        'docs' => ['label' => 'Docs'],
-        'chore' => ['label' => 'Chores'],
+        'feat' => ['label' => 'Features', 'description' => 'New features'],
+        'perf' => ['label' => 'Performance Improvements', 'description' => 'Code changes that improves performance'],
+        'fix' => ['label' => 'Bug Fixes', 'description' => 'Issues resolution'],
+        'refactor' => ['label' => 'Code Refactoring', 'description' => 'A code change that neither fixes a bug nor adds a feature'],
+        'style' => ['label' => 'Styles', 'description' => 'Changes that do not affect the meaning of the code'],
+        'tests' => ['label' => 'Tests', 'description' => 'Adding missing tests or correcting existing tests'],
+        'build' => ['label' => 'Builds', 'description' => 'Changes that affect the build system or external dependencies '],
+        'ci' => ['label' => 'Continuous Integrations', 'description' => 'Changes to CI configuration files and scripts'],
+        'docs' => ['label' => 'Documentation', 'description' => 'Documentation changes'],
+        'chore' => ['label' => 'Chores', 'description' => "Other changes that don't modify the source code or test files"],
+        'revert' => ['label' => 'Reverts', 'description' => 'Reverts a previous commit'],
     ];
 
     /**
@@ -68,22 +73,41 @@ class Configuration
         }
 
         $defaults = [
-            'types' => $this->types,
-            'excludedTypes' => [],
             'headerTitle' => $this->headerTitle,
             'headerDescription' => $this->headerDescription,
             'fileName' => $this->fileName,
-            'ignorePatterns' => $this->ignorePatterns,
+            'types' => $this->types,
+            'excludedTypes' => [
+                'refactor',
+                'style',
+                'build',
+                'ci',
+                'revert',
+                'test',
+                'docs',
+            ],
         ];
 
         $params = array_replace_recursive($defaults, $array);
 
+        // Overwrite excluded types
+        if (!empty($array['excludedTypes'])) {
+            $params['excludedTypes'] = $array['excludedTypes'];
+        }
+
+        // Unset excluded types
         if (is_array($params['excludedTypes'])) {
             foreach ($params['excludedTypes'] as $type) {
                 unset($params['types'][$type]);
             }
         }
 
+        // Ignore patterns
+        if (!empty($array['ignorePatterns'])) {
+            $params['ignorePatterns'] = array_merge($this->ignorePatterns, $array['ignorePatterns']);
+        }
+
+        // Check ignore patterns
         foreach ($params['ignorePatterns'] as $key => $pattern) {
             if (!$this->isRegex($pattern)) {
                 $params['ignorePatterns'][$key] = '#' . preg_quote($pattern, '#') . '#i';
