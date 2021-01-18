@@ -20,13 +20,20 @@ foreach ($files as $file) {
 // Report only fatal errors
 error_reporting(2039);
 
-// Command
+// Config
 $config = [];
-$configFile = getcwd() . '/.changelog';
-if (is_file($configFile)) {
-    $config = require $configFile;
+$configName = '.changelog';
+$configFiles = [
+    getcwd() . '/' . $configName, // Working dir
+    __DIR__ . '/../../../' . $configName, // Project path
+];
+foreach ($configFiles as $file) {
+    if (is_file($file) && empty($config)) {
+        $config = require $file;
+    }
 }
 
+// Command
 $command = new DefaultCommand($config);
 $commandName = $command->getName();
 
