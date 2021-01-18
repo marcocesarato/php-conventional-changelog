@@ -8,7 +8,13 @@
 
 ## Description
 
-Generate changelogs and release notes from a project's commit messages and metadata using php composer and automate versioning with semver.org and conventionalcommits.org
+Generate changelogs from a project's commit messages and metadata using composer and automate versioning with [semver](https://semver.org) and [conventional-commits](https://conventionalcommits.org).
+
+This package can generate changelog and release notes from committing history.
+It provides a command that can be run from the terminal, or using composer scripts, to generate a changelog file in markdown for the current project.
+
+The command may take parameters that define the releases of the project that will be considered to extract the changes from the git history to generate the file.
+The package uses a configuration system with that permit to customize the settings you may want to have your desired changelog generated.
 
 ### How to contribute
 
@@ -136,3 +142,7 @@ By default, will be added one to the patch semver part *(Example, if the last ve
         --no-chores       bool        Exclude chores type from changelog
         --no-refactor     bool        Exclude refactor type from changelog
 ```
+
+[semver]: http://semver.org
+
+[conventionalcommits]: https://conventionalcommits.org
