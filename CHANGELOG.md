@@ -4,6 +4,33 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.4.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.3.0...v1.4.0) (2021-01-18)
+
+
+### Features
+
+* Add amend and no verify options ([625ed1](https://github.com/marcocesarato/php-conventional-changelog/commit/625ed1bfa6fc70716736be303b1f7a048b894756))
+* Add not tag option and add errors on commit and tagging ([285ad0](https://github.com/marcocesarato/php-conventional-changelog/commit/285ad0a1bfe13b2460653a02ad40243184e7d80a))
+
+### Bug Fixes
+
+
+##### Config
+
+* Get configs from project root or working dir ([ee9d65](https://github.com/marcocesarato/php-conventional-changelog/commit/ee9d654f3e340575cb69e3fa940083891c150716))
+* Improve configuration and adjusted some settings ([cd6bdf](https://github.com/marcocesarato/php-conventional-changelog/commit/cd6bdf1de89c603afce1735487c4264c683473ab))
+
+### Documentation
+
+
+##### Readme
+
+* Update description ([02c2c3](https://github.com/marcocesarato/php-conventional-changelog/commit/02c2c36c9e20aabbb708f6a12531300ea80e02b0))
+* Fix configuration comment ([da733a](https://github.com/marcocesarato/php-conventional-changelog/commit/da733a985030a9d5ab99fd3683551fa44267f0ff))
+* Add configuration notes and update example ([10c1f5](https://github.com/marcocesarato/php-conventional-changelog/commit/10c1f5a709961cb52a97009b63189dfaea8d1bf9))
+
+---
+
 ## [1.3.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.2.0...v1.3.0) (2021-01-17)
 
 
