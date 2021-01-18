@@ -24,10 +24,8 @@ class Changelog
 
     /**
      * Generate changelog.
-     *
-     * @return int
      */
-    public function generate(InputInterface $input, SymfonyStyle $output)
+    public function generate(InputInterface $input, SymfonyStyle $output): int
     {
         $root = $input->getArgument('path'); // Root
 
@@ -40,9 +38,14 @@ class Changelog
         $history = $input->getOption('history');
 
         $firstRelease = $input->getOption('first-release');
+        $alphaRelease = $input->getOption('alpha');
+        $betaRelease = $input->getOption('beta');
+        $preRelease = $input->getOption('rc');
         $patchRelease = $input->getOption('patch');
         $minorRelease = $input->getOption('minor');
         $majorRelease = $input->getOption('major');
+
+        $autoBump = false;
 
         // If have amend option enable commit
         if ($amend) {
@@ -86,8 +89,27 @@ class Changelog
             $lastVersionCommit = Git::getLastTagCommit(); // Last version commit
             $lastVersionDate = Git::getCommitDate($lastVersionCommit); // Last version date
 
+            $bumpMode = SemanticVersion::RELEASE_PATCH;
+
+            if ($majorRelease) {
+                $bumpMode = SemanticVersion::RELEASE_MAJOR;
+            } elseif ($minorRelease) {
+                $bumpMode = SemanticVersion::RELEASE_MINOR;
+            } elseif ($patchRelease) {
+                $bumpMode = SemanticVersion::RELEASE_PATCH;
+            } elseif ($preRelease) {
+                $bumpMode = SemanticVersion::RELEASE_RC;
+            } elseif ($betaRelease) {
+                $bumpMode = SemanticVersion::RELEASE_BETA;
+            } elseif ($alphaRelease) {
+                $bumpMode = SemanticVersion::RELEASE_ALPHA;
+            } else {
+                $autoBump = true;
+            }
+
             // Generate new version code
-            $newVersion = Utils::bumpVersion($lastVersion, $majorRelease, $minorRelease, $patchRelease);
+            $semver = new SemanticVersion('1.4.0-rc.1');
+            $newVersion = $semver->bump($bumpMode);
         }
 
         $nextVersion = $input->getOption('ver');
@@ -267,12 +289,8 @@ class Changelog
 
     /**
      * Generate markdown from changes.
-     *
-     * @param $changes
-     *
-     * @return string
      */
-    protected function getMarkdownChanges($changes)
+    protected function getMarkdownChanges(array $changes): string
     {
         $changelog = '';
         // Add all changes list to new changelog
@@ -315,11 +333,8 @@ class Changelog
      * Parse conventional commit head.
      *
      * @param string $message
-     * @param string $type
-     *
-     * @return array
      */
-    protected function parseCommitHead($head, $type)
+    protected function parseCommitHead(string $head, string $type): array
     {
         $parse = [
             'scope' => null,

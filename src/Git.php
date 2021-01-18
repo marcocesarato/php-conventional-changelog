@@ -10,10 +10,8 @@ class Git
      * Run shell command on working dir.
      *
      * @param $string
-     *
-     * @return string
      */
-    protected static function shellExec($string)
+    protected static function shellExec($string): string
     {
         $value = shell_exec($string);
 
@@ -22,30 +20,24 @@ class Git
 
     /**
      * Get first commit hash.
-     *
-     * @return string
      */
-    public static function getFirstCommit()
+    public static function getFirstCommit(): string
     {
         return self::shellExec('git rev-list --max-parents=0 HEAD');
     }
 
     /**
      * Get last tag.
-     *
-     * @return string
      */
-    public static function getLastTag()
+    public static function getLastTag(): string
     {
         return self::shellExec('git describe --tags --abbrev=0');
     }
 
     /**
      * Get commit date.
-     *
-     * @return string
      */
-    public static function getCommitDate($hash)
+    public static function getCommitDate($hash): string
     {
         $date = self::shellExec("git log -1 --format=%aI {$hash}");
         $today = new DateTime($date);
@@ -55,10 +47,8 @@ class Git
 
     /**
      * Get last tag commit hash.
-     *
-     * @return string
      */
-    public static function getLastTagCommit()
+    public static function getLastTagCommit(): string
     {
         $lastTag = self::getLastTag();
 
@@ -67,10 +57,8 @@ class Git
 
     /**
      * Get remote url.
-     *
-     * @return string
      */
-    public static function getRemoteUrl()
+    public static function getRemoteUrl(): string
     {
         $url = self::shellExec('git config --get remote.origin.url');
         $url = preg_replace("/\.git$/", '', $url);
@@ -81,12 +69,8 @@ class Git
 
     /**
      * Get commits.
-     *
-     * @param $options
-     *
-     * @return array
      */
-    public static function getCommits($options = '')
+    public static function getCommits(string $options = ''): array
     {
         $commits = self::shellExec("git log --format=%B%H----DELIMITER---- {$options}") . "\n";
         $commitsArray = explode("----DELIMITER----\n", $commits);
@@ -97,10 +81,8 @@ class Git
 
     /**
      * Get tags.
-     *
-     * @return array
      */
-    public static function getTags()
+    public static function getTags(): array
     {
         $tags = self::shellExec('git tag --list --format=%(refname:strip=2)----DELIMITER----') . "\n";
         $tagsArray = explode("----DELIMITER----\n", $tags);
@@ -112,14 +94,9 @@ class Git
     /**
      * Commit.
      *
-     * @param $message
-     * @param array $files
-     * @param false $amend
-     * @param bool $verify
-     *
      * @return string
      */
-    public static function commit($message, $files = [], $amend = false, $verify = true)
+    public static function commit(string $message, array $files = [], bool $amend = false, bool $verify = true)
     {
         foreach ($files as $file) {
             system("git add \"{$file}\"");
@@ -139,11 +116,9 @@ class Git
     /**
      * Tag.
      *
-     * @param $name
-     *
      * @return string
      */
-    public static function tag($name)
+    public static function tag(string $name)
     {
         return exec("git tag {$name}");
     }
