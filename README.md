@@ -146,6 +146,9 @@ By default, will be added one to the patch semver part *(Example, if the last ve
         --from-date       str         Get commits from specified date [YYYY-MM-DD]
         --ver             str         Define the next release version code (semver)
         --history         bool        Generate the entire history of changes of all releases
+        --amend           bool        Amend commit the new release once changelog is generated
+        --no-verify       bool        Bypasses the pre-commit and commit-msg hooks
+        --no-tag          bool        Disable release auto tagging when commit enabled
 ```
 
 [semver]: http://semver.org
