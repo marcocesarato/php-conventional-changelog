@@ -32,6 +32,8 @@ class Changelog
         $root = $input->getArgument('path'); // Root
 
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
+        $amend = $input->getOption('amend'); // Amend commit
+        $hooks = !$input->getOption('no-verify'); // Verify git hooks
         $fromDate = $input->getOption('from-date');
         $toDate = $input->getOption('to-date');
         $history = $input->getOption('history');
@@ -50,6 +52,11 @@ class Changelog
         }
         if ($excludeRefactor) {
             unset($this->config->types['refactor']);
+        }
+
+        // If have amend option enable commit
+        if ($amend) {
+            $autoCommit = true;
         }
 
         // Initialize changelogs
@@ -243,7 +250,7 @@ class Changelog
 
         // Create commit and add tag
         if ($autoCommit) {
-            Git::commit("chore(release): {$newVersion}", [$file]);
+            Git::commit("chore(release): {$newVersion}", [$file], $amend, $hooks);
             Git::tag('v' . $newVersion);
 
             $output->success("Committed new version with tag: v{$newVersion}");

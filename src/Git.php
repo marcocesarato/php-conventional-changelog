@@ -115,13 +115,20 @@ class Git
      * @param $message
      * @param $files
      */
-    public static function commit($message, $files = [])
+    public static function commit($message, $files = [], $amend = false, $verify = true)
     {
         foreach ($files as $file) {
             system("git add \"{$file}\"");
         }
         $message = str_replace('"', "'", $message); // Escape
-        system("git commit -m \"{$message}\"");
+        $command = "git commit -m \"{$message}\"";
+        if ($amend) {
+            $command .= ' --amend';
+        }
+        if (!$verify) {
+            $command .= ' --no-verify';
+        }
+        system($command);
     }
 
     /**
