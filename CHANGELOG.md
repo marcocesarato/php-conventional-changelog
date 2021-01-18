@@ -12,9 +12,6 @@ All notable changes to this project will be documented in this file.
 * Add config file inclusion from working dir ([2cbb9f](https://github.com/marcocesarato/php-conventional-changelog/commit/2cbb9ff0bae2d25d4801845fec46d01d529fafe9))
 * Implement configuration system ([28001b](https://github.com/marcocesarato/php-conventional-changelog/commit/28001b4fa9de6da256641a5cf377a72f281bbc2a))
 
-### Refactoring
-
-* Split changelog command class into default command and changelog class ([cd3e0e](https://github.com/marcocesarato/php-conventional-changelog/commit/cd3e0e8562e2a3ec014461a005ac646bea71765a))
 
 ### Docs
 
@@ -40,10 +37,6 @@ All notable changes to this project will be documented in this file.
 * Auto commit success message ([5dec89](https://github.com/marcocesarato/php-conventional-changelog/commit/5dec89ce412e37476868076a0e550b41d122049d))
 * Git commit release message ([b6f3e4](https://github.com/marcocesarato/php-conventional-changelog/commit/b6f3e461d348e21fbfde278385a8a7119defdf98))
 
-### Refactoring
-
-* Move some methods to git and utils class ([6f8e4a](https://github.com/marcocesarato/php-conventional-changelog/commit/6f8e4a5617a09703f317d08594d42bbbbb0eeebd))
-* Move git commit and tag actions to git class ([113597](https://github.com/marcocesarato/php-conventional-changelog/commit/11359787566db571fd2a10fd6022d39e912399ee))
 
 ### Docs
 
