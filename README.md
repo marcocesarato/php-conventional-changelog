@@ -54,6 +54,12 @@ Now you can just run `composer changelog` to generate your changelog.
 
 Create a file named `.changelog` on the root of your project or on the working dir.
 
+> **Note:** If you don't need to customize some settings just omit it from the configuration file
+
+> **Note:** The default excluded types are: `build`, `ci`, `docs`, `refactor`, `revert`, `style`, `test`
+
+Create your configuration settings with the help of the following example.
+
 #### Config Example
 ```php
 <?php
@@ -61,17 +67,18 @@ return [
   'headerTitle' => 'My changelog',
   'headerDescription' => 'This is my changelog file.',
   'types' => [
-    // Add style type
-    'style' => [
-      'label' => 'Styles'
+    // Add improvements type (deprecated type)
+    'improvements' => [
+      'label' => 'Improvements',
+      'description' => 'Improvements to existing features'
     ],
     'chore' => [
       // Change chore default label
       'label' => 'Others'
     ],
   ],
-  // Exclude refactor type
-  'excludedTypes' => ['refactor'],
+  // Exclude not notables types (following types are the default excluded types)
+  'excludedTypes' => ['docs', 'refactor', 'style', 'build', 'ci',  'revert', 'test'],
   // File changelog (relative to the working dir)
   'fileName' => 'docs/CHANGELOG.md',
   'ignorePatterns' => [
