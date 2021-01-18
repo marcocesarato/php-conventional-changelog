@@ -1,6 +1,6 @@
 # PHP Conventional Changelog
 
-![Version](https://img.shields.io/badge/version-1.3.0-brightgreen?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-1.4.1-brightgreen?style=for-the-badge)
 ![Requirements](https://img.shields.io/badge/php-%3E%3D%207.2.5-4F5D95?style=for-the-badge)
 ![Code Style](https://img.shields.io/badge/code%20style-PSR-blue?style=for-the-badge)
 ![License](https://img.shields.io/github/license/marcocesarato/php-conventional-changelog?style=for-the-badge)
@@ -138,15 +138,18 @@ By default, will be added one to the patch semver part *(Example, if the last ve
 
 ```
 -c      --commit          bool        Commit the new release once changelog is generated
--p      --patch           bool        Patch release (bug fixes) [default]
--min    --minor           bool        Minor release (add functionality)
--maj    --major           bool        Major release (important changes)
+-a      --amend           bool        Amend commit the new release once changelog is generated
+        --major           bool        Major release (important changes)
+        --minor           bool        Minor release (add functionality)
+        --patch           bool        Patch release (bug fixes) [default]
+        --rc              bool        Release Candidate
+        --beta            bool        Beta release
+        --alpha           bool        Alpha release
         --first-release   bool        Run at first release (if --ver isn't specified version code will be 1.0.0)
         --to-date         str         Get commits from last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
         --from-date       str         Get commits from specified date [YYYY-MM-DD]
         --ver             str         Define the next release version code (semver)
         --history         bool        Generate the entire history of changes of all releases
-        --amend           bool        Amend commit the new release once changelog is generated
         --no-verify       bool        Bypasses the pre-commit and commit-msg hooks
         --no-tag          bool        Disable release auto tagging when commit enabled
 ```

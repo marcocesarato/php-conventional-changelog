@@ -4,6 +4,23 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.4.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.4.0...v1.4.1) (2021-01-18)
+
+
+### Features
+
+* Add semantic version parser ([7b5a9f](https://github.com/marcocesarato/php-conventional-changelog/commit/7b5a9fd99a4557bc7c167b99baa7ac3107d6f6c6))
+* Add rc, alpha and beta release method ([f955e1](https://github.com/marcocesarato/php-conventional-changelog/commit/f955e18309fa8c304bb3fce0faaf23eb3e35eebe))
+
+### Documentation
+
+
+##### Readme
+
+* Add new options on command list ([1ce4e3](https://github.com/marcocesarato/php-conventional-changelog/commit/1ce4e3b60c065e4ab7b4a0eaf272e427ecd58425))
+
+---
+
 ## [1.4.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.3.0...v1.4.0) (2021-01-18)
 
 
