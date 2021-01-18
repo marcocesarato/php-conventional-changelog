@@ -29,9 +29,9 @@ class SemanticVersion
     /**
      * Bump version.
      *
-     * @param string $mode
+     * @param string $release
      */
-    public function bump($mode): string
+    public function bump($release): string
     {
         $version = $this->getVersion();
 
@@ -41,32 +41,32 @@ class SemanticVersion
         // Generate new version code
         $split = explode('-', $version);
         $extra = !empty($split[1]) ? $split[1] : '';
-        $parts = explode('.', $split[0]);
 
-        foreach ($parts as $key => $value) {
-            $newVersion[$key] = (int)$value;
-        }
+        $extraReleases = [self::RELEASE_RC, self::RELEASE_BETA, self::RELEASE_ALPHA];
 
-        $extraModes = [self::RELEASE_RC, self::RELEASE_BETA, self::RELEASE_ALPHA];
-
-        if (in_array($mode, $extraModes)) {
+        if (in_array($release, $extraReleases)) {
             $partsExtra = explode('.', $extra);
             $extraName = $partsExtra[0];
             $extraVersion = !empty($partsExtra[1]) ? $partsExtra[1] : 0;
             if (is_numeric($extraName) && (empty($partsExtra[1]) || !is_numeric($partsExtra[1]))) {
                 $extraVersion = $partsExtra[0];
-            } elseif ($extraName !== $mode) {
+            } elseif ($extraName !== $release) {
                 $extraVersion = 0;
             }
             $extraVersion++;
-            $extra = "{$mode}.{$extraVersion}";
+            $extra = "{$release}.{$extraVersion}";
         }
 
-        if ($mode === self::RELEASE_MAJOR) {
+        $parts = explode('.', $split[0]);
+        foreach ($parts as $key => $value) {
+            $newVersion[$key] = (int)$value;
+        }
+
+        if ($release === self::RELEASE_MAJOR) {
             $newVersion[0]++;
-        } elseif ($mode === self::RELEASE_MINOR) {
+        } elseif ($release === self::RELEASE_MINOR) {
             $newVersion[1]++;
-        } elseif ($mode === self::RELEASE_PATCH) {
+        } elseif ($release === self::RELEASE_PATCH) {
             $newVersion[2]++;
         }
 

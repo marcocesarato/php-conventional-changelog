@@ -89,27 +89,27 @@ class Changelog
             $lastVersionCommit = Git::getLastTagCommit(); // Last version commit
             $lastVersionDate = Git::getCommitDate($lastVersionCommit); // Last version date
 
-            $bumpMode = SemanticVersion::RELEASE_PATCH;
+            $bumpRelease = SemanticVersion::RELEASE_PATCH;
 
             if ($majorRelease) {
-                $bumpMode = SemanticVersion::RELEASE_MAJOR;
+                $bumpRelease = SemanticVersion::RELEASE_MAJOR;
             } elseif ($minorRelease) {
-                $bumpMode = SemanticVersion::RELEASE_MINOR;
+                $bumpRelease = SemanticVersion::RELEASE_MINOR;
             } elseif ($patchRelease) {
-                $bumpMode = SemanticVersion::RELEASE_PATCH;
+                $bumpRelease = SemanticVersion::RELEASE_PATCH;
             } elseif ($preRelease) {
-                $bumpMode = SemanticVersion::RELEASE_RC;
+                $bumpRelease = SemanticVersion::RELEASE_RC;
             } elseif ($betaRelease) {
-                $bumpMode = SemanticVersion::RELEASE_BETA;
+                $bumpRelease = SemanticVersion::RELEASE_BETA;
             } elseif ($alphaRelease) {
-                $bumpMode = SemanticVersion::RELEASE_ALPHA;
+                $bumpRelease = SemanticVersion::RELEASE_ALPHA;
             } else {
                 $autoBump = true;
             }
 
             // Generate new version code
             $semver = new SemanticVersion('1.4.0-rc.1');
-            $newVersion = $semver->bump($bumpMode);
+            $newVersion = $semver->bump($bumpRelease);
         }
 
         $nextVersion = $input->getOption('ver');
