@@ -32,6 +32,7 @@ class Changelog
         $root = $input->getArgument('path'); // Root
 
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
+        $autoTag = !$input->getOption('no-tag'); // Tag release once is committed
         $amend = $input->getOption('amend'); // Amend commit
         $hooks = !$input->getOption('no-verify'); // Verify git hooks
         $fromDate = $input->getOption('from-date');
@@ -246,14 +247,30 @@ class Changelog
 
         // Save new changelog prepending the current one
         file_put_contents($file, $mainHeader . "{$changelogNew}{$changelogCurrent}");
-        $output->success("Changelog generated to: {$file}");
+        $output->success('Changelog generated!');
+        $output->writeln(" > Changelog file: {$file}");
 
-        // Create commit and add tag
+        // Create commit
         if ($autoCommit) {
-            Git::commit("chore(release): {$newVersion}", [$file], $amend, $hooks);
-            Git::tag('v' . $newVersion);
+            $result = Git::commit("chore(release): {$newVersion}", [$file], $amend, $hooks);
+            if ($result !== false) {
+                $output->success('Release committed!');
+                // Create tag
+                if ($autoTag) {
+                    $result = Git::tag('v' . $newVersion);
+                    if ($result !== false) {
+                        $output->success("Release tagged with success! New version: v{$newVersion}");
+                    } else {
+                        $output->error('An error occurred tagging the release!');
 
-            $output->success("Committed new version with tag: v{$newVersion}");
+                        return Command::FAILURE;
+                    }
+                }
+            } else {
+                $output->error('An error occurred committing the release!');
+
+                return Command::FAILURE;
+            }
         }
 
         return Command::SUCCESS;

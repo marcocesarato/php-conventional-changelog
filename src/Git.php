@@ -113,7 +113,11 @@ class Git
      * Commit.
      *
      * @param $message
-     * @param $files
+     * @param array $files
+     * @param false $amend
+     * @param bool $verify
+     *
+     * @return string
      */
     public static function commit($message, $files = [], $amend = false, $verify = true)
     {
@@ -128,16 +132,19 @@ class Git
         if (!$verify) {
             $command .= ' --no-verify';
         }
-        system($command);
+
+        return exec($command);
     }
 
     /**
      * Tag.
      *
      * @param $name
+     *
+     * @return string
      */
     public static function tag($name)
     {
-        system("git tag {$name}");
+        return exec("git tag {$name}");
     }
 }

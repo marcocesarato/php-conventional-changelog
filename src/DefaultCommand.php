@@ -61,6 +61,7 @@ class DefaultCommand extends Command
                 new InputOption('no-chores', null, InputOption::VALUE_NONE, 'Exclude chores type from changelog'),
                 new InputOption('no-refactor', null, InputOption::VALUE_NONE, 'Exclude refactor type from changelog'),
                 new InputOption('no-verify', null, InputOption::VALUE_NONE, 'Bypasses the pre-commit and commit-msg hooks'),
+                new InputOption('no-tag', null, InputOption::VALUE_NONE, 'Disable release auto tagging'),
             ]);
     }
 
