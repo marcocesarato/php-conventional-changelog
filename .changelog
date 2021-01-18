@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // Enable docs type
+    'excludedTypes' => ['refactor', 'style', 'build', 'ci', 'revert', 'test'],
+    // Ignore changelogs
     'ignorePatterns' => [
         '/chore\(changelog\)[:].*/i'
     ],
