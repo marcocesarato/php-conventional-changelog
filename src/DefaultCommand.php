@@ -58,8 +58,6 @@ class DefaultCommand extends Command
                 new InputOption('patch', 'p', InputOption::VALUE_NONE, 'Patch release (bug fixes) [default]'),
                 new InputOption('ver', null, InputOption::VALUE_REQUIRED, 'Define the next release version code (semver)'),
                 new InputOption('history', null, InputOption::VALUE_NONE, 'Generate the entire history of changes of all releases'),
-                new InputOption('no-chores', null, InputOption::VALUE_NONE, 'Exclude chores type from changelog'),
-                new InputOption('no-refactor', null, InputOption::VALUE_NONE, 'Exclude refactor type from changelog'),
                 new InputOption('no-verify', null, InputOption::VALUE_NONE, 'Bypasses the pre-commit and commit-msg hooks'),
                 new InputOption('no-tag', null, InputOption::VALUE_NONE, 'Disable release auto tagging'),
             ]);

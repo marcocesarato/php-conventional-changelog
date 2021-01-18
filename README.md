@@ -139,8 +139,6 @@ By default, will be added one to the patch semver part *(Example, if the last ve
         --from-date       str         Get commits from specified date [YYYY-MM-DD]
         --ver             str         Define the next release version code (semver)
         --history         bool        Generate the entire history of changes of all releases
-        --no-chores       bool        Exclude chores type from changelog
-        --no-refactor     bool        Exclude refactor type from changelog
 ```
 
 [semver]: http://semver.org

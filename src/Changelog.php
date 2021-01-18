@@ -44,17 +44,6 @@ class Changelog
         $minorRelease = $input->getOption('minor');
         $majorRelease = $input->getOption('major');
 
-        $excludeChores = $input->getOption('no-chores');
-        $excludeRefactor = $input->getOption('no-refactor');
-
-        // Exclude types
-        if ($excludeChores) {
-            unset($this->config->types['chore']);
-        }
-        if ($excludeRefactor) {
-            unset($this->config->types['refactor']);
-        }
-
         // If have amend option enable commit
         if ($amend) {
             $autoCommit = true;
