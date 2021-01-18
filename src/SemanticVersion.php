@@ -28,10 +28,8 @@ class SemanticVersion
 
     /**
      * Bump version.
-     *
-     * @param string $release
      */
-    public function bump($release): string
+    public function bump(string $release): string
     {
         $version = $this->getVersion();
 

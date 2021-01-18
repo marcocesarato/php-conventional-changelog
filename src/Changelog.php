@@ -108,7 +108,7 @@ class Changelog
             }
 
             // Generate new version code
-            $semver = new SemanticVersion('1.4.0-rc.1');
+            $semver = new SemanticVersion($lastVersion);
             $newVersion = $semver->bump($bumpRelease);
         }
 

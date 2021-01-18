@@ -8,12 +8,8 @@ class Utils
 {
     /**
      * Clean string removing double spaces and trim.
-     *
-     * @param $string
-     *
-     * @return string
      */
-    public static function clean($string)
+    public static function clean(string $string): string
     {
         $string = trim($string);
 
@@ -24,10 +20,8 @@ class Utils
      *  Get today date string formatted.
      *
      * @param DateTime $today
-     *
-     * @return string
      */
-    public static function getDateString($date)
+    public static function getDateString(DateTime $date): string
     {
         $months = [
             'January',
