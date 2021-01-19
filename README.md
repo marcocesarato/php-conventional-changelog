@@ -56,7 +56,7 @@ Create a file named `.changelog` on the root of your project or on the working d
 
 > **Note:** If you don't need to customize some settings just omit it from the configuration file
 
-> **Note:** The default excluded types are: `build`, `ci`, `docs`, `refactor`, `revert`, `style`, `test`
+> **Note:** The default excluded types are: `build`, `chore`, `ci`, `docs`, `refactor`, `revert`, `style`, `test`
 
 Create your configuration settings with the help of the following example.
 
@@ -78,7 +78,7 @@ return [
     ],
   ],
   // Exclude not notables types (following types are the default excluded types)
-  'excludedTypes' => ['docs', 'refactor', 'style', 'build', 'ci',  'revert', 'test'],
+  'excludedTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
   // File changelog (relative to the working dir)
   'fileName' => 'docs/CHANGELOG.md',
   'ignorePatterns' => [

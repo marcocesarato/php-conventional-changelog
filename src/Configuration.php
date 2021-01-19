@@ -36,7 +36,7 @@ class Configuration
         'fix' => ['label' => 'Bug Fixes', 'description' => 'Issues resolution'],
         'refactor' => ['label' => 'Code Refactoring', 'description' => 'A code change that neither fixes a bug nor adds a feature'],
         'style' => ['label' => 'Styles', 'description' => 'Changes that do not affect the meaning of the code'],
-        'tests' => ['label' => 'Tests', 'description' => 'Adding missing tests or correcting existing tests'],
+        'test' => ['label' => 'Tests', 'description' => 'Adding missing tests or correcting existing tests'],
         'build' => ['label' => 'Builds', 'description' => 'Changes that affect the build system or external dependencies '],
         'ci' => ['label' => 'Continuous Integrations', 'description' => 'Changes to CI configuration files and scripts'],
         'docs' => ['label' => 'Documentation', 'description' => 'Documentation changes'],
@@ -77,15 +77,7 @@ class Configuration
             'headerDescription' => $this->headerDescription,
             'fileName' => $this->fileName,
             'types' => $this->types,
-            'excludedTypes' => [
-                'refactor',
-                'style',
-                'build',
-                'ci',
-                'revert',
-                'test',
-                'docs',
-            ],
+            'excludedTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
         ];
 
         $params = array_replace_recursive($defaults, $array);
