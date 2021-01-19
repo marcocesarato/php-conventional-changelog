@@ -198,7 +198,7 @@ class Changelog
 
                 // Not a conventional commit
                 if (!$commit->isValid()) {
-                    break;
+                    continue;
                 }
 
                 // Check ignored commit
@@ -216,6 +216,7 @@ class Changelog
             }
 
             // Group all changes to lists by type
+            $changes = [];
             $types = $this->config->getTypes();
             foreach ($commits as $commit) {
                 if (in_array($commit->getType(), $types)) {
