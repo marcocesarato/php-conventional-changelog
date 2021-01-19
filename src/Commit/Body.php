@@ -18,6 +18,6 @@ class Body implements Stringable
 
     public function __toString(): string
     {
-        return $this->content;
+        return ucfirst($this->content);
     }
 }

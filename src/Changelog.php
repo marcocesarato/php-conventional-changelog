@@ -125,9 +125,6 @@ class Changelog
             $newVersion = '1.0.0';
         }
 
-        // Remote url
-        $url = Git::getRemoteUrl();
-
         $options = []; // Git retrieve options per version
 
         if ($history) {
@@ -215,24 +212,30 @@ class Changelog
                 }
             }
 
+            // Changes groups sorting
+            $changes = ['breaking_changes' => []];
+            foreach ($this->config->getTypes() as $key => $type) {
+                $changes[$key] = [];
+            }
+
             // Group all changes to lists by type
-            $changes = [];
             $types = $this->config->getTypes();
             foreach ($commits as $commit) {
                 if (in_array($commit->getType(), $types)) {
                     $itemKey = strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '', $commit->getDescription()));
+                    $breakingChanges = $commit->getBreakingChanges();
                     $type = (string)$commit->getType();
                     $scope = $commit->getScope()->toPrettyString();
                     $hash = $commit->getHash();
-                    $changes[$type][$scope][$itemKey][$hash] = [
-                        'description' => ucfirst($commit->getDescription()),
-                        'short' => $commit->getShortHash(),
-                        'url' => $url,
-                        'sha' => $hash,
-                    ];
+                    if (!empty($breakingChanges)) {
+                        $type = 'breaking_changes';
+                    }
+                    $changes[$type][$scope][$itemKey][$hash] = $commit;
                 }
             }
 
+            // Remote url
+            $url = Git::getRemoteUrl();
             // Initialize changelogs
             $changelogNew .= "## [{$params['to']}]($url/compare/{$params['from']}...v{$params['to']}) ({$params['date']})\n\n";
             // Add all changes list to new changelog
@@ -272,42 +275,68 @@ class Changelog
 
     /**
      * Generate markdown from changes.
+     *
+     * @param Commit\Parser[][][][] $changes
      */
     protected function getMarkdownChanges(array $changes): string
     {
         $changelog = '';
+        // Remote url
+        $url = Git::getRemoteUrl();
         // Add all changes list to new changelog
         foreach ($changes as $type => $list) {
             if (empty($list)) {
                 continue;
             }
+            if ($type === 'breaking_changes') {
+                $label = '⚠ BREAKING CHANGES';
+            } else {
+                $label = $this->config->getTypeLabel($type);
+            }
+            $changelog .= "\n### {$label}\n\n";
             ksort($list);
-            $changelog .= PHP_EOL . '### ' . $this->config->getTypeLabel($type) . "\n\n";
             foreach ($list as $scope => $items) {
                 asort($items);
                 if (is_string($scope) && !empty($scope)) {
                     // scope section
-                    $changelog .= PHP_EOL . "##### {$scope}" . "\n\n";
+                    $changelog .= "\n##### {$scope}\n\n";
                 }
                 foreach ($items as $itemsList) {
+                    $important = '';
                     $description = '';
                     $sha = '';
+                    $references = '';
                     $shaGroup = [];
+                    $refsGroup = [];
                     foreach ($itemsList as $item) {
-                        $description = $item['description'];
-                        if (!empty($item['sha'])) {
-                            $shaGroup[] = "[{$item['short']}]({$item['url']}/commit/{$item['sha']})";
+                        $description = ucfirst($item->getDescription());
+                        $refs = $item->getReferences();
+
+                        if ($item->isImportant()) {
+                            $important = '**';
                         }
+
+                        if (!empty($refs)) {
+                            foreach ($refs as $ref) {
+                                $refsGroup[] = '[#' . $ref . "]({$url}/issue/{$ref})";
+                            }
+                        }
+                        if (!empty($item->getHash())) {
+                            $shaGroup[] = '[' . $item->getShortHash() . "]({$url}/commit/" . $item->getHash() . ')';
+                        }
+                    }
+                    if (!empty($refsGroup)) {
+                        $references = implode(', ', $refsGroup);
                     }
                     if (!empty($shaGroup)) {
                         $sha = '(' . implode(', ', $shaGroup) . ')';
                     }
-                    $changelog .= "* {$description} {$sha}\n";
+                    $changelog .= "* {$important}{$description}{$important} {$references} {$sha}\n";
                 }
             }
         }
         // Add version separator
-        $changelog .= PHP_EOL . '---' . "\n\n";
+        $changelog .= "\n---\n\n";
 
         return $changelog;
     }

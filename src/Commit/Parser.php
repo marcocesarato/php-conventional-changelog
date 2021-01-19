@@ -8,7 +8,7 @@ use ConventionalChangelog\Type\Stringable;
 class Parser implements Stringable
 {
     protected const PATTERN_HEADER = "/^(?'type'[a-z]+)(\((?'scope'.+)\))?(?'important'[!]?)[:][[:blank:]](?'description'.+)/iums";
-    protected const PATTERN_FOOTER = "/(?'token'^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?'value'([:][[:blank:]]|[[:blank:]]\#(?=\w)).*?)$/iums";
+    protected const PATTERN_FOOTER = "/(?'token'^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?'value'([:][[:blank:]]|[:]?[[:blank:]][#](?=\w)).*?)$/iums";
 
     /**
      * Raw content.
@@ -94,10 +94,10 @@ class Parser implements Stringable
     protected function parseHeader(string $header)
     {
         preg_match(self::PATTERN_HEADER, $header, $matches);
-        $this->type = new Type($matches['type']);
-        $this->scope = new Scope($matches['scope']);
+        $this->type = new Type((string)$matches['type']);
+        $this->scope = new Scope((string)$matches['scope']);
         $this->important = !empty($matches['important']) ? true : false;
-        $this->description = new Description($matches['description']);
+        $this->description = new Description((string)$matches['description']);
     }
 
     /**
@@ -110,8 +110,9 @@ class Parser implements Stringable
             foreach ($matches as $match) {
                 $footer = $match[0];
                 $body = str_replace($footer, '', $body);
-                $value = ltrim($match['value'], ':');
-                $this->footers[] = new Footer($match['token'], $value);
+                $value = ltrim((string)$match['value'], ':');
+                $value = Format::clean($value);
+                $this->footers[] = new Footer((string)$match['token'], $value);
             }
         }
         $body = Format::clean($body);
@@ -169,6 +170,31 @@ class Parser implements Stringable
     public function getFooters(): array
     {
         return $this->footers;
+    }
+
+    public function getBreakingChanges(): array
+    {
+        $messages = [];
+        foreach ($this->footers as $footer) {
+            if ($footer->getToken() === 'breaking changes') {
+                $messages[] = $footer->getValue();
+            }
+        }
+
+        return $messages;
+    }
+
+    /**
+     * Get issues references.
+     */
+    public function getReferences(): array
+    {
+        $refs = [];
+        foreach ($this->footers as $footer) {
+            $refs = array_merge($footer->getReferences());
+        }
+
+        return array_unique($refs);
     }
 
     public function getHeader()
