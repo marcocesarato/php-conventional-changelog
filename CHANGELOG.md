@@ -4,6 +4,28 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.4.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.4.2...v1.4.3) (2021-01-19)
+
+
+### Features
+
+* Implement new commit parser and refactoring of helper classes  ([F2f2ec](https://github.com/marcocesarato/php-conventional-changelog/commit/F2f2ec80adfa787d453817faa64906e9dd988e44))
+* Add new conventional commit parser  ([603f72](https://github.com/marcocesarato/php-conventional-changelog/commit/603f724dc759f4762c9b09489cb7620a98a10d67))
+* Add breaking changes and issues references  ([Bda545](https://github.com/marcocesarato/php-conventional-changelog/commit/Bda5458e6c190a861417fb0239f86057c1d0c22f))
+
+### Bug Fixes
+
+* Semantic version extra part split  ([183116](https://github.com/marcocesarato/php-conventional-changelog/commit/18311683929859060af3c449a76fad41cb2baa52))
+* Commit changes list generation  ([68b1ff](https://github.com/marcocesarato/php-conventional-changelog/commit/68b1ff9f424b47d0965702724e3cce5866b88892))
+* Uppercase first char of scope on stringify  ([4eaebe](https://github.com/marcocesarato/php-conventional-changelog/commit/4eaebe96c84fa74aefa39d60fa1aeb3777316ce9))
+* Move scope to string method to pretty string  ([D64421](https://github.com/marcocesarato/php-conventional-changelog/commit/D644210b973b1b16e3feeb140c3da881667888fa))
+
+### Chores
+
+* Change php requirements  ([5997ec](https://github.com/marcocesarato/php-conventional-changelog/commit/5997ecf5f02bbeedd1e31fe98cc5f6d8d743cb14))
+
+---
+
 ## [1.4.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.4.1...v1.4.2) (2021-01-19)
 
 
