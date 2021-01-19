@@ -17,7 +17,10 @@ class Scope implements Stringable
         $this->content = $content;
     }
 
-    public function __toString(): string
+    /**
+     * Prettify.
+     */
+    public function toPrettyString(): string
     {
         $string = ucfirst($this->content);
         $string = preg_replace('/[_]+/m', ' ', $string);
@@ -26,5 +29,10 @@ class Scope implements Stringable
         $string = Format::clean($string);
 
         return $string;
+    }
+
+    public function __toString(): string
+    {
+        return $this->content;
     }
 }

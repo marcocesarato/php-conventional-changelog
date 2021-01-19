@@ -222,7 +222,7 @@ class Changelog
                 if (in_array($commit->getType(), $types)) {
                     $itemKey = strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '', $commit->getDescription()));
                     $type = (string)$commit->getType();
-                    $scope = (string)$commit->getScope();
+                    $scope = $commit->getScope()->toPrettyString();
                     $hash = $commit->getHash();
                     $changes[$type][$scope][$itemKey][$hash] = [
                         'description' => ucfirst($commit->getDescription()),
