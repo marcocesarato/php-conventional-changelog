@@ -37,7 +37,7 @@ class SemanticVersion
         $version = preg_replace('#^v#i', '', $version);
 
         // Generate new version code
-        $split = explode('-', $version);
+        $split = explode('-', $version, 2);
         $extra = !empty($split[1]) ? $split[1] : '';
 
         $extraReleases = [self::RELEASE_RC, self::RELEASE_BETA, self::RELEASE_ALPHA];
