@@ -2,6 +2,9 @@
 
 namespace ConventionalChangelog;
 
+use ConventionalChangelog\Helper\Format;
+use ConventionalChangelog\Helper\Git;
+use ConventionalChangelog\Helper\SemanticVersion;
 use DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -79,7 +82,7 @@ class Changelog
 
         // Current Dates
         $today = new DateTime();
-        $todayString = Utils::getDateString($today);
+        $todayString = Format::getDateString($today);
 
         // First commit
         $firstCommit = Git::getFirstCommit();
@@ -89,20 +92,20 @@ class Changelog
             $lastVersionCommit = Git::getLastTagCommit(); // Last version commit
             $lastVersionDate = Git::getCommitDate($lastVersionCommit); // Last version date
 
-            $bumpRelease = SemanticVersion::RELEASE_PATCH;
+            $bumpRelease = SemanticVersion::PATCH;
 
             if ($majorRelease) {
-                $bumpRelease = SemanticVersion::RELEASE_MAJOR;
+                $bumpRelease = SemanticVersion::MAJOR;
             } elseif ($minorRelease) {
-                $bumpRelease = SemanticVersion::RELEASE_MINOR;
+                $bumpRelease = SemanticVersion::MINOR;
             } elseif ($patchRelease) {
-                $bumpRelease = SemanticVersion::RELEASE_PATCH;
+                $bumpRelease = SemanticVersion::PATCH;
             } elseif ($preRelease) {
-                $bumpRelease = SemanticVersion::RELEASE_RC;
+                $bumpRelease = SemanticVersion::RC;
             } elseif ($betaRelease) {
-                $bumpRelease = SemanticVersion::RELEASE_BETA;
+                $bumpRelease = SemanticVersion::BETA;
             } elseif ($alphaRelease) {
-                $bumpRelease = SemanticVersion::RELEASE_ALPHA;
+                $bumpRelease = SemanticVersion::ALPHA;
             } else {
                 $autoBump = true;
             }
@@ -174,7 +177,7 @@ class Changelog
                     $time = strtotime($toDate);
                     $additionalParams .= ' --before="' . date('Y-m-d', $time) . '"';
                     $today->setTimestamp($time);
-                    $todayString = Utils::getDateString($today);
+                    $todayString = Format::getDateString($today);
                 }
             }
             $options[$lastVersion] = [
@@ -190,63 +193,42 @@ class Changelog
 
             // Get all commits information
             $commits = [];
-            foreach ($commitsRaw as $commit) {
-                $rows = explode("\n", $commit);
-                $count = count($rows);
-                // Commit info
-                $head = Utils::clean($rows[0]);
-                $sha = Utils::clean($rows[$count - 1]);
-                $message = '';
-                // Get message
-                foreach ($rows as $i => $row) {
-                    if ($i !== 0 && $i !== $count - 1) {
-                        $message .= $row . "\n";
-                    }
+            foreach ($commitsRaw as $commitRaw) {
+                $commit = new Commit\Parser($commitRaw);
+
+                // Not a conventional commit
+                if (!$commit->isValid()) {
+                    break;
                 }
+
                 // Check ignored commit
                 $ignore = false;
                 foreach ($this->config->getIgnorePatterns() as $pattern) {
-                    if (preg_match($pattern, $head)) {
+                    if (preg_match($pattern, $commit->getHeader())) {
                         $ignore = true;
                         break;
                     }
                 }
                 // Add commit
-                if (!empty($sha) && !$ignore) {
-                    $commits[] = [
-                        'sha' => $sha,
-                        'head' => $head,
-                        'message' => Utils::clean($message),
-                    ];
+                if (!$ignore) {
+                    $commits[] = new Commit\Parser($commit);
                 }
             }
 
-            // Changes groups
-            $changes = [];
-            foreach ($this->config->getTypes() as $key => $type) {
-                $changes[$key] = [];
-            }
-
             // Group all changes to lists by type
+            $types = $this->config->getTypes();
             foreach ($commits as $commit) {
-                foreach ($this->config->getTypes() as $name => $type) {
-                    $head = Utils::clean($commit['head']);
-                    $code = preg_quote($name, '/');
-                    if (preg_match('/^' . $code . '(\(.*?\))?[:]?\\s/i', $head)) {
-                        $parse = $this->parseCommitHead($head, $name);
-                        $scope = $parse['scope'];
-                        $description = $parse['description'];
-                        $sha = $commit['sha'];
-                        $short = substr($sha, 0, 6);
-                        // List item
-                        $itemKey = strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '', $description));
-                        $changes[$name][$scope][$itemKey][$sha] = [
-                            'description' => $description,
-                            'short' => $short,
-                            'url' => $url,
-                            'sha' => $sha,
-                        ];
-                    }
+                if (in_array($commit->getType(), $types)) {
+                    $itemKey = strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '', $commit->getDescription()));
+                    $type = (string)$commit->getType();
+                    $scope = (string)$commit->getScope();
+                    $hash = $commit->getHash();
+                    $changes[$type][$scope][$itemKey][$hash] = [
+                        'description' => ucfirst($commit->getDescription()),
+                        'short' => $commit->getShortHash(),
+                        'url' => $url,
+                        'sha' => $hash,
+                    ];
                 }
             }
 
@@ -327,40 +309,5 @@ class Changelog
         $changelog .= PHP_EOL . '---' . "\n\n";
 
         return $changelog;
-    }
-
-    /**
-     * Parse conventional commit head.
-     *
-     * @param string $message
-     */
-    protected function parseCommitHead(string $head, string $type): array
-    {
-        $parse = [
-            'scope' => null,
-            'description' => Utils::clean($head),
-        ];
-
-        $descriptionType = preg_quote(substr($parse['description'], 0, strlen($type)), '/');
-        $parse['description'] = preg_replace('/^' . $descriptionType . '[:]?\s*/i', '', $parse['description']);
-        $parse['description'] = preg_replace('/^\((.*?)\)[!]?[:]?\s*/', '**$1**: ', Utils::clean($parse['description']));
-        $parse['description'] = preg_replace('/\s+/m', ' ', $parse['description']);
-
-        // Set scope
-        if (preg_match("/^\*\*(.*?)\*\*:(.*?)$/", $parse['description'], $match)) {
-            $parse['scope'] = Utils::clean($match[1]);
-            $parse['description'] = Utils::clean($match[2]);
-
-            // Unify scope labels
-            $parse['scope'] = preg_replace('/[_]+/m', ' ', $parse['scope']);
-            $parse['scope'] = ucfirst($parse['scope']);
-            $parse['scope'] = preg_replace('/((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))/u', ' $0', $parse['scope']);
-            $parse['scope'] = preg_replace('/\.(php|md|json|txt|csv|js)($|\s)/', '', $parse['scope']);
-            $parse['scope'] = Utils::clean($parse['scope']);
-        }
-
-        $parse['description'] = ucfirst($parse['description']);
-
-        return $parse;
     }
 }

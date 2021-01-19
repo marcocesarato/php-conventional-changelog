@@ -1,15 +1,15 @@
 <?php
 
-namespace ConventionalChangelog;
+namespace ConventionalChangelog\Helper;
 
 class SemanticVersion
 {
-    public const RELEASE_MAJOR = 'major';
-    public const RELEASE_MINOR = 'minor';
-    public const RELEASE_PATCH = 'patch';
-    public const RELEASE_RC = 'rc';
-    public const RELEASE_BETA = 'beta';
-    public const RELEASE_ALPHA = 'alpha';
+    public const MAJOR = 'major';
+    public const MINOR = 'minor';
+    public const PATCH = 'patch';
+    public const RC = 'rc';
+    public const BETA = 'beta';
+    public const ALPHA = 'alpha';
 
     /**
      * @var string
@@ -40,7 +40,7 @@ class SemanticVersion
         $split = explode('-', $version, 2);
         $extra = !empty($split[1]) ? $split[1] : '';
 
-        $extraReleases = [self::RELEASE_RC, self::RELEASE_BETA, self::RELEASE_ALPHA];
+        $extraReleases = [self::RC, self::BETA, self::ALPHA];
 
         if (in_array($release, $extraReleases)) {
             $partsExtra = explode('.', $extra);
@@ -60,17 +60,16 @@ class SemanticVersion
             $newVersion[$key] = (int)$value;
         }
 
-        if ($release === self::RELEASE_MAJOR) {
+        if ($release === self::MAJOR) {
             $newVersion[0]++;
-        } elseif ($release === self::RELEASE_MINOR) {
+        } elseif ($release === self::MINOR) {
             $newVersion[1]++;
-        } elseif ($release === self::RELEASE_PATCH) {
+        } elseif ($release === self::PATCH) {
             $newVersion[2]++;
         }
 
         // Recompose semver
         $version = implode('.', $newVersion) . (!empty($extra) ? '-' . $extra : '');
-
         $this->setVersion($version);
 
         return $version;
