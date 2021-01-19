@@ -1,10 +1,10 @@
 <?php
 
-namespace ConventionalChangelog;
+namespace ConventionalChangelog\Helper;
 
 use DateTime;
 
-class Utils
+class Format
 {
     /**
      * Clean string removing double spaces and trim.
@@ -13,7 +13,7 @@ class Utils
     {
         $string = trim($string);
 
-        return preg_replace('/[ ]+/m', ' ', $string);
+        return preg_replace('/[[:blank:]]+/m', ' ', $string);
     }
 
     /**

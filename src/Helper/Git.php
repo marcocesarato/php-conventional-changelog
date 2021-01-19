@@ -1,6 +1,6 @@
 <?php
 
-namespace ConventionalChangelog;
+namespace ConventionalChangelog\Helper;
 
 use DateTime;
 
@@ -15,7 +15,7 @@ class Git
     {
         $value = shell_exec($string);
 
-        return Utils::clean($value);
+        return Format::clean($value);
     }
 
     /**

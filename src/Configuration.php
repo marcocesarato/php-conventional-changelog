@@ -128,9 +128,17 @@ class Configuration
     /**
      * @return string[][]
      */
-    public function getTypes(): array
+    public function getTypesInfo(): array
     {
         return $this->types;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTypes(): array
+    {
+        return array_keys($this->types);
     }
 
     /**
