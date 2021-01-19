@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.4.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.4.1...v1.4.2) (2021-01-19)
+
+
+### Bug Fixes
+
+* Add chores to not notable types ([2c4d1c](https://github.com/marcocesarato/php-conventional-changelog/commit/2c4d1cdc23455f899922d1796bcd6fa343c6d589))
+
+---
+
 ## [1.4.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.4.0...v1.4.1) (2021-01-18)
 
 
