@@ -5,7 +5,7 @@ namespace ConventionalChangelog\Commit;
 use ConventionalChangelog\Helper\Format;
 use ConventionalChangelog\Type\Stringable;
 
-class Parser implements Stringable
+class Conventional implements Stringable
 {
     protected const PATTERN_HEADER = "/^(?'type'[a-z]+)(\((?'scope'.+)\))?(?'important'[!]?)[:][[:blank:]](?'description'.+)/iums";
     protected const PATTERN_FOOTER = "/(?'token'^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?'value'([:][[:blank:]]|[:]?[[:blank:]][#](?=\w)).*?)$/iums";
@@ -75,7 +75,10 @@ class Parser implements Stringable
         $rows = explode("\n", $commit);
         $count = count($rows);
         // Commit info
-        $this->hash = $rows[$count - 1];
+        $hash = trim($rows[$count - 1]);
+        if ($this->isValidHash($hash)) {
+            $this->hash = $hash;
+        }
         $header = $rows[0];
         $message = '';
         // Get message
@@ -119,9 +122,20 @@ class Parser implements Stringable
         $this->body = new Body($body);
     }
 
+    /**
+     * Check if is valid SHA-1.
+     */
+    protected function isValidHash(string $hash)
+    {
+        return (bool)preg_match('/^[0-9a-f]{40}$/i', $hash);
+    }
+
+    /**
+     * Check if is valid conventional commit.
+     */
     public function isValid(): bool
     {
-        return preg_match(self::PATTERN_HEADER, $this->raw);
+        return (bool)preg_match(self::PATTERN_HEADER, $this->raw);
     }
 
     public function getRaw(): string

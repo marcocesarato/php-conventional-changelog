@@ -191,7 +191,7 @@ class Changelog
             // Get all commits information
             $commits = [];
             foreach ($commitsRaw as $commitRaw) {
-                $commit = new Commit\Parser($commitRaw);
+                $commit = new Commit\Conventional($commitRaw);
 
                 // Not a conventional commit
                 if (!$commit->isValid()) {
@@ -208,7 +208,7 @@ class Changelog
                 }
                 // Add commit
                 if (!$ignore) {
-                    $commits[] = new Commit\Parser($commit);
+                    $commits[] = new Commit\Conventional($commit);
                 }
             }
 
@@ -276,7 +276,7 @@ class Changelog
     /**
      * Generate markdown from changes.
      *
-     * @param Commit\Parser[][][][] $changes
+     * @param Commit\Conventional[][][][]  $changes
      */
     protected function getMarkdownChanges(array $changes): string
     {
