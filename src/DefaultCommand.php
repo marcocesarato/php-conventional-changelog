@@ -26,14 +26,17 @@ class DefaultCommand extends Command
     public $changelog;
 
     /**
+     * @var Configuration
+     */
+    public $config;
+
+    /**
      * Constructor.
      */
     public function __construct(array $settings = [])
     {
         parent::__construct(self::$defaultName);
-
-        $config = new Configuration($settings);
-        $this->changelog = new Changelog($config);
+        $this->config = new Configuration($settings);
     }
 
     /**
@@ -47,7 +50,8 @@ class DefaultCommand extends Command
             ->setDescription('Generate changelogs and release notes from a project\'s commit messages' .
                 'and metadata and automate versioning with semver.org and conventionalcommits.org')
             ->setDefinition([
-                new InputArgument('path', InputArgument::OPTIONAL, 'Define the path directory where generate changelog', getcwd()),
+                new InputArgument('path', InputArgument::OPTIONAL, 'Specify the path directory where generate changelog', getcwd()),
+                new InputOption('config', null, InputOption::VALUE_REQUIRED, 'Specify the configuration file path'),
                 new InputOption('commit', 'c', InputOption::VALUE_NONE, 'Commit the new release once changelog is generated'),
                 new InputOption('amend', 'a', InputOption::VALUE_NONE, 'Amend commit the new release once changelog is generated'),
                 new InputOption('first-release', null, InputOption::VALUE_NONE, 'Run at first release (if --ver isn\'t specified version code it will be 1.0.0)'),
@@ -59,7 +63,7 @@ class DefaultCommand extends Command
                 new InputOption('rc', null, InputOption::VALUE_NONE, 'Release candidate'),
                 new InputOption('beta', null, InputOption::VALUE_NONE, 'Beta release'),
                 new InputOption('alpha', null, InputOption::VALUE_NONE, 'Alpha release'),
-                new InputOption('ver', null, InputOption::VALUE_REQUIRED, 'Define the next release version code (semver)'),
+                new InputOption('ver', null, InputOption::VALUE_REQUIRED, 'Specify the next release version code (semver)'),
                 new InputOption('history', null, InputOption::VALUE_NONE, 'Generate the entire history of changes of all releases'),
                 new InputOption('no-verify', null, InputOption::VALUE_NONE, 'Bypasses the pre-commit and commit-msg hooks'),
                 new InputOption('no-tag', null, InputOption::VALUE_NONE, 'Disable release auto tagging'),
@@ -73,7 +77,16 @@ class DefaultCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // Retrieve configuration settings
+        $config = $input->getOption('config');
+        if (!empty($config) && is_file($config)) {
+            $settings = require $config;
+            $this->config = new Configuration($settings);
+        }
+
         $outputStyle = new SymfonyStyle($input, $output);
+        // Initialize changelog
+        $this->changelog = new Changelog($this->config);
 
         return $this->changelog->generate($input, $outputStyle);
     }
