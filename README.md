@@ -52,15 +52,14 @@ Now you can just run `composer changelog` to generate your changelog.
 
 > **Note:** This procedure is *optional* and permit to overwriting/merging the default settings
 
-Create a file named `.changelog` on the root of your project or on the working dir.
+For customize settings you just neet to create a file named `.changelog` on the root of your project or on the working dir.
 
-> **Note:** If you don't need to customize some settings just omit it from the configuration file
+> **Notes:**<br>
+> - If you don't need to customize some settings just omit it from the configuration file
+> - The default ignored types are: `build`, `chore`, `ci`, `docs`, `refactor`, `revert`, `style`, `test`
+> - To allow all types just keep empty `types` and set empty `ignoreTypes`
 
-> **Note:** The default ignored types are: `build`, `chore`, `ci`, `docs`, `refactor`, `revert`, `style`, `test`
-
-> **Note:** To allow all types just keep empty `types` and set empty `ignoreTypes`
-
-Create your configuration settings with the help of the following example.
+Configure your preferences with the help of the following example.
 
 #### Config Example
 ```php
