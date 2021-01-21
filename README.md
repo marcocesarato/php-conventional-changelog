@@ -99,7 +99,7 @@ return [
 The changelog generator will generate a log of changes from the date of the last tag to the current date,
 and it will put all commit logs in the latest version just created.
 
-![](./usage.gif)
+![](./docs/usage.gif)
 
 ### Examples
 
