@@ -9,11 +9,11 @@ class Body implements Stringable
     /**
      * @var string
      */
-    public $content;
+    public $content = '';
 
-    public function __construct(string $content)
+    public function __construct(?string $content = '')
     {
-        $this->content = $content;
+        $this->content = (string)$content;
     }
 
     public function __toString(): string

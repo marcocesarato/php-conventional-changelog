@@ -12,9 +12,9 @@ class Scope implements Stringable
      */
     public $content;
 
-    public function __construct(string $content)
+    public function __construct(?string $content = '')
     {
-        $this->content = $content;
+        $this->content = (string)$content;
     }
 
     /**
