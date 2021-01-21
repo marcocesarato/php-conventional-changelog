@@ -213,22 +213,31 @@ class Changelog
             }
 
             // Changes groups sorting
-            $changes = ['breaking_changes' => []];
-            foreach ($this->config->getTypes() as $key => $type) {
-                $changes[$key] = [];
+            $changes = [];
+            foreach ($this->config->getTypes(true) as $key => $type) {
+                $changes[$type] = [];
             }
 
             // Group all changes to lists by type
             $types = $this->config->getTypes();
             foreach ($commits as $commit) {
                 if (in_array($commit->getType(), $types)) {
-                    $itemKey = strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '', $commit->getDescription()));
+                    $itemKey = $this->getItemKey($commit->getDescription());
                     $breakingChanges = $commit->getBreakingChanges();
                     $type = (string)$commit->getType();
                     $scope = $commit->getScope()->toPrettyString();
                     $hash = $commit->getHash();
                     if (!empty($breakingChanges)) {
-                        $type = 'breaking_changes';
+                        foreach ($breakingChanges as $description) {
+                            // Clone commit as breaking with different description message
+                            $breakingCommit = new Commit\Conventional();
+                            $breakingCommit->setType($type)
+                                           ->setDescription($description)
+                                           ->setScope($scope)
+                                           ->setHash($hash);
+                            $key = $this->getItemKey($description);
+                            $changes['breaking_changes'][$scope][$key][$hash] = $breakingCommit;
+                        }
                     }
                     $changes[$type][$scope][$itemKey][$hash] = $commit;
                 }
@@ -274,6 +283,14 @@ class Changelog
     }
 
     /**
+     * Generate item key for merge commit with similar description.
+     */
+    protected function getItemKey(string $string): string
+    {
+        return strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '', $string));
+    }
+
+    /**
      * Generate markdown from changes.
      *
      * @param Commit\Conventional[][][][]  $changes
@@ -288,11 +305,7 @@ class Changelog
             if (empty($list)) {
                 continue;
             }
-            if ($type === 'breaking_changes') {
-                $label = '⚠ BREAKING CHANGES';
-            } else {
-                $label = $this->config->getTypeLabel($type);
-            }
+            $label = $this->config->getTypeLabel($type);
             $changelog .= "\n### {$label}\n\n";
             ksort($list);
             foreach ($list as $scope => $items) {

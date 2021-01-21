@@ -31,6 +31,7 @@ class Configuration
      * @var string[][]
      */
     public $types = [
+        'breaking_changes' => ['label' => '⚠ BREAKING CHANGES', 'description' => 'Code changes that potentially causes other components to fail'],
         'feat' => ['label' => 'Features', 'description' => 'New features'],
         'perf' => ['label' => 'Performance Improvements', 'description' => 'Code changes that improves performance'],
         'fix' => ['label' => 'Bug Fixes', 'description' => 'Issues resolution'],
@@ -84,7 +85,7 @@ class Configuration
 
         // Overwrite excluded types
         if (!empty($array['excludedTypes'])) {
-            $params['excludedTypes'] = $array['excludedTypes'];
+            $params['excludedTypes'] = $array['excludeTypes'];
         }
 
         // Unset excluded types
@@ -136,9 +137,14 @@ class Configuration
     /**
      * @return string[]
      */
-    public function getTypes(): array
+    public function getTypes(bool $breaking = false): array
     {
-        return array_keys($this->types);
+        $types = $this->types;
+        if (!$breaking) {
+            unset($types['breaking_changes']);
+        }
+
+        return array_keys($types);
     }
 
     /**
