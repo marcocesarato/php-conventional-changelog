@@ -64,15 +64,22 @@ class Conventional implements Stringable
      */
     protected $footers = [];
 
-    public function __construct(string $commit)
+    public function __construct(string $commit = '')
     {
-        $this->raw = Format::clean($commit);
+        // New commit or empty commit
+        if (empty($commit)) {
+            return;
+        }
 
+        $raw = Format::clean($commit);
+        $this->setRaw($raw);
+
+        // Not parsable
         if (!$this->isValid()) {
             return;
         }
 
-        $rows = explode("\n", $commit);
+        $rows = explode("\n", $this->raw);
         $count = count($rows);
         // Commit info
         $hash = trim($rows[$count - 1]);
@@ -97,10 +104,10 @@ class Conventional implements Stringable
     protected function parseHeader(string $header)
     {
         preg_match(self::PATTERN_HEADER, $header, $matches);
-        $this->type = new Type((string)$matches['type']);
-        $this->scope = new Scope((string)$matches['scope']);
-        $this->important = !empty($matches['important']) ? true : false;
-        $this->description = new Description((string)$matches['description']);
+        $this->setType((string)$matches['type'])
+             ->setScope((string)$matches['scope'])
+             ->setImportant(!empty($matches['important']) ? true : false)
+             ->setDescription((string)$matches['description']);
     }
 
     /**
@@ -109,17 +116,19 @@ class Conventional implements Stringable
     protected function parseMessage(string $message)
     {
         $body = Format::clean($message);
+        $footers = [];
         if (preg_match_all(self::PATTERN_FOOTER, $body, $matches, PREG_SET_ORDER, 0)) {
             foreach ($matches as $match) {
                 $footer = $match[0];
                 $body = str_replace($footer, '', $body);
                 $value = ltrim((string)$match['value'], ':');
                 $value = Format::clean($value);
-                $this->footers[] = new Footer((string)$match['token'], $value);
+                $footers[] = new Footer((string)$match['token'], $value);
             }
         }
         $body = Format::clean($body);
-        $this->body = new Body($body);
+        $this->setBody($body)
+             ->setFooters($footers);
     }
 
     /**
@@ -161,6 +170,11 @@ class Conventional implements Stringable
     public function getScope(): Scope
     {
         return $this->scope;
+    }
+
+    public function hasScope(): bool
+    {
+        return !empty((string)$this->scope);
     }
 
     public function isImportant(): bool
@@ -214,7 +228,7 @@ class Conventional implements Stringable
     public function getHeader()
     {
         $header = $this->type;
-        if (!empty((string)$this->scope)) {
+        if ($this->hasScope()) {
             $header .= '(' . $this->scope . ')';
         }
         if ($this->important) {
@@ -230,6 +244,65 @@ class Conventional implements Stringable
         $footer = implode("\n", $this->footers);
 
         return $this->body . "\n\n" . $footer;
+    }
+
+    /**
+     * @return Conventional
+     */
+    public function setRaw(string $raw): self
+    {
+        $this->raw = $raw;
+
+        return $this;
+    }
+
+    public function setHash(string $hash): self
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = new Type($type);
+
+        return $this;
+    }
+
+    public function setScope(?string $scope): self
+    {
+        $this->scope = new Scope($scope);
+
+        return $this;
+    }
+
+    public function setImportant(bool $important): self
+    {
+        $this->important = $important;
+
+        return $this;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = new Description($description);
+
+        return $this;
+    }
+
+    public function setBody(string $body): self
+    {
+        $this->body = new Body($body);
+
+        return $this;
+    }
+
+    public function setFooters(array $footers): self
+    {
+        $this->footers = $footers;
+
+        return $this;
     }
 
     public function __toString(): string
