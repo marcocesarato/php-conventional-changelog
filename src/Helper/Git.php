@@ -15,7 +15,7 @@ class Git
     {
         $value = shell_exec($string);
 
-        return Format::clean($value);
+        return Format::clean((string)$value);
     }
 
     /**
@@ -39,7 +39,7 @@ class Git
      */
     public static function getCommitDate($hash): string
     {
-        $date = self::shellExec("git log -1 --format=%aI {$hash}");
+        $date = self::shellExec("git log -1 --format='%aI' {$hash}");
         $today = new DateTime($date);
 
         return $today->format('Y-m-d');
@@ -72,7 +72,7 @@ class Git
      */
     public static function getCommits(string $options = ''): array
     {
-        $commits = self::shellExec("git log --format=%B%H----DELIMITER---- {$options}") . "\n";
+        $commits = self::shellExec("git log --format='%B%H----DELIMITER----' {$options}") . "\n";
         $commitsArray = explode("----DELIMITER----\n", $commits);
         array_pop($commitsArray);
 
@@ -84,7 +84,7 @@ class Git
      */
     public static function getTags(): array
     {
-        $tags = self::shellExec('git tag --list --format=%(refname:strip=2)----DELIMITER----') . "\n";
+        $tags = self::shellExec("git tag --list --format='%(refname:strip=2)----DELIMITER----'") . "\n";
         $tagsArray = explode("----DELIMITER----\n", $tags);
         array_pop($tagsArray);
 
