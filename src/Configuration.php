@@ -90,10 +90,10 @@ class Configuration
         }
 
         $defaults = [
-            'headerTitle' => $this->headerTitle,
-            'headerDescription' => $this->headerDescription,
-            'path' => $this->path,
-            'preset' => array_merge($this->breakingPreset, $this->preset),
+            'headerTitle' => $this->getHeaderTitle(),
+            'headerDescription' => $this->getHeaderDescription(),
+            'path' => $this->getPath(),
+            'preset' => $this->getPreset(),
             'types' => [],
             'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
         ];
@@ -253,4 +253,12 @@ class Configuration
 
         return $this;
     }
+
+	/**
+	 * @return string[][]
+	 */
+	public function getPreset() : array
+	{
+		return array_merge($this->breakingPreset, $this->preset);
+	}
 }

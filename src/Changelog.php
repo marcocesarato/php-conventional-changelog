@@ -146,6 +146,7 @@ class Changelog
                     'to' => $toTag,
                     'date' => Git::getCommitDate($toTag),
                     'options' => "{$fromTag}..{$toTag}",
+                    'autoBump' => false,
                 ];
                 $previousTag = $toTag;
             }
@@ -155,6 +156,7 @@ class Changelog
                     'to' => $newVersion,
                     'date' => $today->format('Y-m-d'),
                     'options' => "{$lastVersion}..HEAD",
+                    'autoBump' => false,
                 ];
             }
             $options = array_reverse($options);
@@ -186,6 +188,7 @@ class Changelog
                 'to' => $newVersion,
                 'date' => $today->format('Y-m-d'),
                 'options' => $additionalParams,
+                'autoBump' => $autoBump,
             ];
         }
 
@@ -252,6 +255,19 @@ class Changelog
                     $changes[$type][$scope][$itemKey][$hash] = $commit;
                     $summary[$type]++;
                 }
+            }
+
+            if ($params['autoBump']) {
+                $bumpRelease = SemanticVersion::PATCH;
+
+                if ($summary['breaking_changes'] > 0) {
+                    $bumpRelease = SemanticVersion::MAJOR;
+                } elseif ($summary['feat'] > 0) {
+                    $bumpRelease = SemanticVersion::MINOR;
+                }
+
+                $semver = new SemanticVersion($params['from']);
+                $params['to'] = $semver->bump($bumpRelease);
             }
 
             // Remote url
