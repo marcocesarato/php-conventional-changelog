@@ -4,6 +4,54 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.5.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.4.3...v1.5.0) (2021-01-21)
+
+
+### Features
+
+* Split types and presets configuration  ([4239ec](https://github.com/marcocesarato/php-conventional-changelog/commit/4239ec0866ca0d2e21b8bf3394f2d888bf44c08a))
+* Add auto versioning semver bump  ([82c883](https://github.com/marcocesarato/php-conventional-changelog/commit/82c8839300880d16c428abebca8f999f866baaeb))
+* Add summary  ([C37116](https://github.com/marcocesarato/php-conventional-changelog/commit/C371169f3dde9bcdb16a9de6e339ae26d70a477a))
+* Add to tag and from tag options  ([0b0c4b](https://github.com/marcocesarato/php-conventional-changelog/commit/0b0c4b06fcdb5e472914fa33f3175dbad3bac60e))
+
+##### Command
+
+* Add custom configuration file option  ([D65fc7](https://github.com/marcocesarato/php-conventional-changelog/commit/D65fc7472885116e891f383a6600d3df43b72e58))
+
+##### Commit Parser
+
+* Add getters and has scope method  ([83d99a](https://github.com/marcocesarato/php-conventional-changelog/commit/83d99aa44cba23bc0fe6b829c337cb9814a10bf9))
+* Set default values on body and scope  ([B362bd](https://github.com/marcocesarato/php-conventional-changelog/commit/B362bd5167b2951333c12397c544233266676eda))
+
+### Bug Fixes
+
+* Breaking changes preserving the initial commit and customizable label  ([607f6e](https://github.com/marcocesarato/php-conventional-changelog/commit/607f6e09026eaee8b1b7e83fa4a7475d7a4f5694))
+* Add hash check and rename parser to conventional  ([3e8996](https://github.com/marcocesarato/php-conventional-changelog/commit/3e899655c82737ca363995530ec300d4215c2a64))
+* Customize changelog file path  ([1795ff](https://github.com/marcocesarato/php-conventional-changelog/commit/1795ffba53ea35108c05138054772e3bcde73b09))
+
+##### Semver
+
+* Bump major and minor  ([Fd7485](https://github.com/marcocesarato/php-conventional-changelog/commit/Fd7485f2b7ce77e32542b4431e37ea271d031878))
+
+### Documentation
+
+
+##### Readme
+
+* Add usage gif image and improve usage section  ([Fbfdfe](https://github.com/marcocesarato/php-conventional-changelog/commit/Fbfdfe0f888aa5d36451c3e8bd589ddc7674b163))
+* Add config option and adjust usage list example  ([Fbe9fd](https://github.com/marcocesarato/php-conventional-changelog/commit/Fbe9fdba9ee21ee915dcd18a04a3ff9240c90b1b))
+* Merged notes on configuration section  ([9efedc](https://github.com/marcocesarato/php-conventional-changelog/commit/9efedcd91d1d84c022586e3d52ad88c02544547e))
+
+### Chores
+
+* Implement types configuration  ([4d90f1](https://github.com/marcocesarato/php-conventional-changelog/commit/4d90f1d2c1c7b87e6adfdb7b31de3cbc1df659c5))
+
+##### Preset
+
+* Change fixes description  ([Cbaa8f](https://github.com/marcocesarato/php-conventional-changelog/commit/Cbaa8fd627650303874f72e3206f8a1a6664064c))
+
+---
+
 ## [1.4.4](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.4.3...v1.4.4) (2021-01-21)
 
 
