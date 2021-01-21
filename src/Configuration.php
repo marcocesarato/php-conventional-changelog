@@ -32,7 +32,6 @@ class Configuration
      * @var string[][]
      */
     public $preset = [
-        'breaking_changes' => ['label' => '⚠ BREAKING CHANGES', 'description' => 'Code changes that potentially causes other components to fail'],
         'feat' => ['label' => 'Features', 'description' => 'New features'],
         'perf' => ['label' => 'Performance Improvements', 'description' => 'Code changes that improves performance'],
         'fix' => ['label' => 'Bug Fixes', 'description' => 'Issues resolution'],
@@ -44,6 +43,15 @@ class Configuration
         'docs' => ['label' => 'Documentation', 'description' => 'Documentation changes'],
         'chore' => ['label' => 'Chores', 'description' => "Other changes that don't modify the source code or test files"],
         'revert' => ['label' => 'Reverts', 'description' => 'Reverts a previous commit'],
+    ];
+
+    /**
+     * Preset of breaking changes.
+     *
+     * @var string[][]
+     */
+    public $breakingPreset = [
+        'breaking_changes' => ['label' => '⚠ BREAKING CHANGES', 'description' => 'Code changes that potentially causes other components to fail'],
     ];
 
     /**
@@ -85,37 +93,50 @@ class Configuration
             'headerTitle' => $this->headerTitle,
             'headerDescription' => $this->headerDescription,
             'path' => $this->path,
-            'types' => $this->preset,
+            'preset' => array_merge($this->breakingPreset, $this->preset),
+            'types' => [],
             'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
         ];
 
         $params = array_replace_recursive($defaults, $array);
 
-        // Overwrite ignored types
+        // Ignore Types
         if (!empty($array['ignoreTypes'])) {
-            $params['ignoreTypes'] = $array['ignoreTypes'];
+            $params['ignoreTypes'] = $array['ignoreTypes']; // Overwrite ignored types
         }
-
-        // Unset excluded types
         if (is_array($params['ignoreTypes'])) {
             foreach ($params['ignoreTypes'] as $type) {
-                unset($params['types'][$type]);
+                unset($params['preset'][$type]);  // Unset excluded types
             }
         }
 
-        // Ignore patterns
+        // Ignore Patterns
         if (!empty($array['ignorePatterns'])) {
             $params['ignorePatterns'] = array_merge($this->ignorePatterns, $array['ignorePatterns']);
         }
-
-        // Check ignore patterns
         foreach ($params['ignorePatterns'] as $key => $pattern) {
-            if (!$this->isRegex($pattern)) {
+            if (!$this->isRegex($pattern)) { // Check ignore patterns
                 $params['ignorePatterns'][$key] = '#' . preg_quote($pattern, '#') . '#i';
             }
         }
 
-        $this->setTypes($params['types']);
+        // Set Types (overwrite ignored types)
+        if (!empty($array['types'])) {
+            foreach ($this->preset as $type => $value) {
+                if (!in_array($type, $array['types'])) {
+                    if (isset($params['preset'][$type])) {
+                        unset($params['preset'][$type]);
+                    }
+                } else {
+                    $params['preset'][$type] = $value;
+                }
+            }
+        }
+
+        // Add breaking changes
+        $params['preset'] = array_merge($this->breakingPreset, $params['preset']);
+
+        $this->setTypes($params['preset']);
         $this->setHeaderTitle($params['headerTitle']);
         $this->setHeaderDescription($params['headerDescription']);
         $this->setPath($params['path']);
@@ -135,22 +156,20 @@ class Configuration
     }
 
     /**
-     * @return string[][]
+     * @return string[]
      */
-    public function getTypesInfo(): array
+    public function getTypes(): array
     {
-        return $this->types;
+        return array_keys($this->types);
     }
 
     /**
      * @return string[]
      */
-    public function getTypes(bool $breaking = false): array
+    public function getAllowedTypes(): array
     {
         $types = $this->types;
-        if (!$breaking) {
-            unset($types['breaking_changes']);
-        }
+        unset($types['breaking_changes']);
 
         return array_keys($types);
     }
@@ -161,6 +180,14 @@ class Configuration
     public function getTypeLabel(string $type): string
     {
         return $this->types[$type]['label'];
+    }
+
+    /**
+     * @param $type
+     */
+    public function getTypeDescription(string $type): string
+    {
+        return isset($this->types[$type]['description']) ? $this->types[$type]['description'] : '';
     }
 
     /**

@@ -218,12 +218,12 @@ class Changelog
 
             // Changes groups sorting
             $changes = [];
-            foreach ($this->config->getTypes(true) as $key => $type) {
+            foreach ($this->config->getTypes() as $key => $type) {
                 $changes[$type] = [];
             }
 
             // Group all changes to lists by type
-            $types = $this->config->getTypes();
+            $types = $this->config->getAllowedTypes();
             foreach ($commits as $commit) {
                 if (in_array($commit->getType(), $types)) {
                     $itemKey = $this->getItemKey($commit->getDescription());
