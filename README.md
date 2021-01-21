@@ -64,6 +64,8 @@ Create your configuration settings with the help of the following example.
 ```php
 <?php
 return [
+  // File changelog (relative to the working dir)
+  'path' => 'docs/CHANGELOG.md',
   'headerTitle' => 'My changelog',
   'headerDescription' => 'This is my changelog file.',
   'types' => [
@@ -78,9 +80,7 @@ return [
     ],
   ],
   // Exclude not notables types (following types are the default excluded types)
-  'excludedTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
-  // File changelog (relative to the working dir)
-  'fileName' => 'docs/CHANGELOG.md',
+  'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
   'ignorePatterns' => [
     // Exclude all commits with this message
     'chore(deps): update dependencies',

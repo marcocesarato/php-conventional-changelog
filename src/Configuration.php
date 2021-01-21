@@ -9,7 +9,7 @@ class Configuration
      *
      * @var string
      */
-    public $fileName = 'CHANGELOG.md';
+    public $path = 'CHANGELOG.md';
 
     /**
      * Header description.
@@ -26,11 +26,12 @@ class Configuration
     public $headerDescription = 'All notable changes to this project will be documented in this file.';
 
     /**
-     * Types allowed on changelog and labels (preserve the order).
+     * Preset of types allowed on changelog and labels.
+     * Sorting must be preserved.
      *
      * @var string[][]
      */
-    public $types = [
+    public $preset = [
         'breaking_changes' => ['label' => '⚠ BREAKING CHANGES', 'description' => 'Code changes that potentially causes other components to fail'],
         'feat' => ['label' => 'Features', 'description' => 'New features'],
         'perf' => ['label' => 'Performance Improvements', 'description' => 'Code changes that improves performance'],
@@ -44,6 +45,13 @@ class Configuration
         'chore' => ['label' => 'Chores', 'description' => "Other changes that don't modify the source code or test files"],
         'revert' => ['label' => 'Reverts', 'description' => 'Reverts a previous commit'],
     ];
+
+    /**
+     * Types allowed on changelog.
+     *
+     * @var string[][]
+     */
+    public $types = [];
 
     /**
      * Ignore message commit patterns.
@@ -76,21 +84,21 @@ class Configuration
         $defaults = [
             'headerTitle' => $this->headerTitle,
             'headerDescription' => $this->headerDescription,
-            'fileName' => $this->fileName,
-            'types' => $this->types,
-            'excludedTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
+            'path' => $this->path,
+            'types' => $this->preset,
+            'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
         ];
 
         $params = array_replace_recursive($defaults, $array);
 
-        // Overwrite excluded types
-        if (!empty($array['excludedTypes'])) {
-            $params['excludedTypes'] = $array['excludeTypes'];
+        // Overwrite ignored types
+        if (!empty($array['ignoreTypes'])) {
+            $params['ignoreTypes'] = $array['ignoreTypes'];
         }
 
         // Unset excluded types
-        if (is_array($params['excludedTypes'])) {
-            foreach ($params['excludedTypes'] as $type) {
+        if (is_array($params['ignoreTypes'])) {
+            foreach ($params['ignoreTypes'] as $type) {
                 unset($params['types'][$type]);
             }
         }
@@ -110,7 +118,7 @@ class Configuration
         $this->setTypes($params['types']);
         $this->setHeaderTitle($params['headerTitle']);
         $this->setHeaderDescription($params['headerDescription']);
-        $this->setFileName($params['fileName']);
+        $this->setPath($params['path']);
         $this->setIgnorePatterns($params['ignorePatterns']);
     }
 
@@ -165,14 +173,14 @@ class Configuration
         return $this;
     }
 
-    public function getFileName(): string
+    public function getPath(): string
     {
-        return $this->fileName;
+        return $this->path;
     }
 
-    public function setFileName(string $fileName): Configuration
+    public function setPath(string $path): Configuration
     {
-        $this->fileName = $fileName;
+        $this->path = $path;
 
         return $this;
     }

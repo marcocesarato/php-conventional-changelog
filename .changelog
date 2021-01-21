@@ -2,7 +2,7 @@
 
 return [
     // Disable not notables except docs type
-    'excludedTypes' => ['build', 'chore', 'ci', 'refactor', 'revert', 'style', 'test'],
+    'ignoreTypes' => ['build', 'chore', 'ci', 'refactor', 'revert', 'style', 'test'],
     // Ignore changelogs
     'ignorePatterns' => [
         '/chore\(changelog\)[:].*/i'
