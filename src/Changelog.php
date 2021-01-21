@@ -56,7 +56,11 @@ class Changelog
         }
 
         // Initialize changelogs
-        $file = $root . DIRECTORY_SEPARATOR . $this->config->getFileName();
+        $file = $this->config->getPath();
+        $dirname = dirname($file);
+        if (!is_file($file) && !is_dir($dirname)) {
+            $file = $root . DIRECTORY_SEPARATOR . $file;
+        }
         $changelogCurrent = '';
         $changelogNew = '';
 
