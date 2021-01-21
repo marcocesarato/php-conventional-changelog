@@ -4,6 +4,37 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.4.4](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.4.3...v1.4.4) (2021-01-21)
+
+
+### Features
+
+* Split types and presets configuration  ([4239ec](https://github.com/marcocesarato/php-conventional-changelog/commit/4239ec0866ca0d2e21b8bf3394f2d888bf44c08a))
+* Add summary  ([C37116](https://github.com/marcocesarato/php-conventional-changelog/commit/C371169f3dde9bcdb16a9de6e339ae26d70a477a))
+
+##### Commit Parser
+
+* Add getters and has scope method  ([83d99a](https://github.com/marcocesarato/php-conventional-changelog/commit/83d99aa44cba23bc0fe6b829c337cb9814a10bf9))
+* Set default values on body and scope  ([B362bd](https://github.com/marcocesarato/php-conventional-changelog/commit/B362bd5167b2951333c12397c544233266676eda))
+
+### Bug Fixes
+
+* Breaking changes preserving the initial commit and customizable label  ([607f6e](https://github.com/marcocesarato/php-conventional-changelog/commit/607f6e09026eaee8b1b7e83fa4a7475d7a4f5694))
+* Add hash check and rename parser to conventional  ([3e8996](https://github.com/marcocesarato/php-conventional-changelog/commit/3e899655c82737ca363995530ec300d4215c2a64))
+* Customize changelog file path  ([1795ff](https://github.com/marcocesarato/php-conventional-changelog/commit/1795ffba53ea35108c05138054772e3bcde73b09))
+
+##### Git
+
+* Format option quotes  ([693860](https://github.com/marcocesarato/php-conventional-changelog/commit/693860b5ba9c5ddfd13919a48186aeaf22931f12))
+
+### Chores
+
+##### Preset
+
+* Change fixes description  ([Cbaa8f](https://github.com/marcocesarato/php-conventional-changelog/commit/Cbaa8fd627650303874f72e3206f8a1a6664064c))
+
+---
+
 ## [1.4.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.4.2...v1.4.3) (2021-01-19)
 
 
