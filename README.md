@@ -100,6 +100,14 @@ and it will put all commit logs in the latest version just created.
 
 ![](./docs/usage.gif)
 
+> **Notes:**<br>
+> - Auto bump of version code using the [Semantic Versioning](https://semver.org) (`MAJOR.MINOR.PATCH`) is enabled by default if not specified the release method.
+>    - `MAJOR`: At least one breaking change.
+>    - `MINOR`: At least one new feature.
+>    - `PATCH`: Default
+> - Use these options to specify the release method: `--major`, `--minor`, `--patch`, `--rc`, `--beta`, `--alpha`.
+
+
 ### Examples
 
 #### Generate
@@ -113,9 +121,6 @@ php vendor/bin/conventional-changelog
 #### Commit and tagging
 
 To generate your changelog with auto commit and auto versioning tagging
-
-> **Note:** the version code by default, will be added one to the `PATCH` semver part (`MAJOR.MINOR.PATCH+1`) of the latest git tag *(Example, if the last version is `1.0.2` the newer, if not specified the version code, will be `1.0.3`)*.
-> See also `--major`, `--minor`, `--patch`, `--rc`, `--beta`, `--alpha` options.
 
 ```shell
 php vendor/bin/conventional-changelog --commit
@@ -138,6 +143,15 @@ To generate your changelog from a specified date to another specified date
 ```shell
 php vendor/bin/conventional-changelog --from-date="2020-12-01" --to-date="2021-01-01"
 ```
+
+#### Tag range
+
+To generate your changelog from a specified tag to another specified tag
+
+```shell
+php vendor/bin/conventional-changelog --from-tag="v1.0.2" --to-tag="1.0.4"
+```
+
 
 #### Version code
 
