@@ -62,8 +62,11 @@ class SemanticVersion
 
         if ($release === self::MAJOR) {
             $newVersion[0]++;
+            $newVersion[1] = 0;
+            $newVersion[2] = 0;
         } elseif ($release === self::MINOR) {
             $newVersion[1]++;
+            $newVersion[2] = 0;
         } elseif ($release === self::PATCH) {
             $newVersion[2]++;
         }
