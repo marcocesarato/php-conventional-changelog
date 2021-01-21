@@ -34,7 +34,7 @@ class Configuration
     public $preset = [
         'feat' => ['label' => 'Features', 'description' => 'New features'],
         'perf' => ['label' => 'Performance Improvements', 'description' => 'Code changes that improves performance'],
-        'fix' => ['label' => 'Bug Fixes', 'description' => 'Issues resolution'],
+        'fix' => ['label' => 'Bug Fixes', 'description' => 'Bugs and issues resolution'],
         'refactor' => ['label' => 'Code Refactoring', 'description' => 'A code change that neither fixes a bug nor adds a feature'],
         'style' => ['label' => 'Styles', 'description' => 'Changes that do not affect the meaning of the code'],
         'test' => ['label' => 'Tests', 'description' => 'Adding missing tests or correcting existing tests'],
