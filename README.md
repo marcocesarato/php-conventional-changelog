@@ -96,46 +96,35 @@ return [
 
 ## 💻 Usage
 
-> **Note:** all following commands must be run (working dir) on the root of the project or in the path where the changelog should be generated
+The changelog generator will generate a log of changes from the date of the last tag to the current date,
+and it will put all commit logs in the latest version just created.
 
-The changelog generator will generate a log of changes from the date of the last tag *(if not specified with `--from-date`)* to the current date *(if not specified with `--to-date`)*,
-and it will put all commit logs in the latest version just created (at the moment it doesn't generate the entire git commit version release history).
-By default, will be added one to the patch semver part *(Example, if the last version is `1.0.2` the newer, if not specified the identity of the release, will be `1.0.3`)*.
+![](./usage.gif)
 
-##### To generate your changelog for your first release:
-  
-> **Note:** If the version code (`--ver`) isn't specified it will be automatically `1.0.0`
+### Examples
 
-```shell
-php vendor/bin/conventional-changelog --first-release
-```
+#### Generate
 
-
-##### To generate your changelog without committing files:
+To generate your changelog *(without committing files)*
 
 ```shell
 php vendor/bin/conventional-changelog
 ```
 
-##### To generate your changelog with auto commit and auto version tagging:
+#### Commit and tagging
+
+To generate your changelog with auto commit and auto versioning tagging
+
+> Note: the version code by default, will be added one to the `PATCH` semver part (`MAJOR.MINOR.PATCH+1`) of the latest git tag *(Example, if the last version is `1.0.2` the newer, if not specified the version code, will be `1.0.3`)*.
+> See also `--major`, `--minor`, `--patch`, `--rc`, `--beta`, `--alpha` options.
 
 ```shell
 php vendor/bin/conventional-changelog --commit
 ```
 
-##### To generate your changelog from a specified date to another specified date:
+#### History
 
-```shell
-php vendor/bin/conventional-changelog --from-date="2020-12-01" --to-date="2021-01-01"
-```
-
-##### To generate your changelog with a specific version code:
-
-```shell
-php vendor/bin/conventional-changelog --ver="2.0.1"
-```
-
-##### To generate your changelog with the entire history of changes of all releases:
+To generate your changelog with the entire history of changes of all releases
 
 > **Warn:** This operation will overwrite the `CHANGELOG.md` file if it already exists
 
@@ -143,6 +132,21 @@ php vendor/bin/conventional-changelog --ver="2.0.1"
 php vendor/bin/conventional-changelog --history
 ```
 
+#### Date range
+
+To generate your changelog from a specified date to another specified date
+
+```shell
+php vendor/bin/conventional-changelog --from-date="2020-12-01" --to-date="2021-01-01"
+```
+
+#### Version code
+
+To generate your changelog with a specific version code
+
+```shell
+php vendor/bin/conventional-changelog --ver="2.0.1"
+```
 
 ### Commands List
 
