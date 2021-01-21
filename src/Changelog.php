@@ -189,6 +189,11 @@ class Changelog
             ];
         }
 
+        $summary = [];
+        foreach ($this->config->getTypes() as $key => $type) {
+            $summary[$type] = 0;
+        }
+
         foreach ($options as $version => $params) {
             $commitsRaw = Git::getCommits($params['options']);
 
@@ -241,9 +246,11 @@ class Changelog
                                            ->setHash($hash);
                             $key = $this->getItemKey($description);
                             $changes['breaking_changes'][$scope][$key][$hash] = $breakingCommit;
+                            $summary['breaking_changes']++;
                         }
                     }
                     $changes[$type][$scope][$itemKey][$hash] = $commit;
+                    $summary[$type]++;
                 }
             }
 
@@ -253,6 +260,18 @@ class Changelog
             $changelogNew .= "## [{$params['to']}]($url/compare/{$params['from']}...v{$params['to']}) ({$params['date']})\n\n";
             // Add all changes list to new changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
+        }
+
+        // Print summary
+        if (!empty($summary)) {
+            $output->title('Summary');
+            $elements = [];
+            foreach ($summary as $type => $count) {
+                if ($count > 0) {
+                    $elements[] = $count . ' ' . $this->config->getTypeDescription($type);
+                }
+            }
+            $output->listing($elements);
         }
 
         // Save new changelog prepending the current one
