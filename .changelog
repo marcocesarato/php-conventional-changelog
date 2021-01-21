@@ -1,8 +1,7 @@
 <?php
 
 return [
-    // Disable not notables except docs type
-    'ignoreTypes' => ['build', 'chore', 'ci', 'refactor', 'revert', 'style', 'test'],
+    'types' => ['feat', 'fix', 'perf', 'docs', 'chore'],
     // Ignore changelogs
     'ignorePatterns' => [
         '/chore\(changelog\)[:].*/i'
