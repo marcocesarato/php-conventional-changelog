@@ -254,11 +254,11 @@ class Configuration
         return $this;
     }
 
-	/**
-	 * @return string[][]
-	 */
-	public function getPreset() : array
-	{
-		return array_merge($this->breakingPreset, $this->preset);
-	}
+    /**
+     * @return string[][]
+     */
+    public function getPreset(): array
+    {
+        return array_merge($this->breakingPreset, $this->preset);
+    }
 }

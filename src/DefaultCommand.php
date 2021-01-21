@@ -57,6 +57,8 @@ class DefaultCommand extends Command
                 new InputOption('first-release', null, InputOption::VALUE_NONE, 'Run at first release (if --ver isn\'t specified version code it will be 1.0.0)'),
                 new InputOption('from-date', null, InputOption::VALUE_REQUIRED, 'Get commits from specified date [YYYY-MM-DD]'),
                 new InputOption('to-date', null, InputOption::VALUE_REQUIRED, 'Get commits last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]'),
+                new InputOption('from-tag', null, InputOption::VALUE_REQUIRED, 'Get commits from specified tag'),
+                new InputOption('to-tag', null, InputOption::VALUE_REQUIRED, 'Get commits last tag (or specified on --from-tag) to specified tag'),
                 new InputOption('major', null, InputOption::VALUE_NONE, 'Major release (important changes)'),
                 new InputOption('minor', null, InputOption::VALUE_NONE, 'Minor release (add functionality)'),
                 new InputOption('patch', null, InputOption::VALUE_NONE, 'Patch release (bug fixes) [default]'),

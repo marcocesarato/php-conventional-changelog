@@ -114,7 +114,7 @@ php vendor/bin/conventional-changelog
 
 To generate your changelog with auto commit and auto versioning tagging
 
-> Note: the version code by default, will be added one to the `PATCH` semver part (`MAJOR.MINOR.PATCH+1`) of the latest git tag *(Example, if the last version is `1.0.2` the newer, if not specified the version code, will be `1.0.3`)*.
+> **Note:** the version code by default, will be added one to the `PATCH` semver part (`MAJOR.MINOR.PATCH+1`) of the latest git tag *(Example, if the last version is `1.0.2` the newer, if not specified the version code, will be `1.0.3`)*.
 > See also `--major`, `--minor`, `--patch`, `--rc`, `--beta`, `--alpha` options.
 
 ```shell
@@ -164,6 +164,8 @@ php vendor/bin/conventional-changelog --ver="2.0.1"
         --first-release   bool        Run at first release (if --ver isn't specified version code will be 1.0.0)
         --to-date         str         Get commits from last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
         --from-date       str         Get commits from specified date [YYYY-MM-DD]
+        --to-tag          str         Get commits from last tag (or specified on --from-tag) to specified tag
+        --from-tag        str         Get commits from specified tag
         --ver             str         Specify the next release version code (semver)
         --history         bool        Generate the entire history of changes of all releases
         --no-verify       bool        Bypasses the pre-commit and commit-msg hooks

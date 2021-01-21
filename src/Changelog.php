@@ -38,6 +38,8 @@ class Changelog
         $hooks = !$input->getOption('no-verify'); // Verify git hooks
         $fromDate = $input->getOption('from-date');
         $toDate = $input->getOption('to-date');
+        $fromTag = $input->getOption('from-tag');
+        $toTag = $input->getOption('to-tag');
         $history = $input->getOption('history');
 
         $firstRelease = $input->getOption('first-release');
@@ -165,14 +167,36 @@ class Changelog
                 // Get all commits from the first one
                 $additionalParams = "{$firstCommit}..HEAD";
                 $lastVersion = $firstCommit;
+                if (empty($fromTag)) {
+                    $fromTag = $firstCommit;
+                }
             } else {
                 // Get latest commits from last version date
                 $additionalParams = "{$lastVersion}..HEAD";
+                if (empty($fromTag)) {
+                    $fromTag = $lastVersion;
+                }
             }
 
+            // Clean ranges
+            if ((!empty($fromDate) || !empty($toDate)) &&
+                empty($fromTag) &&
+                empty($toTag)) {
+                $additionalParams = '';
+            }
+
+            // Tag range
+            if (!empty($fromTag) ||
+                !empty($toTag)) {
+                if (empty($toTag)) {
+                    $toTag = 'HEAD';
+                }
+                $additionalParams = "{$fromTag}...{$toTag}";
+            }
+
+            // Date range
             if (!empty($fromDate) ||
                 !empty($toDate)) {
-                $additionalParams = '';
                 if (!empty($fromDate)) {
                     $additionalParams .= ' --since="' . date('Y-m-d', strtotime($fromDate)) . '"';
                 }
@@ -183,6 +207,7 @@ class Changelog
                     $todayString = Format::getDateString($today);
                 }
             }
+
             $options[$lastVersion] = [
                 'from' => $lastVersion,
                 'to' => $newVersion,
