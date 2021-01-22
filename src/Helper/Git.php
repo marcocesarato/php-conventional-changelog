@@ -7,6 +7,11 @@ use DateTime;
 class Git
 {
     /**
+     * @var string
+     */
+    protected static $delimiter = '----DELIMITER---';
+
+    /**
      * Run shell command on working dir.
      *
      * @param $string
@@ -14,8 +19,13 @@ class Git
     protected static function run($string): string
     {
         $value = shell_exec($string);
+        $value = Formatter::clean((string)$value);
 
-        return Formatter::clean((string)$value);
+        // Fix for some git versions
+        $value = trim($value, "'");
+        $value = str_replace(self::$delimiter . "'\n'", self::$delimiter . "\n", $value);
+
+        return $value;
     }
 
     /**
@@ -82,9 +92,8 @@ class Git
      */
     public static function getCommits(string $options = ''): array
     {
-        $commits = self::run("git log --pretty=format:'%B%H----DELIMITER----' {$options}") . "\n";
-
-        $commitsArray = explode("----DELIMITER----\n", $commits);
+        $commits = self::run("git log --pretty=format:'%B%H" . self::$delimiter . "' {$options}") . "\n";
+        $commitsArray = explode(self::$delimiter . "\n", $commits);
         array_pop($commitsArray);
 
         return $commitsArray;
@@ -95,8 +104,8 @@ class Git
      */
     public static function getTags(): array
     {
-        $tags = self::run("git tag --sort=-creatordate --list --format='%(refname:strip=2)----DELIMITER----'") . "\n";
-        $tagsArray = explode("----DELIMITER----\n", $tags);
+        $tags = self::run("git tag --sort=-creatordate --list --format='%(refname:strip=2)" . self::$delimiter . "'") . "\n";
+        $tagsArray = explode(self::$delimiter . "\n", $tags);
         array_pop($tagsArray);
 
         $tagsArray = array_reverse($tagsArray);
