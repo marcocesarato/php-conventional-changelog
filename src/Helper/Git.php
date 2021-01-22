@@ -11,7 +11,7 @@ class Git
      *
      * @param $string
      */
-    protected static function shellExec($string): string
+    protected static function run($string): string
     {
         $value = shell_exec($string);
 
@@ -23,7 +23,7 @@ class Git
      */
     public static function isInsideWorkTree(): bool
     {
-        $result = self::shellExec('git rev-parse --is-inside-work-tree');
+        $result = self::run('git rev-parse --is-inside-work-tree');
 
         return $result === 'true';
     }
@@ -33,7 +33,7 @@ class Git
      */
     public static function getFirstCommit(): string
     {
-        return self::shellExec('git rev-list --max-parents=0 HEAD');
+        return self::run('git rev-list --max-parents=0 HEAD');
     }
 
     /**
@@ -41,7 +41,7 @@ class Git
      */
     public static function getLastTag(): string
     {
-        return self::shellExec('git describe --tags --abbrev=0');
+        return self::run('git describe --tags --abbrev=0');
     }
 
     /**
@@ -49,7 +49,7 @@ class Git
      */
     public static function getCommitDate($hash): string
     {
-        $date = self::shellExec("git log -1 --format=%aI {$hash}");
+        $date = self::run("git log -1 --format=%aI {$hash}");
         $today = new DateTime($date);
 
         return $today->format('Y-m-d');
@@ -62,7 +62,7 @@ class Git
     {
         $lastTag = self::getLastTag();
 
-        return self::shellExec("git rev-parse --verify {$lastTag}");
+        return self::run("git rev-parse --verify {$lastTag}");
     }
 
     /**
@@ -70,7 +70,7 @@ class Git
      */
     public static function getRemoteUrl(): string
     {
-        $url = self::shellExec('git config --get remote.origin.url');
+        $url = self::run('git config --get remote.origin.url');
         $url = preg_replace("/\.git$/", '', $url);
         $url = preg_replace('/^(https?:\/\/)([0-9a-z.\-_:%]+@)/i', '$1', $url);
 
@@ -82,7 +82,7 @@ class Git
      */
     public static function getCommits(string $options = ''): array
     {
-        $commits = self::shellExec("git log --pretty=format:'%B%H----DELIMITER----' {$options}") . "\n";
+        $commits = self::run("git log --pretty=format:'%B%H----DELIMITER----' {$options}") . "\n";
 
         $commitsArray = explode("----DELIMITER----\n", $commits);
         array_pop($commitsArray);
@@ -95,7 +95,7 @@ class Git
      */
     public static function getTags(): array
     {
-        $tags = self::shellExec("git tag --sort=-creatordate --list --format='%(refname:strip=2)----DELIMITER----'") . "\n";
+        $tags = self::run("git tag --sort=-creatordate --list --format='%(refname:strip=2)----DELIMITER----'") . "\n";
         $tagsArray = explode("----DELIMITER----\n", $tags);
         array_pop($tagsArray);
 
