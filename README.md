@@ -10,6 +10,10 @@
 
 #### If this project helped you out, please support us with a star :star:
 
+<br>
+
+![](./docs/logo.png)
+
 </div>
 
 ## Description
