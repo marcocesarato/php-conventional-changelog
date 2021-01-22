@@ -19,6 +19,16 @@ class Git
     }
 
     /**
+     * Is inside work tree.
+     */
+    public static function isInsideWorkTree(): bool
+    {
+        $result = self::shellExec('git rev-parse --is-inside-work-tree');
+
+        return $result === 'true';
+    }
+
+    /**
      * Get first commit hash.
      */
     public static function getFirstCommit(): string
