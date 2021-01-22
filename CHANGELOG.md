@@ -4,6 +4,23 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.5.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.5.0...v1.5.1) (2021-01-22)
+
+
+### Bug Fixes
+
+* Commits retrieve on ranges and remove additional whitespaces ([C3bffa](https://github.com/marcocesarato/php-conventional-changelog/commit/C3bffa74021727937c1f5b4a42efe534c820b943))
+
+##### Config
+
+* Possibile issues with empty data ([179c1f](https://github.com/marcocesarato/php-conventional-changelog/commit/179c1fa95fac3853b24a57d0c933d09e5500c328))
+
+##### Git
+
+* Get commits command compatibility and sorting get tags ([28d6ad](https://github.com/marcocesarato/php-conventional-changelog/commit/28d6ad76bb0ebfb1fe21ba70ec4e1b512ef6a3be))
+
+---
+
 ## [1.5.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.4.3...v1.5.0) (2021-01-21)
 
 
