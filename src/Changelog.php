@@ -147,7 +147,7 @@ class Changelog
                     'from' => $fromTag,
                     'to' => $toTag,
                     'date' => Git::getCommitDate($toTag),
-                    'options' => "{$fromTag}..{$toTag}",
+                    'options' => "{$fromTag}...{$toTag}",
                     'autoBump' => false,
                 ];
                 $previousTag = $toTag;
@@ -157,7 +157,7 @@ class Changelog
                     'from' => $lastVersion,
                     'to' => $newVersion,
                     'date' => $today->format('Y-m-d'),
-                    'options' => "{$lastVersion}..HEAD",
+                    'options' => "{$lastVersion}...HEAD",
                     'autoBump' => false,
                 ];
             }
@@ -165,14 +165,14 @@ class Changelog
         } else {
             if ($firstRelease) {
                 // Get all commits from the first one
-                $additionalParams = "{$firstCommit}..HEAD";
+                $additionalParams = "{$firstCommit}...HEAD";
                 $lastVersion = $firstCommit;
                 if (empty($fromTag)) {
                     $fromTag = $firstCommit;
                 }
             } else {
                 // Get latest commits from last version date
-                $additionalParams = "{$lastVersion}..HEAD";
+                $additionalParams = "{$lastVersion}...HEAD";
                 if (empty($fromTag)) {
                     $fromTag = $lastVersion;
                 }
@@ -408,7 +408,8 @@ class Changelog
                     if (!empty($shaGroup)) {
                         $sha = '(' . implode(', ', $shaGroup) . ')';
                     }
-                    $changelog .= "* {$important}{$description}{$important} {$references} {$sha}\n";
+                    $changelog .= Format::clean("* {$important}{$description}{$important} {$references} {$sha}");
+                    $changelog .= PHP_EOL;
                 }
             }
         }
