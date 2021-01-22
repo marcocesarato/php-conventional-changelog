@@ -4,6 +4,32 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.5.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.5.1...v1.5.2) (2021-01-22)
+
+
+### Features
+
+* Add check if inside a git work tree ([E3ad12](https://github.com/marcocesarato/php-conventional-changelog/commit/E3ad1287e1bfccfddf18bf52152dd1edba4eff2a))
+
+##### Git
+
+* Add inside work tree method ([081196](https://github.com/marcocesarato/php-conventional-changelog/commit/0811968babb8de519a3f249b4dcdb7da33a5ad99))
+
+### Bug Fixes
+
+* Auto bump new version code commit and tag ([Bf26ee](https://github.com/marcocesarato/php-conventional-changelog/commit/Bf26eee06484d2045c7f701f2e4b1f02fd430911))
+
+##### Commit Parser
+
+* Change return to string nullable on getters hash and raw ([5aa565](https://github.com/marcocesarato/php-conventional-changelog/commit/5aa565eb18090287e4033a6178acbe0959537d0b))
+
+##### Git
+
+* Get last tag name ([B265d0](https://github.com/marcocesarato/php-conventional-changelog/commit/B265d06b1f857d1f95db27a912fd74bd574c981a))
+* Quotes on values exec return ([4e78c4](https://github.com/marcocesarato/php-conventional-changelog/commit/4e78c4ea8bd4e0f290d20284a7820d5392c04064))
+
+---
+
 ## [1.5.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.5.0...v1.5.1) (2021-01-22)
 
 
