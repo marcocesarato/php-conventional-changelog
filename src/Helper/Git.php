@@ -72,7 +72,8 @@ class Git
      */
     public static function getCommits(string $options = ''): array
     {
-        $commits = self::shellExec("git log --format=%B%H----DELIMITER---- {$options}") . "\n";
+        $commits = self::shellExec("git log --pretty=format:'%B%H----DELIMITER----' {$options}") . "\n";
+
         $commitsArray = explode("----DELIMITER----\n", $commits);
         array_pop($commitsArray);
 
@@ -84,9 +85,11 @@ class Git
      */
     public static function getTags(): array
     {
-        $tags = self::shellExec('git tag --list --format=%(refname:strip=2)----DELIMITER----') . "\n";
+        $tags = self::shellExec("git tag --sort=-creatordate --list --format='%(refname:strip=2)----DELIMITER----'") . "\n";
         $tagsArray = explode("----DELIMITER----\n", $tags);
         array_pop($tagsArray);
+
+        $tagsArray = array_reverse($tagsArray);
 
         return $tagsArray;
     }
