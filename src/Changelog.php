@@ -52,6 +52,15 @@ class Changelog
 
         $autoBump = false;
 
+        // Set working directory
+        chdir($root);
+
+        if (!Git::isInsideWorkTree()) {
+            $output->error('Not a git repository');
+
+            return Command::FAILURE;
+        }
+
         // If have amend option enable commit
         if ($amend) {
             $autoCommit = true;
