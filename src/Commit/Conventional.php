@@ -147,12 +147,12 @@ class Conventional implements Stringable
         return (bool)preg_match(self::PATTERN_HEADER, $this->raw);
     }
 
-    public function getRaw(): string
+    public function getRaw(): ?string
     {
         return $this->raw;
     }
 
-    public function getHash(): string
+    public function getHash(): ?string
     {
         return $this->hash;
     }
