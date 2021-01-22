@@ -71,10 +71,18 @@ class Configuration
     ];
 
     /**
+     * Ignore types.
+     *
+     * @var string[]
+     */
+    public $ignoreTypes = ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'];
+
+    /**
      * Constructor.
      */
     public function __construct(array $settings = [])
     {
+        $this->setTypes($this->preset);
         $this->fromArray($settings);
     }
 
@@ -95,7 +103,8 @@ class Configuration
             'path' => $this->getPath(),
             'preset' => $this->getPreset(),
             'types' => [],
-            'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
+            'ignoreTypes' => $this->getIgnoreTypes(),
+            'ignorePatterns' => $this->getIgnorePatterns(),
         ];
 
         $params = array_replace_recursive($defaults, $array);
@@ -103,21 +112,6 @@ class Configuration
         // Ignore Types
         if (!empty($array['ignoreTypes'])) {
             $params['ignoreTypes'] = $array['ignoreTypes']; // Overwrite ignored types
-        }
-        if (is_array($params['ignoreTypes'])) {
-            foreach ($params['ignoreTypes'] as $type) {
-                unset($params['preset'][$type]);  // Unset excluded types
-            }
-        }
-
-        // Ignore Patterns
-        if (!empty($array['ignorePatterns'])) {
-            $params['ignorePatterns'] = array_merge($this->ignorePatterns, $array['ignorePatterns']);
-        }
-        foreach ($params['ignorePatterns'] as $key => $pattern) {
-            if (!$this->isRegex($pattern)) { // Check ignore patterns
-                $params['ignorePatterns'][$key] = '#' . preg_quote($pattern, '#') . '#i';
-            }
         }
 
         // Set Types (overwrite ignored types)
@@ -136,11 +130,12 @@ class Configuration
         // Add breaking changes
         $params['preset'] = array_merge($this->breakingPreset, $params['preset']);
 
+        $this->setPath($params['path']);
+        $this->setIgnorePatterns($params['ignorePatterns']);
+        $this->setIgnoreTypes($params['ignoreTypes']);
         $this->setTypes($params['preset']);
         $this->setHeaderTitle($params['headerTitle']);
         $this->setHeaderDescription($params['headerDescription']);
-        $this->setPath($params['path']);
-        $this->setIgnorePatterns($params['ignorePatterns']);
     }
 
     /**
@@ -195,6 +190,11 @@ class Configuration
      */
     public function setTypes(array $types): Configuration
     {
+        $ignoreTypes = $this->getIgnoreTypes();
+        foreach ($ignoreTypes as $type) {
+            unset($types[$type]);  // Unset excluded types
+        }
+
         $this->types = $types;
 
         return $this;
@@ -249,6 +249,11 @@ class Configuration
      */
     public function setIgnorePatterns(array $ignorePatterns): Configuration
     {
+        foreach ($ignorePatterns as $key => $pattern) {
+            if (!$this->isRegex($pattern)) {
+                $ignorePatterns[$key] = '#' . preg_quote($pattern, '#') . '#i';
+            }
+        }
         $this->ignorePatterns = $ignorePatterns;
 
         return $this;
@@ -260,5 +265,29 @@ class Configuration
     public function getPreset(): array
     {
         return array_merge($this->breakingPreset, $this->preset);
+    }
+
+    /**
+     * @param string[] $ignoreTypes
+     */
+    public function setIgnoreTypes(array $ignoreTypes): Configuration
+    {
+        $types = $this->getTypes();
+        foreach ($ignoreTypes as $type) {
+            unset($types[$type]);  // Unset excluded types
+        }
+
+        $this->ignoreTypes = $ignoreTypes;
+        $this->types = $types;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getIgnoreTypes(): array
+    {
+        return $this->ignoreTypes;
     }
 }
