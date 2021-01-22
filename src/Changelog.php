@@ -301,7 +301,7 @@ class Changelog
                 }
 
                 $semver = new SemanticVersion($params['from']);
-                $params['to'] = $semver->bump($bumpRelease);
+                $newVersion = $params['to'] = $semver->bump($bumpRelease);
             }
 
             // Remote url
