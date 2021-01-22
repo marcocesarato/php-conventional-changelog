@@ -41,7 +41,7 @@ class Git
      */
     public static function getLastTag(): string
     {
-        return self::run('git describe --tags --abbrev=0');
+        return self::run("git for-each-ref refs/tags --sort=-creatordate --format='%(refname:strip=2)' --count=1");
     }
 
     /**
