@@ -4,7 +4,7 @@
 
 ![Version](https://img.shields.io/badge/version-1.5.1-brightgreen?style=for-the-badge)
 ![Requirements](https://img.shields.io/badge/php-%3E%3D%207.1.3-4F5D95?style=for-the-badge)
-![Code Style](https://img.shields.io/badge/code%20style-PSR-blue?style=for-the-badge)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow?style=for-the-badge)](https://conventionalcommits.org)
 ![License](https://img.shields.io/github/license/marcocesarato/php-conventional-changelog?style=for-the-badge)
 [![GitHub](https://img.shields.io/badge/GitHub-Repo-6f42c1?style=for-the-badge)](https://github.com/marcocesarato/php-conventional-changelog)
 
