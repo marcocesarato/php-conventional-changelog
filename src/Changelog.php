@@ -2,7 +2,7 @@
 
 namespace ConventionalChangelog;
 
-use ConventionalChangelog\Helper\Format;
+use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Helper\Git;
 use ConventionalChangelog\Helper\SemanticVersion;
 use DateTime;
@@ -88,7 +88,7 @@ class Changelog
 
         // Current Dates
         $today = new DateTime();
-        $todayString = Format::getDateString($today);
+        $todayString = Formatter::getDateString($today);
 
         // First commit
         $firstCommit = Git::getFirstCommit();
@@ -204,7 +204,7 @@ class Changelog
                     $time = strtotime($toDate);
                     $additionalParams .= ' --before="' . date('Y-m-d', $time) . '"';
                     $today->setTimestamp($time);
-                    $todayString = Format::getDateString($today);
+                    $todayString = Formatter::getDateString($today);
                 }
             }
 
@@ -408,7 +408,7 @@ class Changelog
                     if (!empty($shaGroup)) {
                         $sha = '(' . implode(', ', $shaGroup) . ')';
                     }
-                    $changelog .= Format::clean("* {$important}{$description}{$important} {$references} {$sha}");
+                    $changelog .= Formatter::clean("* {$important}{$description}{$important} {$references} {$sha}");
                     $changelog .= PHP_EOL;
                 }
             }

@@ -15,7 +15,7 @@ class Git
     {
         $value = shell_exec($string);
 
-        return Format::clean((string)$value);
+        return Formatter::clean((string)$value);
     }
 
     /**

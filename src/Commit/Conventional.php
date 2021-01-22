@@ -2,7 +2,7 @@
 
 namespace ConventionalChangelog\Commit;
 
-use ConventionalChangelog\Helper\Format;
+use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Type\Stringable;
 
 class Conventional implements Stringable
@@ -71,7 +71,7 @@ class Conventional implements Stringable
             return;
         }
 
-        $raw = Format::clean($commit);
+        $raw = Formatter::clean($commit);
         $this->setRaw($raw);
 
         // Not parsable
@@ -115,18 +115,18 @@ class Conventional implements Stringable
      */
     protected function parseMessage(string $message)
     {
-        $body = Format::clean($message);
+        $body = Formatter::clean($message);
         $footers = [];
         if (preg_match_all(self::PATTERN_FOOTER, $body, $matches, PREG_SET_ORDER, 0)) {
             foreach ($matches as $match) {
                 $footer = $match[0];
                 $body = str_replace($footer, '', $body);
                 $value = ltrim((string)$match['value'], ':');
-                $value = Format::clean($value);
+                $value = Formatter::clean($value);
                 $footers[] = new Footer((string)$match['token'], $value);
             }
         }
-        $body = Format::clean($body);
+        $body = Formatter::clean($body);
         $this->setBody($body)
              ->setFooters($footers);
     }
@@ -311,6 +311,6 @@ class Conventional implements Stringable
         $message = $this->getMessage();
         $string = $header . "\n\n" . $message;
 
-        return Format::clean($string);
+        return Formatter::clean($string);
     }
 }

@@ -4,7 +4,7 @@ namespace ConventionalChangelog\Helper;
 
 use DateTime;
 
-class Format
+class Formatter
 {
     /**
      * Clean string removing double spaces and trim.
