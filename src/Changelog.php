@@ -32,6 +32,7 @@ class Changelog
     {
         $root = $input->getArgument('path'); // Root
 
+        $nextVersion = $input->getOption('ver');
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
         $autoTag = !$input->getOption('no-tag'); // Tag release once is committed
         $amend = $input->getOption('amend'); // Amend commit
@@ -130,9 +131,9 @@ class Changelog
             $newVersion = $semver->bump($bumpRelease);
         }
 
-        $nextVersion = $input->getOption('ver');
         if (!empty($nextVersion)) {
             $newVersion = $nextVersion;
+            $autoBump = false;
         }
         $newVersion = preg_replace('#^v#i', '', $newVersion);
 
