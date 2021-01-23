@@ -41,7 +41,7 @@ You can install it easily with composer
 
 For easy use the changelog generator or release faster your new version you can add to your `composer.json` the scripts:
 
-> You can customize it according to your needs
+> **Notes:** you can customize it according to your needs
 
 ```
 {
@@ -49,6 +49,7 @@ For easy use the changelog generator or release faster your new version you can 
   "scripts": {
     "changelog": "conventional-changelog",
     "release": "conventional-changelog --commit",
+    "release:patch": "conventional-changelog --patch --commit",
     "release:minor": "conventional-changelog --minor --commit",
     "release:major": "conventional-changelog --major --commit"
   },
@@ -60,7 +61,7 @@ Now you can just run `composer changelog` to generate your changelog.
 
 ## 📘 Configuration
 
-> **Note:** This procedure is *optional* and permit to overwriting/merging the default settings
+> **Notes:** this procedure is *optional* and permit to overwriting/merging the default settings
 
 For customize settings you just neet to create a file named `.changelog` on the root of your project or on the working dir.
 
@@ -111,6 +112,7 @@ and it will put all commit logs in the latest version just created.
 ![](./docs/usage.gif)
 
 > **Notes:**<br>
+> - Some of these options listed on examples could be used together at the same time (ex. `--first-release --commit`)
 > - Auto bump of version code using the [Semantic Versioning](https://semver.org) (`MAJOR.MINOR.PATCH`) is enabled by default if not specified the release method.
 >    - `MAJOR`: At least one breaking change.
 >    - `MINOR`: At least one new feature.
@@ -120,7 +122,18 @@ and it will put all commit logs in the latest version just created.
 
 ### Examples
 
-#### Generate
+#### First version
+
+> **Notes:** use this option only if you don't need all history changes or is the first version, else run with `--history` option
+
+To generate your changelog for the first version run:
+
+```shell
+php vendor/bin/conventional-changelog --first-release
+```
+
+
+#### New version
 
 To generate your changelog *(without committing files)*
 
@@ -128,19 +141,25 @@ To generate your changelog *(without committing files)*
 php vendor/bin/conventional-changelog
 ```
 
-#### Commit and tagging
+#### New release (with commit and tag)
 
-To generate your changelog with auto commit and auto versioning tagging
+To generate your changelog with auto commit and auto versioning tagging run:
 
 ```shell
 php vendor/bin/conventional-changelog --commit
+```
+
+or for amend to an existing commit you can run:
+
+```shell
+php vendor/bin/conventional-changelog --amend
 ```
 
 #### History
 
 To generate your changelog with the entire history of changes of all releases
 
-> **Warn:** This operation will overwrite the `CHANGELOG.md` file if it already exists
+> **Warn:** this operation will overwrite the `CHANGELOG.md` file if it already exists
 
 ```shell
 php vendor/bin/conventional-changelog --history
@@ -163,7 +182,7 @@ php vendor/bin/conventional-changelog --from-tag="v1.0.2" --to-tag="1.0.4"
 ```
 
 
-#### Version code
+#### Specific version
 
 To generate your changelog with a specific version code
 
@@ -173,7 +192,7 @@ php vendor/bin/conventional-changelog --ver="2.0.1"
 
 ### Commands List
 
-> You can have more info about running  `php vendor/bin/conventional-changelog --help`
+> **Info:** You can have more info about running  `php vendor/bin/conventional-changelog --help`
 
 ```
         --config          str         Specify the configuration file path
@@ -195,7 +214,3 @@ php vendor/bin/conventional-changelog --ver="2.0.1"
         --no-verify       bool        Bypasses the pre-commit and commit-msg hooks
         --no-tag          bool        Disable release auto tagging when commit enabled
 ```
-
-[semver]: http://semver.org
-
-[conventionalcommits]: https://conventionalcommits.org
