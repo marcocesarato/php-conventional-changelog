@@ -12,7 +12,7 @@
 
 <br>
 
-![](./docs/logo.png)
+![](docs/images/logo.png)
 
 </div>
 
@@ -109,7 +109,7 @@ return [
 The changelog generator will generate a log of changes from the date of the last tag to the current date,
 and it will put all commit logs in the latest version just created.
 
-![](./docs/usage.gif)
+![](docs/images/usage.gif)
 
 > **Notes:**<br>
 > - Some of these options listed on examples could be used together at the same time (ex. `--first-release --commit`)
