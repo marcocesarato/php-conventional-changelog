@@ -2,7 +2,6 @@
 
 namespace ConventionalChangelog\Git;
 
-use ConventionalChangelog\Git\Commit\Body;
 use ConventionalChangelog\Git\Commit\Description;
 use ConventionalChangelog\Git\Commit\Footer;
 use ConventionalChangelog\Git\Commit\Scope;
@@ -48,11 +47,6 @@ class ConventionalCommit extends Commit
      * @var Description
      */
     protected $description;
-
-    /**
-     * @var Body
-     */
-    protected $body;
 
     /**
      * Footers.
@@ -155,11 +149,6 @@ class ConventionalCommit extends Commit
         return $this->description;
     }
 
-    public function getBody(): Body
-    {
-        return $this->body;
-    }
-
     /**
      * @return Footer[]
      */
@@ -193,7 +182,7 @@ class ConventionalCommit extends Commit
         return array_unique($refs);
     }
 
-    public function getHeader()
+    public function getHeader(): string
     {
         $header = $this->type;
         if ($this->hasScope()) {
@@ -207,7 +196,7 @@ class ConventionalCommit extends Commit
         return $header;
     }
 
-    public function getMessage()
+    public function getMessage(): string
     {
         $footer = implode("\n", $this->footers);
 
@@ -242,13 +231,6 @@ class ConventionalCommit extends Commit
         return $this;
     }
 
-    public function setBody(string $body): self
-    {
-        $this->body = new Body($body);
-
-        return $this;
-    }
-
     public function setFooters(array $footers): self
     {
         $this->footers = $footers;
@@ -259,16 +241,11 @@ class ConventionalCommit extends Commit
     public function __wakeup()
     {
         $rows = explode("\n", $this->raw);
-        $count = count($rows);
-        // Commit info
-        $hash = trim($rows[$count - 1]);
-        $this->setHash($hash);
-
         $header = $rows[0];
         $message = '';
         // Get message
         foreach ($rows as $i => $row) {
-            if ($i !== 0 && $i !== $count) {
+            if ($i !== 0) {
                 $message .= $row . "\n";
             }
         }

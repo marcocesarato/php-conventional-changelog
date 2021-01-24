@@ -2,6 +2,8 @@
 
 namespace ConventionalChangelog\Git;
 
+use ConventionalChangelog\Git\Commit\Body;
+use ConventionalChangelog\Git\Commit\Subject;
 use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Type\Stringable;
 use DateTime;
@@ -14,6 +16,20 @@ class Commit implements Stringable
      * @var string
      */
     protected $raw;
+
+    /**
+     * Subject content.
+     *
+     * @var Subject
+     */
+    protected $subject;
+
+    /**
+     * Body content.
+     *
+     * @var Body
+     */
+    protected $body;
 
     /**
      * Sha hash.
@@ -209,6 +225,47 @@ class Commit implements Stringable
         $this->committerEmail = $committerEmail;
 
         return $this;
+    }
+
+    public function getBody(): Body
+    {
+        return $this->body;
+    }
+
+    public function setBody(string $body): self
+    {
+        $this->body = new Body($body);
+
+        return $this;
+    }
+
+    public function getSubject(): Subject
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(string $subject): self
+    {
+        $this->subject = new Subject($subject);
+
+        return $this;
+    }
+
+    public function __wakeup()
+    {
+        $rows = explode("\n", $this->raw);
+
+        $subject = $rows[0];
+        $this->setSubject($subject);
+
+        $body = '';
+        // Get message
+        foreach ($rows as $i => $row) {
+            if ($i !== 0) {
+                $body .= $row . "\n";
+            }
+        }
+        $this->setBody($body);
     }
 
     public function __toString(): string
