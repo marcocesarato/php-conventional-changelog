@@ -75,7 +75,7 @@ class Configuration
      *
      * @var string[]
      */
-    public $ignoreTypes = ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'];
+    public $ignoreTypes = ['build', 'chore', 'ci', 'docs', 'perf', 'refactor', 'revert', 'style', 'test'];
 
     /**
      * Constructor.
