@@ -119,7 +119,7 @@ To generate your changelog with auto commit and auto versioning tagging run:
 php vendor/bin/conventional-changelog --commit
 ```
 
-or for amend to an existing commit you can run:
+or to amend at an existing commit you can run:
 
 ```shell
 php vendor/bin/conventional-changelog --amend
