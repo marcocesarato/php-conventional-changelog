@@ -4,6 +4,27 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.5.4](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.5.3...v1.6.0) (2021-01-24)
+
+
+### Features
+
+* Add commit parent class with raw metadata ([962e0f](https://github.com/marcocesarato/php-conventional-changelog/commit/962e0f7474ba34d7cfe01660025f272df9742eb8))
+
+##### Config
+
+* Add root setting ([2ad49c](https://github.com/marcocesarato/php-conventional-changelog/commit/2ad49c5614e5bcba17c95f142ea11e698d07a644))
+
+### Bug Fixes
+
+
+##### Config
+
+* Use default settings if is not a valid config return value ([55fd29](https://github.com/marcocesarato/php-conventional-changelog/commit/55fd292f3a5d9068502b9ce54997d5015e03ad94))
+* Check valid array ([849f43](https://github.com/marcocesarato/php-conventional-changelog/commit/849f43dcadef5361a64fa0ed5705a67850cef329))
+
+---
+
 ## [1.5.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.5.2...v1.5.3) (2021-01-23)
 
 
