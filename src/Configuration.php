@@ -87,6 +87,20 @@ class Configuration
     }
 
     /**
+     * Validate settings.
+     *
+     * @param mixed $settings
+     */
+    public static function validate($settings): bool
+    {
+        if (!is_array($settings)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * From array.
      *
      * @param $array

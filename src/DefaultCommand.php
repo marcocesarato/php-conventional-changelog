@@ -31,12 +31,17 @@ class DefaultCommand extends Command
     public $config;
 
     /**
+     * @var array
+     */
+    public $settings = [];
+
+    /**
      * Constructor.
      */
     public function __construct(array $settings = [])
     {
         parent::__construct(self::$defaultName);
-        $this->config = new Configuration($settings);
+        $this->settings = $settings;
     }
 
     /**
@@ -79,14 +84,21 @@ class DefaultCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $outputStyle = new SymfonyStyle($input, $output);
+
         // Retrieve configuration settings
         $config = $input->getOption('config');
         if (!empty($config) && is_file($config)) {
-            $settings = require $config;
-            $this->config = new Configuration($settings);
+            $this->settings = require $config;
         }
 
-        $outputStyle = new SymfonyStyle($input, $output);
+        if (Configuration::validate($this->settings)) {
+            $output->error('Not a valid configuration! Using default settings.');
+            $this->settings = [];
+        }
+
+        $this->config = new Configuration($this->settings);
+
         // Initialize changelog
         $this->changelog = new Changelog($this->config);
 
