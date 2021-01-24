@@ -9,7 +9,7 @@ dir or use the `--config` option to specify the location of your configuration f
 
 ## Settings
 
-- **Path:** Working directory of your project
+- **Root:** Working directory of your project
 - **Path:** Path to your changelog file (relative to the working dir/root)
 - **Header Title:** Header title of the changelog
 - **Header Description:** Header subtitle of the changelog
