@@ -26,7 +26,7 @@ These are the default settings:
 <?php
 
 return [
-  'root' => __DIR__,
+  'root' => getcwd(),
   'path' => 'CHANGELOG.md',
   'headerTitle' => 'Changelog',
   'headerDescription' => 'All notable changes to this project will be documented in this file.',
