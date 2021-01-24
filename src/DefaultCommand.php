@@ -92,8 +92,8 @@ class DefaultCommand extends Command
             $this->settings = require $config;
         }
 
-        if (Configuration::validate($this->settings)) {
-            $output->error('Not a valid configuration! Using default settings.');
+        if (!Configuration::validate($this->settings)) {
+            $outputStyle->error('Not a valid configuration! Using default settings.');
             $this->settings = [];
         }
 
