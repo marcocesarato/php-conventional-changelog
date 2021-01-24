@@ -113,10 +113,8 @@ class ConventionalCommit extends Commit
 
     /**
      * From commit.
-     *
-     * @return self
      */
-    public static function fromCommit(Commit $commit)
+    public static function fromCommit(Commit $commit): self
     {
         return unserialize(
             preg_replace('/^O:\d+:"[^"]++"/', 'O:' . strlen(__CLASS__) . ':"' . __CLASS__ . '"', serialize($commit)),

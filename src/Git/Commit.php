@@ -68,7 +68,7 @@ class Commit implements Stringable
      *
      * @throws \Exception
      */
-    public function fromArray(array $array)
+    public function fromArray(array $array): self
     {
         if (isset($array['raw'])) {
             $this->setRaw($array['raw']);
@@ -103,7 +103,7 @@ class Commit implements Stringable
     /**
      * Check if is valid SHA-1.
      */
-    protected function isValidHash(string $hash)
+    protected function isValidHash(string $hash): bool
     {
         return (bool)preg_match('/^[0-9a-f]{40}$/i', $hash);
     }
@@ -134,7 +134,7 @@ class Commit implements Stringable
         return $this->hash;
     }
 
-    public function getShortHash(): string
+    public function getShortHash(): ?string
     {
         return substr($this->hash, 0, 6);
     }
@@ -151,7 +151,7 @@ class Commit implements Stringable
         return $this;
     }
 
-    public function getAuthorName(): string
+    public function getAuthorName(): ?string
     {
         return $this->authorName;
     }
@@ -163,7 +163,7 @@ class Commit implements Stringable
         return $this;
     }
 
-    public function getAuthorEmail(): string
+    public function getAuthorEmail(): ?string
     {
         return $this->authorEmail;
     }
@@ -187,7 +187,7 @@ class Commit implements Stringable
         return $this;
     }
 
-    public function getCommitterName(): string
+    public function getCommitterName(): ?string
     {
         return $this->committerName;
     }
@@ -199,7 +199,7 @@ class Commit implements Stringable
         return $this;
     }
 
-    public function getCommitterEmail(): string
+    public function getCommitterEmail(): ?string
     {
         return $this->committerEmail;
     }
@@ -213,6 +213,6 @@ class Commit implements Stringable
 
     public function __toString(): string
     {
-        return $this->getRaw();
+        return (string)$this->getRaw();
     }
 }

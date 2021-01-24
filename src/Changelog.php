@@ -2,8 +2,8 @@
 
 namespace ConventionalChangelog;
 
-use ConventionalChangelog\Git\Repository;
 use ConventionalChangelog\Git\ConventionalCommit;
+use ConventionalChangelog\Git\Repository;
 use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Helper\SemanticVersion;
 use DateTime;
