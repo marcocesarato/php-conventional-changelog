@@ -3,22 +3,22 @@
 - Commit all changed files (`--commit-all`)
 - Check version history on semver code generator
 - Settings
-  - Hooks
-      - `preRun`/`postRun`
-      - `preBump`/`postBump`
-      - `preChangelog`/`postChangelog`
-      - `preCommit`/`postCommit`
-      - `preTag`/`postTag`
-  - Skips
-      - `skipBump`
-      - `skipChangelog`
-      - `skipCommit`
-      - `skipTag`
-  - Tag prefix and suffix (default prefix `v`)
-  - Show References (default `true`)
-  - Show Commit hash (default `true`)
-  - Prettify Scope (default `true`)
-  - Commit Url Format
-  - Compare Url Format
-  - Issue Url Format
-  - Release Commit Message Format
+    - Hooks
+        - `preRun`/`postRun`
+        - `preBump`/`postBump`
+        - `preChangelog`/`postChangelog`
+        - `preCommit`/`postCommit`
+        - `preTag`/`postTag`
+    - Skips
+        - `skipBump`
+        - `skipChangelog`
+        - `skipCommit`
+        - `skipTag`
+    - Tag prefix and suffix (default prefix `v`)
+    - Show References (default `true`)
+    - Show Commit hash (default `true`)
+    - Prettify Scope (default `true`)
+    - Commit Url Format
+    - Compare Url Format
+    - Issue Url Format
+    - Release Commit Message Format

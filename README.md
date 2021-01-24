@@ -18,18 +18,21 @@
 
 ## Description
 
-Generate changelogs from a project's commit messages and metadata using composer and automate versioning with [semver](https://semver.org) and [conventional-commits](https://conventionalcommits.org).
+Generate changelogs from a project's commit messages and metadata using composer and automate versioning
+with [semver](https://semver.org) and [conventional-commits](https://conventionalcommits.org).
 
-This package can generate changelog and release notes from committing history.
-It provides a command that can be run from the terminal, or using composer scripts, to generate a changelog file in markdown for the current project.
+This package can generate changelog and release notes from committing history. It provides a command that can be run
+from the terminal, or using composer scripts, to generate a changelog file in markdown for the current project.
 
-The command may take parameters that define the releases of the project that will be considered to extract the changes from the git history to generate the file.
-The package uses a configuration system with that permit to customize the settings you may want to have your desired changelog generated.
+The command may take parameters that define the releases of the project that will be considered to extract the changes
+from the git history to generate the file. The package uses a configuration system with that permit to customize the
+settings you may want to have your desired changelog generated.
 
 ### How to contribute
 
-Have an idea? Found a bug? Please raise to [ISSUES](https://github.com/marcocesarato/php-conventional-changelog/issues) or [PULL REQUEST](https://github.com/marcocesarato/php-conventional-changelog/pulls).
-Contributions are welcome and are greatly appreciated! Every little bit helps.
+Have an idea? Found a bug? Please raise to [ISSUES](https://github.com/marcocesarato/php-conventional-changelog/issues)
+or [PULL REQUEST](https://github.com/marcocesarato/php-conventional-changelog/pulls). Contributions are welcome and are
+greatly appreciated! Every little bit helps.
 
 ## 📖 Installation
 
@@ -63,7 +66,8 @@ Now you can just run `composer changelog` to generate your changelog.
 
 > **Notes:** this procedure is *optional* and permit to overwriting/merging the default settings
 
-For customize settings you just neet to create a file named `.changelog` on the root of your project or on the working dir.
+For customize settings you just neet to create a file named `.changelog` on the root of your project or on the working
+dir.
 
 > **Notes:**<br>
 > - If you don't need to customize some settings just omit it from the configuration file
@@ -73,6 +77,7 @@ For customize settings you just neet to create a file named `.changelog` on the 
 Configure your preferences with the help of the following example.
 
 #### Config Example
+
 ```php
 <?php
 return [
@@ -94,7 +99,7 @@ return [
     ],
   ],
   // Exclude not notables types (following types are the default excluded types)
-  'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'refactor', 'revert', 'style', 'test'],
+  'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'pref', 'refactor', 'revert', 'style', 'test'],
   'ignorePatterns' => [
     // Exclude all commits with this message
     'chore(deps): update dependencies',
@@ -106,8 +111,8 @@ return [
 
 ## 💻 Usage
 
-The changelog generator will generate a log of changes from the date of the last tag to the current date,
-and it will put all commit logs in the latest version just created.
+The changelog generator will generate a log of changes from the date of the last tag to the current date, and it will
+put all commit logs in the latest version just created.
 
 ![](docs/images/usage.gif)
 
@@ -118,7 +123,6 @@ and it will put all commit logs in the latest version just created.
 >    - `MINOR`: At least one new feature.
 >    - `PATCH`: Default
 > - Use these options to specify the release method: `--major`, `--minor`, `--patch`, `--rc`, `--beta`, `--alpha`.
-
 
 ### Examples
 
@@ -131,7 +135,6 @@ To generate your changelog for the first version run:
 ```shell
 php vendor/bin/conventional-changelog --first-release
 ```
-
 
 #### New version
 
@@ -180,7 +183,6 @@ To generate your changelog from a specified tag to another specified tag
 ```shell
 php vendor/bin/conventional-changelog --from-tag="v1.0.2" --to-tag="1.0.4"
 ```
-
 
 #### Specific version
 
