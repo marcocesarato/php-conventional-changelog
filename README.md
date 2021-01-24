@@ -66,48 +66,15 @@ Now you can just run `composer changelog` to generate your changelog.
 
 > **Notes:** this procedure is *optional* and permit to overwriting/merging the default settings
 
-For customize settings you just neet to create a file named `.changelog` on the root of your project or on the working
-dir.
+For customize settings you just needs to create a file named `.changelog` on the root of your project/on the working
+dir or use the `--config` option to specify the location of your configuration file.
 
 > **Notes:**<br>
-> - If you don't need to customize some settings just omit it from the configuration file
-> - The default ignored types are: `build`, `chore`, `ci`, `docs`, `refactor`, `revert`, `style`, `test`
+> - When a setting on the configuration file is not necessary just omit it
+> - The default ignored types are: `build`, `chore`, `ci`, `docs`, `perf`, `refactor`, `revert`, `style`, `test`
 > - To allow all types just keep empty `types` and set empty `ignoreTypes`
 
-Configure your preferences with the help of the following example.
-
-#### Config Example
-
-```php
-<?php
-return [
-  // File changelog (relative to the working dir)
-  'path' => 'docs/CHANGELOG.md', // You can specify a different folder
-  'headerTitle' => 'My changelog',
-  'headerDescription' => 'This is my changelog file.',
-  // Types allowed on changelog
-  'types' => ['feat', 'fix', 'pref'], // These could overwrite ignored types
-  'preset' => [
-    // Add improvements type (deprecated type)
-    'improvements' => [
-      'label' => 'Improvements',
-      'description' => 'Improvements to existing features'
-    ],
-    'chore' => [
-      // Change chore default label
-      'label' => 'Others'
-    ],
-  ],
-  // Exclude not notables types (following types are the default excluded types)
-  'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'pref', 'refactor', 'revert', 'style', 'test'],
-  'ignorePatterns' => [
-    // Exclude all commits with this message
-    'chore(deps): update dependencies',
-    // You can also use regex to exclude all commit like 'chore(changelog): updated'
-    '/chore\(changelog\)[:].*/i'
-  ],
-];
-```
+You can have more info about reading the [config documentation](./docs/config.md).
 
 ## 💻 Usage
 
