@@ -9,6 +9,7 @@
         - `preChangelog`/`postChangelog`
         - `preCommit`/`postCommit`
         - `preTag`/`postTag`
+        - `formatScope`
     - Skips
         - `skipBump`
         - `skipChangelog`
@@ -22,3 +23,4 @@
     - Compare Url Format
     - Issue Url Format
     - Release Commit Message Format
+    - Sort commits by (`date`, `subject`)
