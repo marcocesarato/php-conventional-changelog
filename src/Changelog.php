@@ -242,7 +242,7 @@ class Changelog
             // Get all commits information
             $commits = [];
             foreach ($commitsRaw as $commitRaw) {
-                $commit = new Commit\Conventional($commitRaw);
+                $commit = Commit\Conventional::fromCommit($commitRaw);
 
                 // Not a conventional commit
                 if (!$commit->isValid()) {
@@ -259,7 +259,7 @@ class Changelog
                 }
                 // Add commit
                 if (!$ignore) {
-                    $commits[] = new Commit\Conventional($commit);
+                    $commits[] = $commit;
                 }
             }
 

@@ -2,6 +2,7 @@
 
 namespace ConventionalChangelog\Helper;
 
+use ConventionalChangelog\Commit\Commit;
 use DateTime;
 
 class Git
@@ -92,11 +93,37 @@ class Git
      */
     public static function getCommits(string $options = ''): array
     {
-        $commits = self::run("git log --pretty=format:'%B%H" . self::$delimiter . "' {$options}") . "\n";
-        $commitsArray = explode(self::$delimiter . "\n", $commits);
+        $commits = [];
+        $shortcodes = [
+            'raw' => '%B',
+            'hash' => '%H',
+            'authorName' => '%aN',
+            'authorEmail' => '%aE',
+            'authorDate' => '%aI',
+            'committerName' => '%cN',
+            'committerEmail' => '%cE',
+            'committerDate' => '%cI',
+        ];
+
+        $format = '';
+        foreach ($shortcodes as $key => $value) {
+            $format .= "[{$key}]{$value}[/{$key}]";
+        }
+        $format .= self::$delimiter;
+        $commitsLogs = self::run("git log --pretty=format:'" . $format . "' {$options}") . "\n";
+
+        $commitsArray = explode(self::$delimiter . "\n", $commitsLogs);
         array_pop($commitsArray);
 
-        return $commitsArray;
+        $shortcodesKeys = array_keys($shortcodes);
+        foreach ($commitsArray as $commitRaw) {
+            $parse = self::parseShortcodes($commitRaw, $shortcodesKeys);
+            $commit = new Commit();
+            $commit->fromArray($parse);
+            $commits[] = $commit;
+        }
+
+        return $commits;
     }
 
     /**
@@ -143,5 +170,29 @@ class Git
     public static function tag(string $name)
     {
         return exec("git tag {$name}");
+    }
+
+    /**
+     * Parse shortcode.
+     *
+     * @param $content
+     * @param $shortcodes
+     *
+     * @return array
+     */
+    protected static function parseShortcodes($content, $shortcodes)
+    {
+        $result = [];
+        foreach ($shortcodes as $key) {
+            $result[$key] = null;
+            $key = preg_quote($key, '/');
+            $pattern = "/\[[\s]*" . $key . "[\s]*\](.+?)\[[\s]*\/[\s]*" . $key . "[\s]*\]/si";
+            preg_match_all($pattern, $content, $match);
+            if (count($match) > 0 && !empty($match[0]) && isset($match[1][0])) {
+                $result[$key] = $match[1][0];
+            }
+        }
+
+        return $result;
     }
 }

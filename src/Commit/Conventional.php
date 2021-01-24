@@ -3,19 +3,11 @@
 namespace ConventionalChangelog\Commit;
 
 use ConventionalChangelog\Helper\Formatter;
-use ConventionalChangelog\Type\Stringable;
 
-class Conventional implements Stringable
+class Conventional extends Commit
 {
     protected const PATTERN_HEADER = "/^(?'type'[a-z]+)(\((?'scope'.+)\))?(?'important'[!]?)[:][[:blank:]](?'description'.+)/iums";
     protected const PATTERN_FOOTER = "/(?'token'^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?'value'([:][[:blank:]]|[:]?[[:blank:]][#](?=\w)).*?)$/iums";
-
-    /**
-     * Raw content.
-     *
-     * @var string
-     */
-    protected $raw;
 
     /**
      * Sha hash.
@@ -64,38 +56,21 @@ class Conventional implements Stringable
      */
     protected $footers = [];
 
-    public function __construct(string $commit = '')
+    public function __construct(?string $commit = null)
     {
+        parent::__construct($commit);
+
         // New commit or empty commit
         if (empty($commit)) {
             return;
         }
-
-        $raw = Formatter::clean($commit);
-        $this->setRaw($raw);
 
         // Not parsable
         if (!$this->isValid()) {
             return;
         }
 
-        $rows = explode("\n", $this->raw);
-        $count = count($rows);
-        // Commit info
-        $hash = trim($rows[$count - 1]);
-        if ($this->isValidHash($hash)) {
-            $this->hash = $hash;
-        }
-        $header = $rows[0];
-        $message = '';
-        // Get message
-        foreach ($rows as $i => $row) {
-            if ($i !== 0 && $i !== $count) {
-                $message .= $row . "\n";
-            }
-        }
-        $this->parseHeader($header);
-        $this->parseMessage($message);
+        $this->__wakeup();
     }
 
     /**
@@ -132,11 +107,15 @@ class Conventional implements Stringable
     }
 
     /**
-     * Check if is valid SHA-1.
+     * From commit.
+     *
+     * @return self
      */
-    protected function isValidHash(string $hash)
+    public static function fromCommit(Commit $commit)
     {
-        return (bool)preg_match('/^[0-9a-f]{40}$/i', $hash);
+        return unserialize(
+            preg_replace('/^O:\d+:"[^"]++"/', 'O:' . strlen(__CLASS__) . ':"' . __CLASS__ . '"', serialize($commit))
+        );
     }
 
     /**
@@ -145,21 +124,6 @@ class Conventional implements Stringable
     public function isValid(): bool
     {
         return (bool)preg_match(self::PATTERN_HEADER, $this->raw);
-    }
-
-    public function getRaw(): ?string
-    {
-        return $this->raw;
-    }
-
-    public function getHash(): ?string
-    {
-        return $this->hash;
-    }
-
-    public function getShortHash(): string
-    {
-        return substr($this->hash, 0, 6);
     }
 
     public function getType(): Type
@@ -246,23 +210,6 @@ class Conventional implements Stringable
         return $this->body . "\n\n" . $footer;
     }
 
-    /**
-     * @return Conventional
-     */
-    public function setRaw(string $raw): self
-    {
-        $this->raw = $raw;
-
-        return $this;
-    }
-
-    public function setHash(string $hash): self
-    {
-        $this->hash = $hash;
-
-        return $this;
-    }
-
     public function setType(string $type): self
     {
         $this->type = new Type($type);
@@ -303,6 +250,26 @@ class Conventional implements Stringable
         $this->footers = $footers;
 
         return $this;
+    }
+
+    public function __wakeup()
+    {
+        $rows = explode("\n", $this->raw);
+        $count = count($rows);
+        // Commit info
+        $hash = trim($rows[$count - 1]);
+        $this->setHash($hash);
+
+        $header = $rows[0];
+        $message = '';
+        // Get message
+        foreach ($rows as $i => $row) {
+            if ($i !== 0 && $i !== $count) {
+                $message .= $row . "\n";
+            }
+        }
+        $this->parseHeader($header);
+        $this->parseMessage($message);
     }
 
     public function __toString(): string
