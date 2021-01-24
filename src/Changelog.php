@@ -53,6 +53,10 @@ class Changelog
 
         $autoBump = false;
 
+        if (empty($root) || !is_dir($root)) {
+            $root = $this->config->getRoot();
+        }
+
         // Set working directory
         chdir($root);
 

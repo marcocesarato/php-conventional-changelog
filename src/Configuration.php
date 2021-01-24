@@ -5,6 +5,13 @@ namespace ConventionalChangelog;
 class Configuration
 {
     /**
+     * Working dir.
+     *
+     * @var string
+     */
+    public $root = './';
+
+    /**
      * Changelog filename.
      *
      * @var string
@@ -82,6 +89,7 @@ class Configuration
      */
     public function __construct(array $settings = [])
     {
+        $this->setRoot();
         $this->setTypes($this->preset);
         $this->fromArray($settings);
     }
@@ -112,6 +120,7 @@ class Configuration
         }
 
         $defaults = [
+            'root' => null,
             'headerTitle' => $this->getHeaderTitle(),
             'headerDescription' => $this->getHeaderDescription(),
             'path' => $this->getPath(),
@@ -144,6 +153,7 @@ class Configuration
         // Add breaking changes
         $params['preset'] = array_merge($this->breakingPreset, $params['preset']);
 
+        $this->setRoot($params['root']);
         $this->setPath($params['path']);
         $this->setIgnorePatterns($params['ignorePatterns']);
         $this->setIgnoreTypes($params['ignoreTypes']);
@@ -303,5 +313,24 @@ class Configuration
     public function getIgnoreTypes(): array
     {
         return $this->ignoreTypes;
+    }
+
+    public function getRoot(): string
+    {
+        return $this->root;
+    }
+
+    /**
+     * @param string $root
+     */
+    public function setRoot(?string $root = null): Configuration
+    {
+        if (empty($root) || !is_dir($root)) {
+            $root = getcwd();
+        }
+
+        $this->root = $root;
+
+        return $this;
     }
 }

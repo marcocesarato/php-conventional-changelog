@@ -55,7 +55,7 @@ class DefaultCommand extends Command
             ->setDescription('Generate changelogs and release notes from a project\'s commit messages' .
                 'and metadata and automate versioning with semver.org and conventionalcommits.org')
             ->setDefinition([
-                new InputArgument('path', InputArgument::OPTIONAL, 'Specify the path directory where generate changelog', getcwd()),
+                new InputArgument('path', InputArgument::OPTIONAL, 'Specify the path directory where generate changelog'),
                 new InputOption('config', null, InputOption::VALUE_REQUIRED, 'Specify the configuration file path'),
                 new InputOption('commit', 'c', InputOption::VALUE_NONE, 'Commit the new release once changelog is generated'),
                 new InputOption('amend', 'a', InputOption::VALUE_NONE, 'Amend commit the new release once changelog is generated'),
