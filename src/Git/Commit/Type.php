@@ -1,10 +1,10 @@
 <?php
 
-namespace ConventionalChangelog\Commit;
+namespace ConventionalChangelog\Git\Commit;
 
 use ConventionalChangelog\Type\Stringable;
 
-class Description implements Stringable
+class Type implements Stringable
 {
     /**
      * @var string
@@ -13,7 +13,7 @@ class Description implements Stringable
 
     public function __construct(string $content)
     {
-        $this->content = $content;
+        $this->content = strtolower($content);
     }
 
     public function __toString(): string

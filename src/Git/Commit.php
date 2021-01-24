@@ -1,6 +1,6 @@
 <?php
 
-namespace ConventionalChangelog\Commit;
+namespace ConventionalChangelog\Git;
 
 use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Type\Stringable;

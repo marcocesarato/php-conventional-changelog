@@ -2,8 +2,9 @@
 
 namespace ConventionalChangelog;
 
+use ConventionalChangelog\Git\Repository;
+use ConventionalChangelog\Git\ConventionalCommit;
 use ConventionalChangelog\Helper\Formatter;
-use ConventionalChangelog\Helper\Git;
 use ConventionalChangelog\Helper\SemanticVersion;
 use DateTime;
 use Symfony\Component\Console\Command\Command;
@@ -60,7 +61,7 @@ class Changelog
         // Set working directory
         chdir($root);
 
-        if (!Git::isInsideWorkTree()) {
+        if (!Repository::isInsideWorkTree()) {
             $output->error('Not a git repository');
 
             return Command::FAILURE;
@@ -105,12 +106,12 @@ class Changelog
         $todayString = Formatter::getDateString($today);
 
         // First commit
-        $firstCommit = Git::getFirstCommit();
+        $firstCommit = Repository::getFirstCommit();
 
         if (!$firstRelease) {
-            $lastVersion = Git::getLastTag(); // Last version
-            $lastVersionCommit = Git::getLastTagCommit(); // Last version commit
-            $lastVersionDate = Git::getCommitDate($lastVersionCommit); // Last version date
+            $lastVersion = Repository::getLastTag(); // Last version
+            $lastVersionCommit = Repository::getLastTagCommit(); // Last version commit
+            $lastVersionDate = Repository::getCommitDate($lastVersionCommit); // Last version date
 
             $bumpRelease = SemanticVersion::PATCH;
 
@@ -149,7 +150,7 @@ class Changelog
 
         if ($history) {
             $changelogCurrent = ''; // Clean changelog file
-            $tags = Git::getTags();
+            $tags = Repository::getTags();
 
             $previousTag = null;
             foreach ($tags as $key => $toTag) {
@@ -160,7 +161,7 @@ class Changelog
                 $options[$toTag] = [
                     'from' => $fromTag,
                     'to' => $toTag,
-                    'date' => Git::getCommitDate($toTag),
+                    'date' => Repository::getCommitDate($toTag),
                     'options' => "{$fromTag}...{$toTag}",
                     'autoBump' => false,
                 ];
@@ -237,12 +238,12 @@ class Changelog
         }
 
         foreach ($options as $version => $params) {
-            $commitsRaw = Git::getCommits($params['options']);
+            $commitsRaw = Repository::getCommits($params['options']);
 
             // Get all commits information
             $commits = [];
             foreach ($commitsRaw as $commitRaw) {
-                $commit = Commit\Conventional::fromCommit($commitRaw);
+                $commit = ConventionalCommit::fromCommit($commitRaw);
 
                 // Not a conventional commit
                 if (!$commit->isValid()) {
@@ -281,7 +282,7 @@ class Changelog
                     if (!empty($breakingChanges)) {
                         foreach ($breakingChanges as $description) {
                             // Clone commit as breaking with different description message
-                            $breakingCommit = new Commit\Conventional();
+                            $breakingCommit = new ConventionalCommit();
                             $breakingCommit->setType($type)
                                            ->setDescription($description)
                                            ->setScope($scope)
@@ -310,7 +311,7 @@ class Changelog
             }
 
             // Remote url
-            $url = Git::getRemoteUrl();
+            $url = Repository::getRemoteUrl();
             // Initialize changelogs
             $changelogNew .= "## [{$params['to']}]($url/compare/{$params['from']}...v{$params['to']}) ({$params['date']})\n\n";
             // Add all changes list to new changelog
@@ -336,12 +337,12 @@ class Changelog
 
         // Create commit
         if ($autoCommit) {
-            $result = Git::commit("chore(release): {$newVersion}", [$file], $amend, $hooks);
+            $result = Repository::commit("chore(release): {$newVersion}", [$file], $amend, $hooks);
             if ($result !== false) {
                 $output->success('Release committed!');
                 // Create tag
                 if ($autoTag) {
-                    $result = Git::tag('v' . $newVersion);
+                    $result = Repository::tag('v' . $newVersion);
                     if ($result !== false) {
                         $output->success("Release tagged with success! New version: v{$newVersion}");
                     } else {
@@ -371,13 +372,13 @@ class Changelog
     /**
      * Generate markdown from changes.
      *
-     * @param Commit\Conventional[][][][]  $changes
+     * @param ConventionalCommit[][][][]  $changes
      */
     protected function getMarkdownChanges(array $changes): string
     {
         $changelog = '';
         // Remote url
-        $url = Git::getRemoteUrl();
+        $url = Repository::getRemoteUrl();
         // Add all changes list to new changelog
         foreach ($changes as $type => $list) {
             if (empty($list)) {

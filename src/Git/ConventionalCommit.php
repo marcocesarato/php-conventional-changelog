@@ -1,10 +1,15 @@
 <?php
 
-namespace ConventionalChangelog\Commit;
+namespace ConventionalChangelog\Git;
 
+use ConventionalChangelog\Git\Commit\Body;
+use ConventionalChangelog\Git\Commit\Description;
+use ConventionalChangelog\Git\Commit\Footer;
+use ConventionalChangelog\Git\Commit\Scope;
+use ConventionalChangelog\Git\Commit\Type;
 use ConventionalChangelog\Helper\Formatter;
 
-class Conventional extends Commit
+class ConventionalCommit extends Commit
 {
     protected const PATTERN_HEADER = "/^(?'type'[a-z]+)(\((?'scope'.+)\))?(?'important'[!]?)[:][[:blank:]](?'description'.+)/iums";
     protected const PATTERN_FOOTER = "/(?'token'^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?'value'([:][[:blank:]]|[:]?[[:blank:]][#](?=\w)).*?)$/iums";
@@ -114,7 +119,8 @@ class Conventional extends Commit
     public static function fromCommit(Commit $commit)
     {
         return unserialize(
-            preg_replace('/^O:\d+:"[^"]++"/', 'O:' . strlen(__CLASS__) . ':"' . __CLASS__ . '"', serialize($commit))
+            preg_replace('/^O:\d+:"[^"]++"/', 'O:' . strlen(__CLASS__) . ':"' . __CLASS__ . '"', serialize($commit)),
+            [__CLASS__]
         );
     }
 

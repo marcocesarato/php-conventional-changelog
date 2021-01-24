@@ -1,11 +1,11 @@
 <?php
 
-namespace ConventionalChangelog\Helper;
+namespace ConventionalChangelog\Git;
 
-use ConventionalChangelog\Commit\Commit;
+use ConventionalChangelog\Helper\Formatter;
 use DateTime;
 
-class Git
+class Repository
 {
     /**
      * @var string
