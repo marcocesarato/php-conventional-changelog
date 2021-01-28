@@ -35,7 +35,7 @@ class Changelog
 
         $nextVersion = $input->getOption('ver');
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
-        $autoCommitAll = $autoCommit || $input->getOption('commit-all'); // Commit all changes once changelog is generated
+        $autoCommitAll = $input->getOption('commit-all'); // Commit all changes once changelog is generated
         $autoTag = !$input->getOption('no-tag') && !$this->config->skipTag(); // Tag release once is committed
         $autoTag = $autoTag && $this->config->skipTag() ? false : true;
         $amend = $input->getOption('amend'); // Amend commit

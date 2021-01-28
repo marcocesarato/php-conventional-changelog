@@ -147,7 +147,7 @@ class Repository
      */
     public static function addAll()
     {
-        system('git add -all');
+        system('git add --all');
     }
 
     /**
