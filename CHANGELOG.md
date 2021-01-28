@@ -4,7 +4,22 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
-## [1.5.4](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.5.3...v1.6.0) (2021-01-24)
+## [1.6.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.5.4...v1.6.0) (2021-01-28)
+
+
+### Features
+
+* Add tag prefix and suffix ([469f16](https://github.com/marcocesarato/php-conventional-changelog/commit/469f166f117478198d9fbdb55a4ea2b7f1d02ff3))
+* Add commit all option ([323a5c](https://github.com/marcocesarato/php-conventional-changelog/commit/323a5c0c4bdb030938cea7b41056240cfbc4a9a6))
+* Add skip verify, bump and tag ([1ae0e9](https://github.com/marcocesarato/php-conventional-changelog/commit/1ae0e964abf46ba2668c6562f59133654bea700d))
+
+### Bug Fixes
+
+* Option commit all ([d84122](https://github.com/marcocesarato/php-conventional-changelog/commit/d84122283b244d213c2e5ee7329bce696bf85bc1))
+
+---
+
+## [1.5.4](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.5.3...v1.5.4) (2021-01-24)
 
 
 ### Features
