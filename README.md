@@ -60,7 +60,7 @@ For easy use the changelog generator or release faster your new version you can 
 }
 ```
 
-Now you can just run `composer changelog` to generate your changelog.
+Now you can just run `composer changelog` or `composer release` (the last one will autobump the version code and commit changes) to generate your changelog.
 
 ## 📘 Configuration
 
@@ -166,6 +166,7 @@ php vendor/bin/conventional-changelog --ver="2.0.1"
 ```
         --config          str         Specify the configuration file path
 -c      --commit          bool        Commit the new release once changelog is generated
+        --commit-all      bool        Commit all changes the new release once changelog is generated
 -a      --amend           bool        Amend commit the new release once changelog is generated
         --major           bool        Major release (important changes)
         --minor           bool        Minor release (add functionality)
@@ -180,6 +181,6 @@ php vendor/bin/conventional-changelog --ver="2.0.1"
         --from-tag        str         Get commits from specified tag
         --ver             str         Specify the next release version code (semver)
         --history         bool        Generate the entire history of changes of all releases
-        --no-verify       bool        Bypasses the pre-commit and commit-msg hooks
+        --no-verify       bool        Skip the pre-commit and commit-msg hooks
         --no-tag          bool        Disable release auto tagging when commit enabled
 ```
