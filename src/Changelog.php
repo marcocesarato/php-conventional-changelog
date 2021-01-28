@@ -36,9 +36,11 @@ class Changelog
         $nextVersion = $input->getOption('ver');
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
         $autoCommitAll = $autoCommit || $input->getOption('commit-all'); // Commit all changes once changelog is generated
-        $autoTag = !$input->getOption('no-tag'); // Tag release once is committed
+        $autoTag = !$input->getOption('no-tag') && !$this->config->skipTag(); // Tag release once is committed
+        $autoTag = $autoTag && $this->config->skipTag() ? false : true;
         $amend = $input->getOption('amend'); // Amend commit
         $hooks = !$input->getOption('no-verify'); // Verify git hooks
+        $hooks = $hooks && $this->config->skipVerify() ? false : true;
         $fromDate = $input->getOption('from-date');
         $toDate = $input->getOption('to-date');
         $fromTag = $input->getOption('from-tag');
@@ -130,7 +132,7 @@ class Changelog
             } elseif ($alphaRelease) {
                 $bumpRelease = SemanticVersion::ALPHA;
             } else {
-                $autoBump = true;
+                $autoBump = $this->config->skipBump() ? false : true;
             }
 
             // Generate new version code

@@ -92,6 +92,27 @@ class Configuration
     protected $tagPrefix = 'v';
 
     /**
+     * Skip tag.
+     *
+     * @var bool
+     */
+    protected $skipTag = false;
+
+    /**
+     * Skip bump.
+     *
+     * @var bool
+     */
+    protected $skipBump = false;
+
+    /**
+     * Skip verify.
+     *
+     * @var bool
+     */
+    protected $skipVerify = false;
+
+    /**
      * Tag suffix.
      *
      * @var string
@@ -144,6 +165,9 @@ class Configuration
             'ignorePatterns' => $this->getIgnorePatterns(),
             'tagPrefix' => $this->getTagPrefix(),
             'tagSuffix' => $this->getTagSuffix(),
+            'skipBump' => $this->skipBump(),
+            'skipTag' => $this->skipTag(),
+            'skipVerify' => $this->skipVerify(),
         ];
 
         $params = array_replace_recursive($defaults, $array);
@@ -178,6 +202,9 @@ class Configuration
         $this->setHeaderDescription($params['headerDescription']);
         $this->setTagPrefix($params['tagPrefix']);
         $this->setTagSuffix($params['tagSuffix']);
+        $this->setSkipBump($params['skipBump']);
+        $this->setSkipTag($params['skipTag']);
+        $this->setSkipVerify($params['skipVerify']);
     }
 
     /**
@@ -372,6 +399,42 @@ class Configuration
     public function setTagSuffix(string $tagSuffix): Configuration
     {
         $this->tagSuffix = $tagSuffix;
+
+        return $this;
+    }
+
+    public function skipTag(): bool
+    {
+        return $this->skipTag;
+    }
+
+    public function setSkipTag(bool $skipTag): Configuration
+    {
+        $this->skipTag = $skipTag;
+
+        return $this;
+    }
+
+    public function skipBump(): bool
+    {
+        return $this->skipBump;
+    }
+
+    public function setSkipBump(bool $skipBump): Configuration
+    {
+        $this->skipBump = $skipBump;
+
+        return $this;
+    }
+
+    public function skipVerify(): bool
+    {
+        return $this->skipVerify;
+    }
+
+    public function setSkipVerify(bool $skipVerify): Configuration
+    {
+        $this->skipVerify = $skipVerify;
 
         return $this;
     }
