@@ -347,9 +347,10 @@ class Changelog
                 $output->success('Release committed!');
                 // Create tag
                 if ($autoTag) {
-                    $result = Repository::tag('v' . $newVersion);
+                    $tag = $this->config->getTagPrefix() . $newVersion . $this->config->getTagSuffix();
+                    $result = Repository::tag($tag);
                     if ($result !== false) {
-                        $output->success("Release tagged with success! New version: v{$newVersion}");
+                        $output->success("Release tagged with success! New version: {$tag}");
                     } else {
                         $output->error('An error occurred tagging the release!');
 

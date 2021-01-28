@@ -85,6 +85,20 @@ class Configuration
     public $ignoreTypes = ['build', 'chore', 'ci', 'docs', 'perf', 'refactor', 'revert', 'style', 'test'];
 
     /**
+     * Tag prefix.
+     *
+     * @var string
+     */
+    public $tagPrefix = 'v';
+
+    /**
+     * Tag suffix.
+     *
+     * @var string
+     */
+    public $tagSuffix = '';
+
+    /**
      * Constructor.
      */
     public function __construct(array $settings = [])
@@ -128,6 +142,8 @@ class Configuration
             'types' => [],
             'ignoreTypes' => $this->getIgnoreTypes(),
             'ignorePatterns' => $this->getIgnorePatterns(),
+            'tagPrefix' => $this->getTagPrefix(),
+            'tagSuffix' => $this->getTagSuffix(),
         ];
 
         $params = array_replace_recursive($defaults, $array);
@@ -160,6 +176,8 @@ class Configuration
         $this->setTypes($params['preset']);
         $this->setHeaderTitle($params['headerTitle']);
         $this->setHeaderDescription($params['headerDescription']);
+        $this->setTagPrefix($params['tagPrefix']);
+        $this->setTagSuffix($params['tagSuffix']);
     }
 
     /**
@@ -330,6 +348,30 @@ class Configuration
         }
 
         $this->root = $root;
+
+        return $this;
+    }
+
+    public function getTagPrefix(): string
+    {
+        return $this->tagPrefix;
+    }
+
+    public function setTagPrefix(string $tagPrefix): Configuration
+    {
+        $this->tagPrefix = $tagPrefix;
+
+        return $this;
+    }
+
+    public function getTagSuffix(): string
+    {
+        return $this->tagSuffix;
+    }
+
+    public function setTagSuffix(string $tagSuffix): Configuration
+    {
+        $this->tagSuffix = $tagSuffix;
 
         return $this;
     }
