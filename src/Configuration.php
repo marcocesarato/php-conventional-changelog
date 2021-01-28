@@ -9,28 +9,28 @@ class Configuration
      *
      * @var string
      */
-    public $root = './';
+    protected $root = './';
 
     /**
      * Changelog filename.
      *
      * @var string
      */
-    public $path = 'CHANGELOG.md';
+    protected $path = 'CHANGELOG.md';
 
     /**
      * Header description.
      *
      * @var string
      */
-    public $headerTitle = 'Changelog';
+    protected $headerTitle = 'Changelog';
 
     /**
      * Header title.
      *
      * @var string
      */
-    public $headerDescription = 'All notable changes to this project will be documented in this file.';
+    protected $headerDescription = 'All notable changes to this project will be documented in this file.';
 
     /**
      * Preset of types allowed on changelog and labels.
@@ -38,7 +38,7 @@ class Configuration
      *
      * @var string[][]
      */
-    public $preset = [
+    protected $preset = [
         'feat' => ['label' => 'Features', 'description' => 'New features'],
         'perf' => ['label' => 'Performance Improvements', 'description' => 'Code changes that improves performance'],
         'fix' => ['label' => 'Bug Fixes', 'description' => 'Bugs and issues resolution'],
@@ -57,7 +57,7 @@ class Configuration
      *
      * @var string[][]
      */
-    public $breakingPreset = [
+    protected $breakingPreset = [
         'breaking_changes' => ['label' => '⚠ BREAKING CHANGES', 'description' => 'Code changes that potentially causes other components to fail'],
     ];
 
@@ -66,14 +66,14 @@ class Configuration
      *
      * @var string[][]
      */
-    public $types = [];
+    protected $types = [];
 
     /**
      * Ignore message commit patterns.
      *
      * @var string[]
      */
-    public $ignorePatterns = [
+    protected $ignorePatterns = [
         '/^chore\(release\):/i',
     ];
 
@@ -82,21 +82,21 @@ class Configuration
      *
      * @var string[]
      */
-    public $ignoreTypes = ['build', 'chore', 'ci', 'docs', 'perf', 'refactor', 'revert', 'style', 'test'];
+    protected $ignoreTypes = ['build', 'chore', 'ci', 'docs', 'perf', 'refactor', 'revert', 'style', 'test'];
 
     /**
      * Tag prefix.
      *
      * @var string
      */
-    public $tagPrefix = 'v';
+    protected $tagPrefix = 'v';
 
     /**
      * Tag suffix.
      *
      * @var string
      */
-    public $tagSuffix = '';
+    protected $tagSuffix = '';
 
     /**
      * Constructor.
