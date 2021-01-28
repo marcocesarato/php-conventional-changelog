@@ -17,6 +17,11 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Types:** Types allowed and showed on changelog. This setting could overwrite ignored types.
 - **Ignore Types:** Types ignored and so hidden on changelog
 - **Ignore Patterns:** Patterns ignored and so hidden on changelog with a specific description. *(Regex are enabled)*
+- **Tag Prefix:** Add prefix to release tag
+- **Tag Suffix:** Add suffix to release tag
+- **Skip Bump:** Skip automatic vcersion code bump
+- **Skip Tag:** Skip automatic commit tagging
+- **Skip Verify:** Skip the pre-commit and commit-msg hooks
 
 ### Default settings
 
@@ -49,6 +54,11 @@ return [
   'types' => [],
   'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'perf', 'refactor', 'revert', 'style', 'test'],
   'ignorePatterns' => ['/^chore\(release\):/i'],
+  'tagPrefix' => 'v',
+  'tagSuffix' => '',
+  'skipBump' => false,
+  'skipTag' => false,
+  'skipVerify' => false,
 ];
 ```
 
@@ -103,5 +113,10 @@ return [
     // You can also use regex to exclude all commit like 'chore(changelog): updated'
     '/chore\(changelog\)[:].*/i'
   ],
+  'tagPrefix' => 'ver',
+  'tagSuffix' => '',
+  'skipBump' => false,
+  'skipTag' => false,
+  'skipVerify' => true,
 ];
 ```
