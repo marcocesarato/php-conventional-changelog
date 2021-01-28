@@ -35,6 +35,7 @@ class Changelog
 
         $nextVersion = $input->getOption('ver');
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
+        $autoCommitAll = $autoCommit || $input->getOption('commit-all'); // Commit all changes once changelog is generated
         $autoTag = !$input->getOption('no-tag'); // Tag release once is committed
         $amend = $input->getOption('amend'); // Amend commit
         $hooks = !$input->getOption('no-verify'); // Verify git hooks
@@ -52,6 +53,7 @@ class Changelog
         $minorRelease = $input->getOption('minor');
         $majorRelease = $input->getOption('major');
 
+        $autoCommit = $autoCommit || $autoCommitAll;
         $autoBump = false;
 
         if (empty($root) || !is_dir($root)) {
@@ -337,6 +339,9 @@ class Changelog
 
         // Create commit
         if ($autoCommit) {
+            if ($autoCommitAll) {
+                Repository::addAll();
+            }
             $result = Repository::commit("chore(release): {$newVersion}", [$file], $amend, $hooks);
             if ($result !== false) {
                 $output->success('Release committed!');

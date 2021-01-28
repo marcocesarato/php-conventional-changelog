@@ -141,15 +141,38 @@ class Repository
     }
 
     /**
+     * Add all.
+     *
+     * @return string
+     */
+    public static function addAll()
+    {
+        system('git add -all');
+    }
+
+    /**
+     * Add files.
+     *
+     * @return string
+     */
+    public static function add($files)
+    {
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+        foreach ($files as $file) {
+            system("git add \"{$file}\"");
+        }
+    }
+
+    /**
      * Commit.
      *
      * @return string
      */
     public static function commit(string $message, array $files = [], bool $amend = false, bool $verify = true)
     {
-        foreach ($files as $file) {
-            system("git add \"{$file}\"");
-        }
+        self::add($files);
         $message = str_replace('"', "'", $message); // Escape
         $command = "git commit -m \"{$message}\"";
         if ($amend) {
