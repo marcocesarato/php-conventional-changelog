@@ -150,10 +150,6 @@ class Configuration
      */
     public function fromArray(array $array)
     {
-        if (empty($array)) {
-            return;
-        }
-
         $defaults = [
             'root' => null,
             'headerTitle' => $this->getHeaderTitle(),
