@@ -41,6 +41,7 @@
     "check-cs": "php vendor/bin/php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php_cs",
     "fix-cs": "php-cs-fixer fix --config=.php_cs --verbose",
     "release": "php conventional-changelog --commit",
+    "release:patch": "php conventional-changelog --commit --patch",
     "release:minor": "php conventional-changelog --commit --minor",
     "release:major": "php conventional-changelog --commit --major"
   },
