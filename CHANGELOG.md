@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.6.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.6.0...v1.6.1) (2021-02-09)
+
+
+### Bug Fixes
+
+* Option commit all ([d84122](https://github.com/marcocesarato/php-conventional-changelog/commit/d84122283b244d213c2e5ee7329bce696bf85bc1))
+
+##### Config
+
+* Empty configurations from array [#1](https://github.com/marcocesarato/php-conventional-changelog/issue/1) ([481f05](https://github.com/marcocesarato/php-conventional-changelog/commit/481f051069f5c9a5ae2ec0f1375fa3ac8e81b9b4))
+
+---
+
 ## [1.6.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.5.4...v1.6.0) (2021-01-28)
 
 
