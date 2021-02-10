@@ -58,17 +58,6 @@ class ConventionalCommit extends Commit
     public function __construct(?string $commit = null)
     {
         parent::__construct($commit);
-
-        // New commit or empty commit
-        if (empty($commit)) {
-            return;
-        }
-
-        // Not parsable
-        if (!$this->isValid()) {
-            return;
-        }
-
         $this->__wakeup();
     }
 
@@ -240,6 +229,16 @@ class ConventionalCommit extends Commit
 
     public function __wakeup()
     {
+        // Empty
+        if (empty($this->raw)) {
+            return;
+        }
+
+        // Not parsable
+        if (!$this->isValid()) {
+            return;
+        }
+
         $rows = explode("\n", $this->raw);
         $header = $rows[0];
         $message = '';
