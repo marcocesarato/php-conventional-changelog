@@ -1,4 +1,4 @@
-name: Linter
+name: Code Checker
 
 on:
   push:
@@ -34,6 +34,9 @@ jobs:
       run: composer install --prefer-dist --no-progress --no-suggest
 
     - name: PHP Lint
-      uses: michaelw90/PHP-Lint@2.1.0
+      uses: davidlienhard/php-simple-lint@1
+      with:
+        folder: './'
+        ignore: './vendor/\*'
 
     - uses: symfonycorp/security-checker-action@v2
