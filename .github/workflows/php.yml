@@ -13,13 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: symfonycorp/security-checker-action@v2
 
     - name: Validate composer.json and composer.lock
       run: composer validate
-    
-    - name: PHP Lint
-      uses: michaelw90/PHP-Lint@2.1.0
 
     - name: Cache Composer packages
       id: composer-cache
@@ -34,8 +30,7 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+    - name: PHP Lint
+      uses: michaelw90/PHP-Lint@2.1.0
 
-    # - name: Run test suite
-    #   run: composer run-script test
+    - uses: symfonycorp/security-checker-action@v2
