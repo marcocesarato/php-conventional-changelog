@@ -58,7 +58,7 @@ class ConventionalCommit extends Commit
     public function __construct(?string $commit = null)
     {
         parent::__construct($commit);
-        $this->__wakeup();
+        $this->parse();
     }
 
     /**
@@ -227,7 +227,10 @@ class ConventionalCommit extends Commit
         return $this;
     }
 
-    public function __wakeup()
+    /**
+     * Parse raw commit.
+     */
+    protected function parse()
     {
         // Empty
         if (empty($this->raw)) {
@@ -250,6 +253,11 @@ class ConventionalCommit extends Commit
         }
         $this->parseHeader($header);
         $this->parseMessage($message);
+    }
+
+    public function __wakeup()
+    {
+        $this->parse();
     }
 
     public function __toString(): string
