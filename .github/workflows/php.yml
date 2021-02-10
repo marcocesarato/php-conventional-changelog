@@ -1,4 +1,4 @@
-name: PHP Checker
+name: Linter
 
 on:
   push:
@@ -13,6 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Update composer
+      run: composer update
 
     - name: Validate composer.json and composer.lock
       run: composer validate
