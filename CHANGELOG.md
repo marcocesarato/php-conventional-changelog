@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.6.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.6.1...v1.6.2) (2021-02-10)
+
+
+### Bug Fixes
+
+* Conventional commit wakeup class parse [#3](https://github.com/marcocesarato/php-conventional-changelog/issue/3) ([9eb3fb](https://github.com/marcocesarato/php-conventional-changelog/commit/9eb3fbee01f7e8717be67aaa5199bd51c7a17030))
+
+---
+
 ## [1.6.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.6.0...v1.6.1) (2021-02-09)
 
 
