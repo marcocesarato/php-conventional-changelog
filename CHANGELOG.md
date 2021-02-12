@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-* Conventional commit wakeup class parse [#3](https://github.com/marcocesarato/php-conventional-changelog/issue/3) ([9eb3fb](https://github.com/marcocesarato/php-conventional-changelog/commit/9eb3fbee01f7e8717be67aaa5199bd51c7a17030))
+* Conventional commit wakeup class parse [#3](https://github.com/marcocesarato/php-conventional-changelog/issues/3) ([9eb3fb](https://github.com/marcocesarato/php-conventional-changelog/commit/9eb3fbee01f7e8717be67aaa5199bd51c7a17030))
 
 ---
 
@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ##### Config
 
-* Empty configurations from array [#1](https://github.com/marcocesarato/php-conventional-changelog/issue/1) ([481f05](https://github.com/marcocesarato/php-conventional-changelog/commit/481f051069f5c9a5ae2ec0f1375fa3ac8e81b9b4))
+* Empty configurations from array [#1](https://github.com/marcocesarato/php-conventional-changelog/issues/1) ([481f05](https://github.com/marcocesarato/php-conventional-changelog/commit/481f051069f5c9a5ae2ec0f1375fa3ac8e81b9b4))
 
 ---
 
