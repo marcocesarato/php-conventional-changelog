@@ -120,6 +120,48 @@ class Configuration
     protected $tagSuffix = '';
 
     /**
+     * The URL protocol of all repository urls on changelogs.
+     *
+     * @var string
+     */
+    protected $urlProtocol = 'https';
+
+    /**
+     * A URL representing a specific commit at a hash.
+     *
+     * @var string
+     */
+    protected $commitUrlFormat = '{{host}}/{{owner}}/{{repository}}/commit/{{hash}}';
+
+    /**
+     * A URL representing the comparison between two git sha.
+     *
+     * @var string
+     */
+    protected $compareUrlFormat = '{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}';
+
+    /**
+     * A URL representing the issue format (allowing a different URL format to be swapped in for Gitlab, Bitbucket, etc).
+     *
+     * @var string
+     */
+    protected $issueUrlFormat = '{{host}}/{{owner}}/{{repository}}/issues/{{id}}';
+
+    /**
+     * A URL representing the a user's profile URL on GitHub, Gitlab, etc. This URL is used for substituting @abc with https://github.com/abc in commit messages.
+     *
+     * @var string
+     */
+    protected $userUrlFormat = '{{host}}/{{user}}';
+
+    /**
+     * A string to be used to format the auto-generated release commit message.
+     *
+     * @var string
+     */
+    protected $releaseCommitMessageFormat = 'chore(release): {{currentTag}}';
+
+    /**
      * Constructor.
      */
     public function __construct(array $settings = [])
@@ -164,6 +206,12 @@ class Configuration
             'skipBump' => $this->skipBump(),
             'skipTag' => $this->skipTag(),
             'skipVerify' => $this->skipVerify(),
+            'urlProtocol' => $this->getUrlProtocol(),
+            'commitUrlFormat' => $this->getCommitUrlFormat(),
+            'compareUrlFormat' => $this->getCompareUrlFormat(),
+            'issueUrlFormat' => $this->getIssueUrlFormat(),
+            'userUrlFormat' => $this->getUserUrlFormat(),
+            'releaseCommitMessageFormat' => $this->getReleaseCommitMessageFormat(),
         ];
 
         $params = array_replace_recursive($defaults, $array);
@@ -189,18 +237,30 @@ class Configuration
         // Add breaking changes
         $params['preset'] = array_merge($this->breakingPreset, $params['preset']);
 
+        // Paths
         $this->setRoot($params['root']);
         $this->setPath($params['path']);
+        // Types
         $this->setIgnorePatterns($params['ignorePatterns']);
         $this->setIgnoreTypes($params['ignoreTypes']);
         $this->setTypes($params['preset']);
+        // Document
         $this->setHeaderTitle($params['headerTitle']);
         $this->setHeaderDescription($params['headerDescription']);
+        // Tag
         $this->setTagPrefix($params['tagPrefix']);
         $this->setTagSuffix($params['tagSuffix']);
+        // Skips
         $this->setSkipBump($params['skipBump']);
         $this->setSkipTag($params['skipTag']);
         $this->setSkipVerify($params['skipVerify']);
+        // Formats
+        $this->setUrlProtocol($params['urlProtocol']);
+        $this->setCommitUrlFormat($params['commitUrlFormat']);
+        $this->setCompareUrlFormat($params['compareUrlFormat']);
+        $this->setIssueUrlFormat($params['issueUrlFormat']);
+        $this->setUserUrlFormat($params['userUrlFormat']);
+        $this->setReleaseCommitMessageFormat($params['releaseCommitMessageFormat']);
     }
 
     /**
@@ -431,6 +491,96 @@ class Configuration
     public function setSkipVerify(bool $skipVerify): Configuration
     {
         $this->skipVerify = $skipVerify;
+
+        return $this;
+    }
+
+    /**
+     * @return \string[][]
+     */
+    public function getBreakingPreset(): array
+    {
+        return $this->breakingPreset;
+    }
+
+    /**
+     * @param  \string[][]  $breakingPreset
+     */
+    public function setBreakingPreset(array $breakingPreset): Configuration
+    {
+        $this->breakingPreset = $breakingPreset;
+
+        return $this;
+    }
+
+    public function getCommitUrlFormat(): string
+    {
+        return $this->commitUrlFormat;
+    }
+
+    public function setCommitUrlFormat(string $commitUrlFormat): Configuration
+    {
+        $this->commitUrlFormat = $commitUrlFormat;
+
+        return $this;
+    }
+
+    public function getCompareUrlFormat(): string
+    {
+        return $this->compareUrlFormat;
+    }
+
+    public function setCompareUrlFormat(string $compareUrlFormat): Configuration
+    {
+        $this->compareUrlFormat = $compareUrlFormat;
+
+        return $this;
+    }
+
+    public function getIssueUrlFormat(): string
+    {
+        return $this->issueUrlFormat;
+    }
+
+    public function setIssueUrlFormat(string $issueUrlFormat): Configuration
+    {
+        $this->issueUrlFormat = $issueUrlFormat;
+
+        return $this;
+    }
+
+    public function getUserUrlFormat(): string
+    {
+        return $this->userUrlFormat;
+    }
+
+    public function setUserUrlFormat(string $userUrlFormat): Configuration
+    {
+        $this->userUrlFormat = $userUrlFormat;
+
+        return $this;
+    }
+
+    public function getReleaseCommitMessageFormat(): string
+    {
+        return $this->releaseCommitMessageFormat;
+    }
+
+    public function setReleaseCommitMessageFormat(string $releaseCommitMessageFormat): Configuration
+    {
+        $this->releaseCommitMessageFormat = $releaseCommitMessageFormat;
+
+        return $this;
+    }
+
+    public function getUrlProtocol(): string
+    {
+        return $this->urlProtocol;
+    }
+
+    public function setUrlProtocol(string $urlProtocol): Configuration
+    {
+        $this->urlProtocol = $urlProtocol;
 
         return $this;
     }

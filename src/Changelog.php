@@ -19,11 +19,19 @@ class Changelog
     protected $config;
 
     /**
+     * Remote url parse.
+     *
+     * @var array
+     */
+    protected $remote = [];
+
+    /**
      * Changelog constructor.
      */
     public function __construct(Configuration $config)
     {
         $this->config = $config;
+        $this->remote = Repository::parseRemoteUrl();
     }
 
     /**
@@ -314,10 +322,9 @@ class Changelog
                 $newVersion = $params['to'] = $semver->bump($bumpRelease);
             }
 
-            // Remote url
-            $url = Repository::getRemoteUrl();
             // Initialize changelogs
-            $changelogNew .= "## [{$params['to']}]($url/compare/{$params['from']}...v{$params['to']}) ({$params['date']})\n\n";
+            $compareUrl = $this->getCompareUrl($params['from'], "v{$params['to']}");
+            $changelogNew .= "## [{$params['to']}]({$compareUrl}) ({$params['date']})\n\n";
             // Add all changes list to new changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
         }
@@ -344,7 +351,8 @@ class Changelog
             if ($autoCommitAll) {
                 Repository::addAll();
             }
-            $result = Repository::commit("chore(release): {$newVersion}", [$file], $amend, $hooks);
+            $message = $this->getReleaseCommitMessage($newVersion);
+            $result = Repository::commit($message, [$file], $amend, $hooks);
             if ($result !== false) {
                 $output->success('Release committed!');
                 // Create tag
@@ -385,8 +393,6 @@ class Changelog
     protected function getMarkdownChanges(array $changes): string
     {
         $changelog = '';
-        // Remote url
-        $url = Repository::getRemoteUrl();
         // Add all changes list to new changelog
         foreach ($changes as $type => $list) {
             if (empty($list)) {
@@ -418,11 +424,13 @@ class Changelog
 
                         if (!empty($refs)) {
                             foreach ($refs as $ref) {
-                                $refsGroup[] = '[#' . $ref . "]({$url}/issue/{$ref})";
+                                $url = $this->getIssueUrl($ref);
+                                $refsGroup[] = '[#' . $ref . "]({$url})";
                             }
                         }
                         if (!empty($item->getHash())) {
-                            $shaGroup[] = '[' . $item->getShortHash() . "]({$url}/commit/" . $item->getHash() . ')';
+                            $url = $this->getCommitUrl($item->getHash());
+                            $shaGroup[] = '[' . $item->getShortHash() . "]({$url})";
                         }
                     }
                     if (!empty($refsGroup)) {
@@ -440,5 +448,59 @@ class Changelog
         $changelog .= "\n---\n\n";
 
         return $changelog;
+    }
+
+    public function getFormattedString(string $format, array $values): string
+    {
+        $string = $format;
+        $values = array_merge($this->remote, $values);
+        foreach ($values as $key => $value) {
+            $string = str_replace('{{' . $key . '}}', $value, $string);
+        }
+
+        return $string;
+    }
+
+    public function getCommitUrl($hash): string
+    {
+        $protocol = $this->config->getUrlProtocol();
+        $format = $this->config->getCommitUrlFormat();
+        $url = $this->getFormattedString($format, ['hash' => $hash]);
+
+        return "{$protocol}://{$url}";
+    }
+
+    public function getCompareUrl($previousTag, $currentTag): string
+    {
+        $protocol = $this->config->getUrlProtocol();
+        $format = $this->config->getCompareUrlFormat();
+        $url = $this->getFormattedString($format, ['previousTag' => $previousTag, 'currentTag' => $currentTag]);
+
+        return "{$protocol}://{$url}";
+    }
+
+    public function getIssueUrl($id): string
+    {
+        $protocol = $this->config->getUrlProtocol();
+        $format = $this->config->getIssueUrlFormat();
+        $url = $this->getFormattedString($format, ['id' => $id]);
+
+        return "{$protocol}://{$url}";
+    }
+
+    public function getUserUrl($user): string
+    {
+        $protocol = $this->config->getUrlProtocol();
+        $format = $this->config->getUserUrlFormat();
+        $url = $this->getFormattedString($format, ['user' => $user]);
+
+        return "{$protocol}://{$url}";
+    }
+
+    public function getReleaseCommitMessage($tag): string
+    {
+        $format = $this->config->getReleaseCommitMessageFormat();
+
+        return $this->getFormattedString($format, ['currentTag' => $tag]);
     }
 }
