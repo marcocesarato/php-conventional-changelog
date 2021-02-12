@@ -19,9 +19,12 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Ignore Patterns:** Patterns ignored and so hidden on changelog with a specific description. *(Regex are enabled)*
 - **Tag Prefix:** Add prefix to release tag
 - **Tag Suffix:** Add suffix to release tag
-- **Skip Bump:** Skip automatic vcersion code bump
+- **Skip Bump:** Skip automatic version code bump
 - **Skip Tag:** Skip automatic commit tagging
 - **Skip Verify:** Skip the pre-commit and commit-msg hooks
+- **Hidden Hash:** Hide commit hash from changelog
+- **Hidden Mentions:** Hide users mentions from changelog
+- **Hidden References:** Hide issue references from changelog
 - **Url Protocol:** The URL protocol of all repository urls on changelogs (http/https)
 - **Commit Url Format:** A URL representing a specific commit at a hash
 - **Compare Url Format:** A URL representing the comparison between two git sha
@@ -67,6 +70,9 @@ return [
   'skipBump' => false,
   'skipTag' => false,
   'skipVerify' => false,
+  'hiddenHash' => false,
+  'hiddenMentions' => false,
+  'hiddenReferences' => false,
   'urlProtocol' => 'https',
   'commitUrlFormat' => '{{host}}/{{owner}}/{{repository}}/commit/{{hash}}',
   'compareUrlFormat' => '{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}',
