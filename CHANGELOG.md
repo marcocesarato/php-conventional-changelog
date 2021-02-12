@@ -4,6 +4,21 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.8.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.7.0...v1.8.0) (2021-02-12)
+
+
+### Features
+
+* Add pretty scope config ([f47356](https://github.com/marcocesarato/php-conventional-changelog/commit/f47356fac49edd01dab3f9cceb29481bab66758c))
+* Add hidden configurations ([42c9af](https://github.com/marcocesarato/php-conventional-changelog/commit/42c9afe7aee84ab75ccc4ce9f7add83cf1922f51))
+* Add user mentions ([214c75](https://github.com/marcocesarato/php-conventional-changelog/commit/214c75f84874ef4a92fd869230762c257d97c638))
+
+### Bug Fixes
+
+* Breaking changes indicated by a ! and ignore duplicated or empty message [#1](https://github.com/marcocesarato/php-conventional-changelog/issues/1) ([f3ebee](https://github.com/marcocesarato/php-conventional-changelog/commit/f3ebeee6bdac4e0fc1010ce3f7d3afd58bfda381))
+
+---
+
 ## [1.7.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.6.2...v1.7.0) (2021-02-12)
 
 
