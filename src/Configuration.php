@@ -53,13 +53,18 @@ class Configuration
     ];
 
     /**
+     * Key of breaking changes.
+     *
+     * @var string
+     */
+    public static $breakingChangesType = 'breaking_changes';
+
+    /**
      * Preset of breaking changes.
      *
      * @var string[][]
      */
-    protected $breakingPreset = [
-        'breaking_changes' => ['label' => '⚠ BREAKING CHANGES', 'description' => 'Code changes that potentially causes other components to fail'],
-    ];
+    protected $breakingChangesPreset = ['label' => '⚠ BREAKING CHANGES', 'description' => 'Code changes that potentially causes other components to fail'];
 
     /**
      * Types allowed on changelog.
@@ -235,7 +240,7 @@ class Configuration
         }
 
         // Add breaking changes
-        $params['preset'] = array_merge($this->breakingPreset, $params['preset']);
+        $params['preset'] = array_merge($this->getBreakingChangesPreset(), $params['preset']);
 
         // Paths
         $this->setRoot($params['root']);
@@ -389,7 +394,7 @@ class Configuration
      */
     public function getPreset(): array
     {
-        return array_merge($this->breakingPreset, $this->preset);
+        return array_merge($this->getBreakingChangesPreset(), $this->preset);
     }
 
     /**
@@ -498,19 +503,9 @@ class Configuration
     /**
      * @return \string[][]
      */
-    public function getBreakingPreset(): array
+    public function getBreakingChangesPreset(): array
     {
-        return $this->breakingPreset;
-    }
-
-    /**
-     * @param  \string[][]  $breakingPreset
-     */
-    public function setBreakingPreset(array $breakingPreset): Configuration
-    {
-        $this->breakingPreset = $breakingPreset;
-
-        return $this;
+        return [self::$breakingChangesType => $this->breakingChangesPreset];
     }
 
     public function getCommitUrlFormat(): string

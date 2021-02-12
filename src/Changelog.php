@@ -285,7 +285,7 @@ class Changelog
             // Group all changes to lists by type
             $types = $this->config->getAllowedTypes();
             foreach ($commits as $commit) {
-                if (in_array($commit->getType(), $types)) {
+                if (in_array($commit->getType(), $types) || $commit->isBreakingChange()) {
                     $itemKey = $this->getItemKey($commit->getDescription());
                     $breakingChanges = $commit->getBreakingChanges();
                     $type = (string)$commit->getType();
@@ -293,15 +293,20 @@ class Changelog
                     $hash = $commit->getHash();
                     if (!empty($breakingChanges)) {
                         foreach ($breakingChanges as $description) {
+                            $breakingType = Configuration::$breakingChangesType;
+                            $key = $this->getItemKey($description);
+                            if (empty($description) || $itemKey === $key) {
+                                $commit->setBreakingChange(true);
+                                continue;
+                            }
                             // Clone commit as breaking with different description message
                             $breakingCommit = new ConventionalCommit();
-                            $breakingCommit->setType($type)
+                            $breakingCommit->setType($breakingType)
                                            ->setDescription($description)
                                            ->setScope($scope)
                                            ->setHash($hash);
-                            $key = $this->getItemKey($description);
-                            $changes['breaking_changes'][$scope][$key][$hash] = $breakingCommit;
-                            $summary['breaking_changes']++;
+                            $changes[$breakingType][$scope][$key][$hash] = $breakingCommit;
+                            $summary[$breakingType]++;
                         }
                     }
                     $changes[$type][$scope][$itemKey][$hash] = $commit;
@@ -408,7 +413,6 @@ class Changelog
                     $changelog .= "\n##### {$scope}\n\n";
                 }
                 foreach ($items as $itemsList) {
-                    $important = '';
                     $description = '';
                     $sha = '';
                     $references = '';
@@ -417,10 +421,6 @@ class Changelog
                     foreach ($itemsList as $item) {
                         $description = ucfirst($item->getDescription());
                         $refs = $item->getReferences();
-
-                        if ($item->isImportant()) {
-                            $important = '**';
-                        }
 
                         if (!empty($refs)) {
                             foreach ($refs as $ref) {
@@ -439,7 +439,7 @@ class Changelog
                     if (!empty($shaGroup)) {
                         $sha = '(' . implode(', ', $shaGroup) . ')';
                     }
-                    $changelog .= Formatter::clean("* {$important}{$description}{$important} {$references} {$sha}");
+                    $changelog .= Formatter::clean("* {$description} {$references} {$sha}");
                     $changelog .= PHP_EOL;
                 }
             }

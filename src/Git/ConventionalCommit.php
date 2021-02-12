@@ -2,6 +2,7 @@
 
 namespace ConventionalChangelog\Git;
 
+use ConventionalChangelog\Configuration;
 use ConventionalChangelog\Git\Commit\Description;
 use ConventionalChangelog\Git\Commit\Footer;
 use ConventionalChangelog\Git\Commit\Scope;
@@ -10,8 +11,8 @@ use ConventionalChangelog\Helper\Formatter;
 
 class ConventionalCommit extends Commit
 {
-    protected const PATTERN_HEADER = "/^(?'type'[a-z]+)(\((?'scope'.+)\))?(?'important'[!]?)[:][[:blank:]](?'description'.+)/iums";
-    protected const PATTERN_FOOTER = "/(?'token'^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?'value'([:][[:blank:]]|[:]?[[:blank:]][#](?=\w)).*?)$/iums";
+    protected const PATTERN_HEADER = "/^(?<type>[a-z]+)(?<breaking_before>[!]?)(\((?<scope>.+)\))?(?<breaking_after>[!]?)[:][[:blank:]](?<description>.+)/iums";
+    protected const PATTERN_FOOTER = "/(?<token>^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?<value>([:][[:blank:]]|[:]?[[:blank:]][#](?=\w)).*?)$/iums";
 
     /**
      * Sha hash.
@@ -35,11 +36,11 @@ class ConventionalCommit extends Commit
     protected $scope;
 
     /**
-     * Important.
+     * Is breaking change.
      *
      * @var bool
      */
-    protected $important = false;
+    protected $isBreakingChange = false;
 
     /**
      * Description.
@@ -69,7 +70,7 @@ class ConventionalCommit extends Commit
         preg_match(self::PATTERN_HEADER, $header, $matches);
         $this->setType((string)$matches['type'])
              ->setScope((string)$matches['scope'])
-             ->setImportant(!empty($matches['important']) ? true : false)
+             ->setBreakingChange(!empty($matches['breaking_before'] || !empty($matches['breaking_after'])) ? true : false)
              ->setDescription((string)$matches['description']);
     }
 
@@ -115,7 +116,12 @@ class ConventionalCommit extends Commit
 
     public function getType(): Type
     {
-        return $this->type;
+        $type = $this->type;
+        if ($this->isBreakingChange()) {
+            $type = new Type(Configuration::$breakingChangesType);
+        }
+
+        return $type;
     }
 
     public function getScope(): Scope
@@ -128,9 +134,9 @@ class ConventionalCommit extends Commit
         return !empty((string)$this->scope);
     }
 
-    public function isImportant(): bool
+    public function isBreakingChange(): bool
     {
-        return $this->important;
+        return $this->isBreakingChange;
     }
 
     public function getDescription(): Description
@@ -177,7 +183,7 @@ class ConventionalCommit extends Commit
         if ($this->hasScope()) {
             $header .= '(' . $this->scope . ')';
         }
-        if ($this->important) {
+        if ($this->isBreakingChange) {
             $header .= '!';
         }
         $header .= ': ' . $this->description;
@@ -206,9 +212,9 @@ class ConventionalCommit extends Commit
         return $this;
     }
 
-    public function setImportant(bool $important): self
+    public function setBreakingChange(bool $isBreakingChange): self
     {
-        $this->important = $important;
+        $this->isBreakingChange = $isBreakingChange;
 
         return $this;
     }
