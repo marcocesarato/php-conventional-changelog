@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.7.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.6.2...v1.7.0) (2021-02-12)
+
+
+### Features
+
+* Urls and release commit formats ([7cb62a](https://github.com/marcocesarato/php-conventional-changelog/commit/7cb62acf85196bb576791bba6afd7ba55e2a3690))
+
+##### Git
+
+* Add parse remote url method ([81812c](https://github.com/marcocesarato/php-conventional-changelog/commit/81812c0838964198d577240ae12e79d059e18cc4))
+
+---
+
 ## [1.6.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.6.1...v1.6.2) (2021-02-10)
 
 
