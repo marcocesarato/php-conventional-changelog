@@ -22,6 +22,14 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Skip Bump:** Skip automatic vcersion code bump
 - **Skip Tag:** Skip automatic commit tagging
 - **Skip Verify:** Skip the pre-commit and commit-msg hooks
+- **Url Protocol:** The URL protocol of all repository urls on changelogs (http/https)
+- **Commit Url Format:** A URL representing a specific commit at a hash
+- **Compare Url Format:** A URL representing the comparison between two git sha
+- **Issue Url Format:** A URL representing the issue format (allowing a different URL format to be swapped in for
+  Gitlab, Bitbucket, etc)
+- **User Url Format:** A URL representing the a user's profile URL on GitHub, Gitlab, etc. This URL is used for
+  substituting @abc with https://github.com/abc in commit messages
+- **Release Commit Message Format:** A string to be used to format the auto-generated release commit message
 
 ### Default settings
 
@@ -59,6 +67,12 @@ return [
   'skipBump' => false,
   'skipTag' => false,
   'skipVerify' => false,
+  'urlProtocol' => 'https',
+  'commitUrlFormat' => '{{host}}/{{owner}}/{{repository}}/commit/{{hash}}',
+  'compareUrlFormat' => '{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}',
+  'issueUrlFormat' => '{{host}}/{{owner}}/{{repository}}/issues/{{id}}',
+  'userUrlFormat' => '{{host}}/{{user}}',
+  'releaseCommitMessageFormat' => 'chore(release): {{currentTag}}',
 ];
 ```
 
