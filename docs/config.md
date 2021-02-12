@@ -25,6 +25,8 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Hidden Hash:** Hide commit hash from changelog
 - **Hidden Mentions:** Hide users mentions from changelog
 - **Hidden References:** Hide issue references from changelog
+- **Pretty Scope:** Prettify the scope commit part (section name) on changelog *(ex. UserManager => User Manager or
+  user_config => User config)*
 - **Url Protocol:** The URL protocol of all repository urls on changelogs (http/https)
 - **Commit Url Format:** A URL representing a specific commit at a hash
 - **Compare Url Format:** A URL representing the comparison between two git sha
@@ -73,6 +75,7 @@ return [
   'hiddenHash' => false,
   'hiddenMentions' => false,
   'hiddenReferences' => false,
+  'prettyScope' => true,
   'urlProtocol' => 'https',
   'commitUrlFormat' => '{{host}}/{{owner}}/{{repository}}/commit/{{hash}}',
   'compareUrlFormat' => '{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}',
