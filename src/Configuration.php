@@ -188,6 +188,13 @@ class Configuration
     protected $releaseCommitMessageFormat = 'chore(release): {{currentTag}}';
 
     /**
+     * Prettify scope.
+     *
+     * @var bool
+     */
+    protected $prettyScope = true;
+
+    /**
      * Constructor.
      */
     public function __construct(array $settings = [])
@@ -232,9 +239,10 @@ class Configuration
             'skipBump' => $this->skipBump(),
             'skipTag' => $this->skipTag(),
             'skipVerify' => $this->skipVerify(),
-	        'hiddenHash' => $this->isHiddenHash(),
+            'hiddenHash' => $this->isHiddenHash(),
             'hiddenMentions' => $this->isHiddenMentions(),
             'hiddenReferences' => $this->isHiddenReferences(),
+            'prettyScope' => $this->isPrettyScope(),
             'urlProtocol' => $this->getUrlProtocol(),
             'commitUrlFormat' => $this->getCommitUrlFormat(),
             'compareUrlFormat' => $this->getCompareUrlFormat(),
@@ -284,10 +292,11 @@ class Configuration
         $this->setSkipTag($params['skipTag']);
         $this->setSkipVerify($params['skipVerify']);
         // Hidden
-	    $this->setHiddenHash($params['hiddenHash']);
-	    $this->setHiddenMentions($params['hiddenMentions']);
-	    $this->setHiddenReferences($params['hiddenReferences']);
+        $this->setHiddenHash($params['hiddenHash']);
+        $this->setHiddenMentions($params['hiddenMentions']);
+        $this->setHiddenReferences($params['hiddenReferences']);
         // Formats
+        $this->setPrettyScope($params['prettyScope']);
         $this->setUrlProtocol($params['urlProtocol']);
         $this->setCommitUrlFormat($params['commitUrlFormat']);
         $this->setCompareUrlFormat($params['compareUrlFormat']);
@@ -346,7 +355,7 @@ class Configuration
     /**
      * @param string[][] $types
      */
-    public function setTypes(array $types): Configuration
+    public function setTypes(array $types): self
     {
         $ignoreTypes = $this->getIgnoreTypes();
         foreach ($ignoreTypes as $type) {
@@ -363,7 +372,7 @@ class Configuration
         return $this->path;
     }
 
-    public function setPath(string $path): Configuration
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -375,7 +384,7 @@ class Configuration
         return $this->headerTitle;
     }
 
-    public function setHeaderTitle(string $headerTitle): Configuration
+    public function setHeaderTitle(string $headerTitle): self
     {
         $this->headerTitle = $headerTitle;
 
@@ -387,7 +396,7 @@ class Configuration
         return $this->headerDescription;
     }
 
-    public function setHeaderDescription(string $headerDescription): Configuration
+    public function setHeaderDescription(string $headerDescription): self
     {
         $this->headerDescription = $headerDescription;
 
@@ -405,7 +414,7 @@ class Configuration
     /**
      * @param string[] $ignorePatterns
      */
-    public function setIgnorePatterns(array $ignorePatterns): Configuration
+    public function setIgnorePatterns(array $ignorePatterns): self
     {
         foreach ($ignorePatterns as $key => $pattern) {
             if (!$this->isRegex($pattern)) {
@@ -428,7 +437,7 @@ class Configuration
     /**
      * @param string[] $ignoreTypes
      */
-    public function setIgnoreTypes(array $ignoreTypes): Configuration
+    public function setIgnoreTypes(array $ignoreTypes): self
     {
         $types = $this->getTypes();
         foreach ($ignoreTypes as $type) {
@@ -457,7 +466,7 @@ class Configuration
     /**
      * @param string $root
      */
-    public function setRoot(?string $root = null): Configuration
+    public function setRoot(?string $root = null): self
     {
         if (empty($root) || !is_dir($root)) {
             $root = getcwd();
@@ -473,7 +482,7 @@ class Configuration
         return $this->tagPrefix;
     }
 
-    public function setTagPrefix(string $tagPrefix): Configuration
+    public function setTagPrefix(string $tagPrefix): self
     {
         $this->tagPrefix = $tagPrefix;
 
@@ -485,7 +494,7 @@ class Configuration
         return $this->tagSuffix;
     }
 
-    public function setTagSuffix(string $tagSuffix): Configuration
+    public function setTagSuffix(string $tagSuffix): self
     {
         $this->tagSuffix = $tagSuffix;
 
@@ -497,7 +506,7 @@ class Configuration
         return $this->skipTag;
     }
 
-    public function setSkipTag(bool $skipTag): Configuration
+    public function setSkipTag(bool $skipTag): self
     {
         $this->skipTag = $skipTag;
 
@@ -509,7 +518,7 @@ class Configuration
         return $this->skipBump;
     }
 
-    public function setSkipBump(bool $skipBump): Configuration
+    public function setSkipBump(bool $skipBump): self
     {
         $this->skipBump = $skipBump;
 
@@ -521,7 +530,7 @@ class Configuration
         return $this->skipVerify;
     }
 
-    public function setSkipVerify(bool $skipVerify): Configuration
+    public function setSkipVerify(bool $skipVerify): self
     {
         $this->skipVerify = $skipVerify;
 
@@ -541,7 +550,7 @@ class Configuration
         return $this->commitUrlFormat;
     }
 
-    public function setCommitUrlFormat(string $commitUrlFormat): Configuration
+    public function setCommitUrlFormat(string $commitUrlFormat): self
     {
         $this->commitUrlFormat = $commitUrlFormat;
 
@@ -553,7 +562,7 @@ class Configuration
         return $this->compareUrlFormat;
     }
 
-    public function setCompareUrlFormat(string $compareUrlFormat): Configuration
+    public function setCompareUrlFormat(string $compareUrlFormat): self
     {
         $this->compareUrlFormat = $compareUrlFormat;
 
@@ -565,7 +574,7 @@ class Configuration
         return $this->issueUrlFormat;
     }
 
-    public function setIssueUrlFormat(string $issueUrlFormat): Configuration
+    public function setIssueUrlFormat(string $issueUrlFormat): self
     {
         $this->issueUrlFormat = $issueUrlFormat;
 
@@ -577,7 +586,7 @@ class Configuration
         return $this->userUrlFormat;
     }
 
-    public function setUserUrlFormat(string $userUrlFormat): Configuration
+    public function setUserUrlFormat(string $userUrlFormat): self
     {
         $this->userUrlFormat = $userUrlFormat;
 
@@ -589,7 +598,7 @@ class Configuration
         return $this->releaseCommitMessageFormat;
     }
 
-    public function setReleaseCommitMessageFormat(string $releaseCommitMessageFormat): Configuration
+    public function setReleaseCommitMessageFormat(string $releaseCommitMessageFormat): self
     {
         $this->releaseCommitMessageFormat = $releaseCommitMessageFormat;
 
@@ -601,67 +610,58 @@ class Configuration
         return $this->urlProtocol;
     }
 
-    public function setUrlProtocol(string $urlProtocol): Configuration
+    public function setUrlProtocol(string $urlProtocol): self
     {
         $this->urlProtocol = $urlProtocol;
 
         return $this;
     }
 
-	/**
-	 * @return bool
-	 */
-	public function isHiddenReferences() : bool
-	{
-		return $this->hiddenReferences;
-	}
+    public function isHiddenReferences(): bool
+    {
+        return $this->hiddenReferences;
+    }
 
-	/**
-	 * @param  bool  $hiddenReferences
-	 * @return Configuration
-	 */
-	public function setHiddenReferences(bool $hiddenReferences) : Configuration
-	{
-		$this->hiddenReferences = $hiddenReferences;
+    public function setHiddenReferences(bool $hiddenReferences): self
+    {
+        $this->hiddenReferences = $hiddenReferences;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function isHiddenMentions() : bool
-	{
-		return $this->hiddenMentions;
-	}
+    public function isHiddenMentions(): bool
+    {
+        return $this->hiddenMentions;
+    }
 
-	/**
-	 * @param  bool  $hiddenMentions
-	 * @return Configuration
-	 */
-	public function setHiddenMentions(bool $hiddenMentions) : Configuration
-	{
-		$this->hiddenMentions = $hiddenMentions;
+    public function setHiddenMentions(bool $hiddenMentions): self
+    {
+        $this->hiddenMentions = $hiddenMentions;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function isHiddenHash() : bool
-	{
-		return $this->hiddenHash;
-	}
+    public function isHiddenHash(): bool
+    {
+        return $this->hiddenHash;
+    }
 
-	/**
-	 * @param  bool  $hiddenHash
-	 * @return Configuration
-	 */
-	public function setHiddenHash(bool $hiddenHash) : Configuration
-	{
-		$this->hiddenHash = $hiddenHash;
+    public function setHiddenHash(bool $hiddenHash): self
+    {
+        $this->hiddenHash = $hiddenHash;
 
-		return $this;
-	}
+        return $this;
+    }
+
+    public function isPrettyScope(): bool
+    {
+        return $this->prettyScope;
+    }
+
+    public function setPrettyScope(bool $prettyScope): self
+    {
+        $this->prettyScope = $prettyScope;
+
+        return $this;
+    }
 }

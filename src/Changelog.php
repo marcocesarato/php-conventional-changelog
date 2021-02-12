@@ -289,7 +289,10 @@ class Changelog
                     $itemKey = $this->getItemKey($commit->getDescription());
                     $breakingChanges = $commit->getBreakingChanges();
                     $type = (string)$commit->getType();
-                    $scope = $commit->getScope()->toPrettyString();
+                    $scope = $commit->getScope();
+                    if ($this->config->isPrettyScope()) {
+                        $scope = $commit->getScope()->toPrettyString();
+                    }
                     $hash = $commit->getHash();
                     if (!empty($breakingChanges)) {
                         foreach ($breakingChanges as $description) {
