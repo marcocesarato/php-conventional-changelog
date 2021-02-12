@@ -228,10 +228,10 @@ class Repository
     {
         $url = self::getRemoteUrl();
         $patterns = [
-            '#^(?P<protocol>https?|git|ssh|rsync)\://(?:(?P<user>.+)@)*(?P<host>[a-z0-9_.-]*)[:/]*(?P<port>[\d]+){0,1}(?P<pathname>\/((?P<owner>[\w\-]+)\/)?((?P<name>[\w\-\.]+?)(\.git|\/)?)?)$#smi',
-            '#(git\+)?((?P<protocol>\w+)://)((?P<user>\w+)@)?((?P<host>[\w\.\-]+))(:(?P<port>\d+))?(?P<pathname>(\/(?P<owner>\w+)/)?(\/?(?P<name>[\w\-]+)(\.git|\/)?)?)$#smi',
-            '#^(?:(?P<user>.+)@)*(?P<host>[a-z0-9_.-]*)[:]*(?P<port>[\d]+){0,1}(?P<pathname>\/?(?P<owner>.+)/(?P<name>.+).git)$#smi',
-            '#((?P<user>\w+)@)?((?P<host>[\w\.\-]+))[\:\/]{1,2}(?P<pathname>((?P<owner>\w+)/)?((?P<name>[\w\-]+)(\.git|\/)?)?)$#smi',
+            '#^(?P<protocol>https?|git|ssh|rsync)\://(?:(?P<user>.+)@)*(?P<host>[a-z0-9_.-]*)[:/]*(?P<port>[\d]+){0,1}(?P<pathname>\/((?P<owner>[\w\-]+)\/)?((?P<repository>[\w\-\.]+?)(\.git|\/)?)?)$#smi',
+            '#(git\+)?((?P<protocol>\w+)://)((?P<user>\w+)@)?((?P<host>[\w\.\-]+))(:(?P<port>\d+))?(?P<pathname>(\/(?P<owner>\w+)/)?(\/?(?P<repository>[\w\-]+)(\.git|\/)?)?)$#smi',
+            '#^(?:(?P<user>.+)@)*(?P<host>[a-z0-9_.-]*)[:]*(?P<port>[\d]+){0,1}(?P<pathname>\/?(?P<owner>.+)/(?P<repository>.+).git)$#smi',
+            '#((?P<user>\w+)@)?((?P<host>[\w\.\-]+))[\:\/]{1,2}(?P<pathname>((?P<owner>\w+)/)?((?P<repository>[\w\-]+)(\.git|\/)?)?)$#smi',
         ];
         foreach ($patterns as $pattern) {
             if (preg_match($pattern, $url, $match)) {
