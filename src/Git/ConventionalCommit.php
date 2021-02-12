@@ -177,6 +177,21 @@ class ConventionalCommit extends Commit
         return array_unique($refs);
     }
 
+    /**
+     * Get mentions.
+     */
+    public function getMentions(): array
+    {
+        $mentions = [];
+        if (preg_match_all('/(?:^|\s+)(?<mention>@(?<user>[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}))(?:$|\s+)/smi', $this->raw, $matches)) {
+            foreach ($matches['user'] as $match) {
+                $mentions[] = $match;
+            }
+        }
+
+        return array_unique($mentions);
+    }
+
     public function getHeader(): string
     {
         $header = $this->type;

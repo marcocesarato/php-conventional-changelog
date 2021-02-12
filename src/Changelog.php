@@ -419,30 +419,53 @@ class Changelog
                     $description = '';
                     $sha = '';
                     $references = '';
+                    $mentions = '';
                     $shaGroup = [];
                     $refsGroup = [];
+                    $mentionsGroup = [];
                     foreach ($itemsList as $item) {
                         $description = ucfirst($item->getDescription());
-                        $refs = $item->getReferences();
-
-                        if (!empty($refs)) {
-                            foreach ($refs as $ref) {
-                                $url = $this->getIssueUrl($ref);
-                                $refsGroup[] = '[#' . $ref . "]({$url})";
+                        // Hashes
+                        if (!$this->config->isHiddenHash()) {
+                            if (!empty($item->getHash())) {
+                                $commitUrl = $this->getCommitUrl($item->getHash());
+                                $shaGroup[] = '[' . $item->getShortHash() . "]({$commitUrl})";
                             }
                         }
-                        if (!empty($item->getHash())) {
-                            $url = $this->getCommitUrl($item->getHash());
-                            $shaGroup[] = '[' . $item->getShortHash() . "]({$url})";
+                        // References
+                        if (!$this->config->isHiddenReferences()) {
+                            $refs = $item->getReferences();
+                            if (!empty($refs)) {
+                                foreach ($refs as $ref) {
+                                    $refUrl = $this->getIssueUrl($ref);
+                                    $refsGroup[] = '[#' . $ref . "]({$refUrl})";
+                                }
+                            }
                         }
+                        // Mentions
+                        $commitMentions = $item->getMentions();
+                        foreach ($commitMentions as $user) {
+                            $mention = "@{$user}";
+                            $userUrl = $this->getUserUrl($user);
+                            $text = "[*{$mention}*]({$userUrl})";
+                            if (strpos($description, $mention) !== false) {
+                                $description = str_replace($mention, $text, $description);
+                            } elseif (!$this->config->isHiddenMentions()) {
+                                $mentionsGroup[] = $text;
+                            }
+                        }
+                    }
+
+                    if (!$this->config->isHiddenHash() && !empty($shaGroup)) {
+                        $sha = '(' . implode(', ', $shaGroup) . ')';
                     }
                     if (!$this->config->isHiddenReferences() && !empty($refsGroup)) {
                         $references = implode(', ', $refsGroup);
                     }
-                    if (!$this->config->isHiddenHash() && !empty($shaGroup)) {
-                        $sha = '(' . implode(', ', $shaGroup) . ')';
+                    if (!$this->config->isHiddenMentions() && !empty($mentionsGroup)) {
+                        $mentions = '*[*' . implode(', ', $mentionsGroup) . '*]*';
                     }
-                    $changelog .= Formatter::clean("* {$description} {$references} {$sha}");
+                    $changelog .= Formatter::clean("* {$description} {$references} {$sha} {$mentions}");
                     $changelog .= PHP_EOL;
                 }
             }
