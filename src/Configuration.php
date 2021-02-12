@@ -57,7 +57,7 @@ class Configuration
      *
      * @var string
      */
-    public static $breakingChangesType = 'breaking_changes';
+    public const BREAKING_CHANGES_TYPE = 'breaking_changes';
 
     /**
      * Preset of breaking changes.
@@ -116,6 +116,27 @@ class Configuration
      * @var bool
      */
     protected $skipVerify = false;
+
+    /**
+     * Hidden references.
+     *
+     * @var bool
+     */
+    protected $hiddenReferences = false;
+
+    /**
+     * Hidden mentions.
+     *
+     * @var bool
+     */
+    protected $hiddenMentions = false;
+
+    /**
+     * Hidden hash.
+     *
+     * @var bool
+     */
+    protected $hiddenHash = false;
 
     /**
      * Tag suffix.
@@ -211,6 +232,9 @@ class Configuration
             'skipBump' => $this->skipBump(),
             'skipTag' => $this->skipTag(),
             'skipVerify' => $this->skipVerify(),
+	        'hiddenHash' => $this->isHiddenHash(),
+            'hiddenMentions' => $this->isHiddenMentions(),
+            'hiddenReferences' => $this->isHiddenReferences(),
             'urlProtocol' => $this->getUrlProtocol(),
             'commitUrlFormat' => $this->getCommitUrlFormat(),
             'compareUrlFormat' => $this->getCompareUrlFormat(),
@@ -259,6 +283,10 @@ class Configuration
         $this->setSkipBump($params['skipBump']);
         $this->setSkipTag($params['skipTag']);
         $this->setSkipVerify($params['skipVerify']);
+        // Hidden
+	    $this->setHiddenHash($params['hiddenHash']);
+	    $this->setHiddenMentions($params['hiddenMentions']);
+	    $this->setHiddenReferences($params['hiddenReferences']);
         // Formats
         $this->setUrlProtocol($params['urlProtocol']);
         $this->setCommitUrlFormat($params['commitUrlFormat']);
@@ -505,7 +533,7 @@ class Configuration
      */
     public function getBreakingChangesPreset(): array
     {
-        return [self::$breakingChangesType => $this->breakingChangesPreset];
+        return [self::BREAKING_CHANGES_TYPE => $this->breakingChangesPreset];
     }
 
     public function getCommitUrlFormat(): string
@@ -579,4 +607,61 @@ class Configuration
 
         return $this;
     }
+
+	/**
+	 * @return bool
+	 */
+	public function isHiddenReferences() : bool
+	{
+		return $this->hiddenReferences;
+	}
+
+	/**
+	 * @param  bool  $hiddenReferences
+	 * @return Configuration
+	 */
+	public function setHiddenReferences(bool $hiddenReferences) : Configuration
+	{
+		$this->hiddenReferences = $hiddenReferences;
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isHiddenMentions() : bool
+	{
+		return $this->hiddenMentions;
+	}
+
+	/**
+	 * @param  bool  $hiddenMentions
+	 * @return Configuration
+	 */
+	public function setHiddenMentions(bool $hiddenMentions) : Configuration
+	{
+		$this->hiddenMentions = $hiddenMentions;
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isHiddenHash() : bool
+	{
+		return $this->hiddenHash;
+	}
+
+	/**
+	 * @param  bool  $hiddenHash
+	 * @return Configuration
+	 */
+	public function setHiddenHash(bool $hiddenHash) : Configuration
+	{
+		$this->hiddenHash = $hiddenHash;
+
+		return $this;
+	}
 }

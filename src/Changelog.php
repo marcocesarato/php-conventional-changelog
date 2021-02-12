@@ -293,7 +293,7 @@ class Changelog
                     $hash = $commit->getHash();
                     if (!empty($breakingChanges)) {
                         foreach ($breakingChanges as $description) {
-                            $breakingType = Configuration::$breakingChangesType;
+                            $breakingType = Configuration::BREAKING_CHANGES_TYPE;
                             $key = $this->getItemKey($description);
                             if (empty($description) || $itemKey === $key) {
                                 $commit->setBreakingChange(true);
@@ -433,10 +433,10 @@ class Changelog
                             $shaGroup[] = '[' . $item->getShortHash() . "]({$url})";
                         }
                     }
-                    if (!empty($refsGroup)) {
+                    if (!$this->config->isHiddenReferences() && !empty($refsGroup)) {
                         $references = implode(', ', $refsGroup);
                     }
-                    if (!empty($shaGroup)) {
+                    if (!$this->config->isHiddenHash() && !empty($shaGroup)) {
                         $sha = '(' . implode(', ', $shaGroup) . ')';
                     }
                     $changelog .= Formatter::clean("* {$description} {$references} {$sha}");

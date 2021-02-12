@@ -118,7 +118,7 @@ class ConventionalCommit extends Commit
     {
         $type = $this->type;
         if ($this->isBreakingChange()) {
-            $type = new Type(Configuration::$breakingChangesType);
+            $type = new Type(Configuration::BREAKING_CHANGES_TYPE);
         }
 
         return $type;
