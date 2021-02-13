@@ -170,7 +170,7 @@ class Repository
      *
      * @return string
      */
-    public static function commit(string $message, array $files = [], bool $amend = false, bool $verify = true)
+    public static function commit(string $message, array $files = [], bool $amend = false, bool $verify = true, $noEdit = false)
     {
         self::add($files);
         $message = str_replace('"', "'", $message); // Escape
@@ -180,6 +180,9 @@ class Repository
         }
         if (!$verify) {
             $command .= ' --no-verify';
+        }
+        if ($noEdit) {
+            $command .= ' --no-edit';
         }
 
         return exec($command);
