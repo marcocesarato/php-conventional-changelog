@@ -4,18 +4,7 @@
 use ConventionalChangelog\DefaultCommand;
 use Symfony\Component\Console\Application;
 
-// Autoload
-$files = [
-    __DIR__ . '/../../autoload.php',
-    __DIR__ . '/../vendor/autoload.php',
-    __DIR__ . '/vendor/autoload.php',
-];
-foreach ($files as $file) {
-    if (file_exists($file)) {
-        require_once $file;
-        break;
-    }
-}
+require_once __DIR__ . '/autoload.php';
 
 // Report only fatal errors
 error_reporting(2039);
