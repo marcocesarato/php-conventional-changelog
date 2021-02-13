@@ -4,22 +4,13 @@ namespace ConventionalChangelog\Git;
 
 use ConventionalChangelog\Configuration;
 use ConventionalChangelog\Git\Commit\Description;
-use ConventionalChangelog\Git\Commit\Mention;
 use ConventionalChangelog\Git\Commit\Reference;
 use ConventionalChangelog\Git\Commit\Scope;
 use ConventionalChangelog\Git\Commit\Type;
-use ConventionalChangelog\Helper\Formatter;
 
 class ConventionalCommit extends Commit
 {
     protected const PATTERN_HEADER = "/^(?<type>[a-z]+)(?<breaking_before>[!]?)(\((?<scope>.+)\))?(?<breaking_after>[!]?)[:][[:blank:]](?<description>.+)/iums";
-
-    /**
-     * Sha hash.
-     *
-     * @var string
-     */
-    protected $hash;
 
     /**
      * Type.
@@ -49,55 +40,10 @@ class ConventionalCommit extends Commit
      */
     protected $description;
 
-    /**
-     * User Mentions.
-     *
-     * @var Mention[]
-     */
-    protected $mentions = [];
-
     public function __construct(?string $commit = null)
     {
         parent::__construct($commit);
         $this->parse();
-    }
-
-    /**
-     * Parse header.
-     */
-    protected function parseHeader(string $header)
-    {
-        preg_match(self::PATTERN_HEADER, $header, $matches);
-        $this->setType((string)$matches['type'])
-             ->setScope((string)$matches['scope'])
-             ->setBreakingChange(!empty($matches['breaking_before'] || !empty($matches['breaking_after'])) ? true : false)
-             ->setDescription((string)$matches['description']);
-    }
-
-    /**
-     * Parse message.
-     */
-    protected function parseMessage(string $message)
-    {
-        $body = Formatter::clean($message);
-
-        $mentions = [];
-        if (preg_match_all('/(?:^|\s+)(?<mention>@(?<user>[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}))(?:$|\s+)/smi', $this->raw, $matches)) {
-            foreach ($matches['user'] as $match) {
-                $mentions[] = new Mention($match);
-            }
-        }
-
-        if (preg_match_all(self::PATTERN_FOOTER, $body, $matches, PREG_SET_ORDER, 0)) {
-            foreach ($matches as $match) {
-                $footer = $match[0];
-                $body = str_replace($footer, '', $body);
-            }
-        }
-
-        $body = Formatter::clean($body);
-        $this->setBody($body)
-             ->setMentions($mentions);
     }
 
     /**
@@ -176,30 +122,6 @@ class ConventionalCommit extends Commit
         return array_unique($refs);
     }
 
-    /**
-     * Set mentions.
-     *
-     * @param Mention[] $mentions
-     *
-     * @return $this
-     */
-    public function setMentions(array $mentions): self
-    {
-        $this->mentions = array_unique($mentions);
-
-        return $this;
-    }
-
-    /**
-     * Get mentions.
-     *
-     * @return Mention[]
-     */
-    public function getMentions(): array
-    {
-        return $this->mentions;
-    }
-
     public function getHeader(): string
     {
         $header = $this->type;
@@ -265,11 +187,20 @@ class ConventionalCommit extends Commit
         if (!$this->isValid()) {
             return;
         }
-
         $header = $this->getSubject();
-        $message = $this->getBody();
 
         $this->parseHeader($header);
-        $this->parseMessage($message);
+    }
+
+    /**
+     * Parse header.
+     */
+    protected function parseHeader(string $header)
+    {
+        preg_match(self::PATTERN_HEADER, $header, $matches);
+        $this->setType((string)$matches['type'])
+            ->setScope((string)$matches['scope'])
+            ->setBreakingChange(!empty($matches['breaking_before'] || !empty($matches['breaking_after'])) ? true : false)
+            ->setDescription((string)$matches['description']);
     }
 }

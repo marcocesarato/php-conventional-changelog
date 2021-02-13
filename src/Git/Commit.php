@@ -4,6 +4,7 @@ namespace ConventionalChangelog\Git;
 
 use ConventionalChangelog\Git\Commit\Body;
 use ConventionalChangelog\Git\Commit\Footer;
+use ConventionalChangelog\Git\Commit\Mention;
 use ConventionalChangelog\Git\Commit\Subject;
 use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Type\Stringable;
@@ -12,6 +13,7 @@ use DateTime;
 class Commit implements Stringable
 {
     protected const PATTERN_FOOTER = "/(?<token>^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?<value>([:][[:blank:]]|[:]?[[:blank:]][#](?=\w)).*?)$/iums";
+    protected const PATTERN_MENTION = "/(?:^|\s+)(?<mention>@(?<user>[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}))(?:$|\s+)/smi";
 
     /**
      * Raw content.
@@ -40,6 +42,13 @@ class Commit implements Stringable
      * @var Footer[]
      */
     protected $footers = [];
+
+    /**
+     * User Mentions.
+     *
+     * @var Mention[]
+     */
+    protected $mentions = [];
 
     /**
      * Sha hash.
@@ -246,6 +255,7 @@ class Commit implements Stringable
 
     public function setBody(string $body): self
     {
+        $body = Formatter::clean($body);
         $footers = [];
         if (preg_match_all(self::PATTERN_FOOTER, $body, $matches, PREG_SET_ORDER, 0)) {
             foreach ($matches as $match) {
@@ -257,6 +267,8 @@ class Commit implements Stringable
             }
         }
         $this->setFooters($footers);
+
+        $body = Formatter::clean($body);
         $this->body = new Body($body);
 
         return $this;
@@ -290,6 +302,30 @@ class Commit implements Stringable
     }
 
     /**
+     * Set mentions.
+     *
+     * @param Mention[] $mentions
+     *
+     * @return $this
+     */
+    public function setMentions(array $mentions): self
+    {
+        $this->mentions = array_unique($mentions);
+
+        return $this;
+    }
+
+    /**
+     * Get mentions.
+     *
+     * @return Mention[]
+     */
+    public function getMentions(): array
+    {
+        return $this->mentions;
+    }
+
+    /**
      * Parse raw commit.
      */
     protected function parse()
@@ -297,16 +333,23 @@ class Commit implements Stringable
         $rows = explode("\n", $this->raw);
 
         $subject = $rows[0];
-        $this->setSubject($subject);
-
         $body = '';
-        // Get message
         foreach ($rows as $i => $row) {
             if ($i !== 0) {
                 $body .= $row . "\n";
             }
         }
-        $this->setBody($body);
+
+        $mentions = [];
+        if (preg_match_all(self::PATTERN_MENTION, $this->raw, $matches)) {
+            foreach ($matches['user'] as $match) {
+                $mentions[] = new Mention($match);
+            }
+        }
+
+        $this->setSubject($subject)
+             ->setBody($body)
+             ->setMentions($mentions);
     }
 
     public function __wakeup()
