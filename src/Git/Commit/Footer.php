@@ -20,10 +20,30 @@ class Footer implements Stringable
      */
     public $value;
 
+    /**
+     * References.
+     *
+     * @var Reference[]
+     */
+    public $references;
+
     public function __construct(string $token, string $value)
     {
-        $this->token = $token;
-        $this->value = $value;
+        $this->token = trim($token);
+        $this->value = trim($value);
+
+        $refs = [];
+        if ($value[0] === '#') {
+            $values = explode(' ', $value);
+            foreach ($values as $val) {
+                $ref = ltrim($val, '#');
+                if (is_numeric($ref)) {
+                    $refs[] = new Reference($ref);
+                }
+            }
+        }
+
+        $this->references = array_unique($refs);
     }
 
     public function getToken(): string
@@ -41,19 +61,7 @@ class Footer implements Stringable
      */
     public function getReferences(): array
     {
-        $refs = [];
-        $value = $this->getValue();
-        if ($value[0] === '#') {
-            $values = explode(' ', $value);
-            foreach ($values as $val) {
-                $ref = ltrim($val, '#');
-                if (is_numeric($ref)) {
-                    $refs[] = $ref;
-                }
-            }
-        }
-
-        return array_unique($refs);
+        return $this->references;
     }
 
     public function __toString(): string

@@ -5,6 +5,7 @@ namespace ConventionalChangelog\Git;
 use ConventionalChangelog\Configuration;
 use ConventionalChangelog\Git\Commit\Description;
 use ConventionalChangelog\Git\Commit\Footer;
+use ConventionalChangelog\Git\Commit\Mention;
 use ConventionalChangelog\Git\Commit\Scope;
 use ConventionalChangelog\Git\Commit\Type;
 use ConventionalChangelog\Helper\Formatter;
@@ -56,6 +57,13 @@ class ConventionalCommit extends Commit
      */
     protected $footers = [];
 
+    /**
+     * User Mentions.
+     *
+     * @var Mention[]
+     */
+    protected $mentions = [];
+
     public function __construct(?string $commit = null)
     {
         parent::__construct($commit);
@@ -80,6 +88,14 @@ class ConventionalCommit extends Commit
     protected function parseMessage(string $message)
     {
         $body = Formatter::clean($message);
+
+        $mentions = [];
+        if (preg_match_all('/(?:^|\s+)(?<mention>@(?<user>[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}))(?:$|\s+)/smi', $this->raw, $matches)) {
+            foreach ($matches['user'] as $match) {
+                $mentions[] = new Mention($match);
+            }
+        }
+
         $footers = [];
         if (preg_match_all(self::PATTERN_FOOTER, $body, $matches, PREG_SET_ORDER, 0)) {
             foreach ($matches as $match) {
@@ -92,7 +108,8 @@ class ConventionalCommit extends Commit
         }
         $body = Formatter::clean($body);
         $this->setBody($body)
-             ->setFooters($footers);
+             ->setFooters($footers)
+             ->setMentions($mentions);
     }
 
     /**
@@ -178,18 +195,23 @@ class ConventionalCommit extends Commit
     }
 
     /**
+     * Set mentions.
+     */
+    public function setMentions(array $mentions): self
+    {
+        $this->mentions = array_unique($mentions);
+
+        return $this;
+    }
+
+    /**
      * Get mentions.
+     *
+     * @return Mention[]
      */
     public function getMentions(): array
     {
-        $mentions = [];
-        if (preg_match_all('/(?:^|\s+)(?<mention>@(?<user>[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}))(?:$|\s+)/smi', $this->raw, $matches)) {
-            foreach ($matches['user'] as $match) {
-                $mentions[] = $match;
-            }
-        }
-
-        return array_unique($mentions);
+        return $this->mentions;
     }
 
     public function getHeader(): string

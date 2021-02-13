@@ -121,15 +121,12 @@ class Changelog
 
         // Current Dates
         $today = new DateTime();
-        $todayString = Formatter::getDateString($today);
 
         // First commit
         $firstCommit = Repository::getFirstCommit();
 
         if (!$firstRelease) {
             $lastVersion = Repository::getLastTag(); // Last version
-            $lastVersionCommit = Repository::getLastTagCommit(); // Last version commit
-            $lastVersionDate = Repository::getCommitDate($lastVersionCommit); // Last version date
 
             $bumpRelease = SemanticVersion::PATCH;
 
@@ -238,7 +235,6 @@ class Changelog
                     $time = strtotime($toDate);
                     $additionalParams .= ' --before="' . date('Y-m-d', $time) . '"';
                     $today->setTimestamp($time);
-                    $todayString = Formatter::getDateString($today);
                 }
             }
 
@@ -467,8 +463,8 @@ class Changelog
                         }
                         // Mentions
                         $commitMentions = $item->getMentions();
-                        foreach ($commitMentions as $user) {
-                            $mention = "@{$user}";
+                        foreach ($commitMentions as $mention) {
+                            $user = $mention->getUser();
                             $userUrl = $this->getUserUrl($user);
                             $text = "[*{$mention}*]({$userUrl})";
                             if (strpos($description, $mention) !== false) {
