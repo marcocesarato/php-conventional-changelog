@@ -456,8 +456,9 @@ class Changelog
                             $refs = $item->getReferences();
                             if (!empty($refs)) {
                                 foreach ($refs as $ref) {
-                                    $refUrl = $this->getIssueUrl($ref);
-                                    $refsGroup[] = '[#' . $ref . "]({$refUrl})";
+                                    $refId = $ref->getId();
+                                    $refUrl = $this->getIssueUrl($refId);
+                                    $refsGroup[] = "[{$ref}]({$refUrl})";
                                 }
                             }
                         }
