@@ -4,6 +4,25 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.9.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.8.0...v1.9.0) (2021-02-13)
+
+
+### Features
+
+* Add pre and post run hooks and changes sorting ([a38ef1](https://github.com/marcocesarato/php-conventional-changelog/commit/a38ef1d6f74128322d031ef9404888a6e1706d38), [668d2e](https://github.com/marcocesarato/php-conventional-changelog/commit/668d2ea679f92c9f1022b95f93b83b614fd6d461))
+
+##### Git
+
+* Add delete tag method ([7712c2](https://github.com/marcocesarato/php-conventional-changelog/commit/7712c24494972365270aff896421f127003c2108))
+* Add get last commit hash method ([c650b5](https://github.com/marcocesarato/php-conventional-changelog/commit/c650b5e48b3c79959af2d8b941818c2740cc4fae))
+* Add no edit param to commit method ([bf4d1a](https://github.com/marcocesarato/php-conventional-changelog/commit/bf4d1a85e8303307dcd42c0318d6a33089bf49d7))
+
+##### Semver
+
+* Pattern version validation ([e19170](https://github.com/marcocesarato/php-conventional-changelog/commit/e191708265b8764823f397dbd28a8597edd2e0cd))
+
+---
+
 ## [1.8.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.7.0...v1.8.0) (2021-02-12)
 
 
