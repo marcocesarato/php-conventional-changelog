@@ -4,7 +4,6 @@ namespace ConventionalChangelog\Git;
 
 use ConventionalChangelog\Configuration;
 use ConventionalChangelog\Git\Commit\Description;
-use ConventionalChangelog\Git\Commit\Footer;
 use ConventionalChangelog\Git\Commit\Mention;
 use ConventionalChangelog\Git\Commit\Reference;
 use ConventionalChangelog\Git\Commit\Scope;
@@ -14,7 +13,6 @@ use ConventionalChangelog\Helper\Formatter;
 class ConventionalCommit extends Commit
 {
     protected const PATTERN_HEADER = "/^(?<type>[a-z]+)(?<breaking_before>[!]?)(\((?<scope>.+)\))?(?<breaking_after>[!]?)[:][[:blank:]](?<description>.+)/iums";
-    protected const PATTERN_FOOTER = "/(?<token>^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?<value>([:][[:blank:]]|[:]?[[:blank:]][#](?=\w)).*?)$/iums";
 
     /**
      * Sha hash.
@@ -50,13 +48,6 @@ class ConventionalCommit extends Commit
      * @var Description
      */
     protected $description;
-
-    /**
-     * Footers.
-     *
-     * @var Footer[]
-     */
-    protected $footers = [];
 
     /**
      * User Mentions.
@@ -97,19 +88,15 @@ class ConventionalCommit extends Commit
             }
         }
 
-        $footers = [];
         if (preg_match_all(self::PATTERN_FOOTER, $body, $matches, PREG_SET_ORDER, 0)) {
             foreach ($matches as $match) {
                 $footer = $match[0];
                 $body = str_replace($footer, '', $body);
-                $value = ltrim((string)$match['value'], ':');
-                $value = Formatter::clean($value);
-                $footers[] = new Footer((string)$match['token'], $value);
             }
         }
+
         $body = Formatter::clean($body);
         $this->setBody($body)
-             ->setFooters($footers)
              ->setMentions($mentions);
     }
 
@@ -160,14 +147,6 @@ class ConventionalCommit extends Commit
     public function getDescription(): Description
     {
         return $this->description;
-    }
-
-    /**
-     * @return Footer[]
-     */
-    public function getFooters(): array
-    {
-        return $this->footers;
     }
 
     public function getBreakingChanges(): array
@@ -270,18 +249,13 @@ class ConventionalCommit extends Commit
         return $this;
     }
 
-    public function setFooters(array $footers): self
-    {
-        $this->footers = $footers;
-
-        return $this;
-    }
-
     /**
      * Parse raw commit.
      */
     protected function parse()
     {
+        parent::parse();
+
         // Empty
         if (empty($this->raw)) {
             return;
@@ -292,30 +266,10 @@ class ConventionalCommit extends Commit
             return;
         }
 
-        $rows = explode("\n", $this->raw);
-        $header = $rows[0];
-        $message = '';
-        // Get message
-        foreach ($rows as $i => $row) {
-            if ($i !== 0) {
-                $message .= $row . "\n";
-            }
-        }
+        $header = $this->getSubject();
+        $message = $this->getBody();
+
         $this->parseHeader($header);
         $this->parseMessage($message);
-    }
-
-    public function __wakeup()
-    {
-        $this->parse();
-    }
-
-    public function __toString(): string
-    {
-        $header = $this->getHeader();
-        $message = $this->getMessage();
-        $string = $header . "\n\n" . $message;
-
-        return Formatter::clean($string);
     }
 }

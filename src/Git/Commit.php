@@ -3,6 +3,7 @@
 namespace ConventionalChangelog\Git;
 
 use ConventionalChangelog\Git\Commit\Body;
+use ConventionalChangelog\Git\Commit\Footer;
 use ConventionalChangelog\Git\Commit\Subject;
 use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Type\Stringable;
@@ -10,6 +11,8 @@ use DateTime;
 
 class Commit implements Stringable
 {
+    protected const PATTERN_FOOTER = "/(?<token>^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?<value>([:][[:blank:]]|[:]?[[:blank:]][#](?=\w)).*?)$/iums";
+
     /**
      * Raw content.
      *
@@ -30,6 +33,13 @@ class Commit implements Stringable
      * @var Body
      */
     protected $body;
+
+    /**
+     * Footers.
+     *
+     * @var Footer[]
+     */
+    protected $footers = [];
 
     /**
      * Sha hash.
@@ -77,6 +87,7 @@ class Commit implements Stringable
 
         $raw = Formatter::clean($commit);
         $this->setRaw($raw);
+        $this->parse();
     }
 
     /**
@@ -112,6 +123,7 @@ class Commit implements Stringable
             $date = new DateTime($array['committerDate']);
             $this->setCommitterDate($date);
         }
+        $this->parse();
 
         return $this;
     }
@@ -234,6 +246,17 @@ class Commit implements Stringable
 
     public function setBody(string $body): self
     {
+        $footers = [];
+        if (preg_match_all(self::PATTERN_FOOTER, $body, $matches, PREG_SET_ORDER, 0)) {
+            foreach ($matches as $match) {
+                $footer = $match[0];
+                $body = str_replace($footer, '', $body);
+                $value = ltrim((string)$match['value'], ':');
+                $value = Formatter::clean($value);
+                $footers[] = new Footer((string)$match['token'], $value);
+            }
+        }
+        $this->setFooters($footers);
         $this->body = new Body($body);
 
         return $this;
@@ -251,7 +274,25 @@ class Commit implements Stringable
         return $this;
     }
 
-    public function __wakeup()
+    public function setFooters(array $footers): self
+    {
+        $this->footers = $footers;
+
+        return $this;
+    }
+
+    /**
+     * @return Footer[]
+     */
+    public function getFooters(): array
+    {
+        return $this->footers;
+    }
+
+    /**
+     * Parse raw commit.
+     */
+    protected function parse()
     {
         $rows = explode("\n", $this->raw);
 
@@ -266,6 +307,11 @@ class Commit implements Stringable
             }
         }
         $this->setBody($body);
+    }
+
+    public function __wakeup()
+    {
+        $this->parse();
     }
 
     public function __toString(): string
