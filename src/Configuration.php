@@ -195,6 +195,41 @@ class Configuration
     protected $prettyScope = true;
 
     /**
+     * Sort by options and orientation.
+     */
+    protected const SORT_BY = [
+        'date' => 'DESC',
+        'subject' => 'ASC',
+        'authorName' => 'ASC',
+        'authorEmail' => 'ASC',
+        'authorDate' => 'DESC',
+        'committerName' => 'ASC',
+        'committerEmail' => 'ASC',
+        'committerDate' => 'DESC',
+    ];
+
+    /**
+     * Commit sorting.
+     *
+     * @var string
+     */
+    protected $sortBy = 'subject';
+
+    /**
+     * Pre run.
+     *
+     * @var mixed
+     */
+    protected $preRun;
+
+    /**
+     * Post run.
+     *
+     * @var mixed
+     */
+    protected $postRun;
+
+    /**
      * Constructor.
      */
     public function __construct(array $settings = [])
@@ -229,6 +264,7 @@ class Configuration
             'root' => null,
             'headerTitle' => $this->getHeaderTitle(),
             'headerDescription' => $this->getHeaderDescription(),
+            'sortBy' => $this->getSortBy(),
             'path' => $this->getPath(),
             'preset' => $this->getPreset(),
             'types' => [],
@@ -249,6 +285,8 @@ class Configuration
             'issueUrlFormat' => $this->getIssueUrlFormat(),
             'userUrlFormat' => $this->getUserUrlFormat(),
             'releaseCommitMessageFormat' => $this->getReleaseCommitMessageFormat(),
+            'preRun' => $this->getPreRun(),
+            'postRun' => $this->getPostRun(),
         ];
 
         $params = array_replace_recursive($defaults, $array);
@@ -272,37 +310,43 @@ class Configuration
         }
 
         // Add breaking changes
-        $params['preset'] = array_merge($this->getBreakingChangesPreset(), $params['preset']);
+        $breakingPreset = $this->getBreakingChangesPreset();
+        $params['preset'] = array_merge($breakingPreset, $params['preset']);
 
-        // Paths
-        $this->setRoot($params['root']);
-        $this->setPath($params['path']);
-        // Types
-        $this->setIgnorePatterns($params['ignorePatterns']);
-        $this->setIgnoreTypes($params['ignoreTypes']);
-        $this->setTypes($params['preset']);
-        // Document
-        $this->setHeaderTitle($params['headerTitle']);
-        $this->setHeaderDescription($params['headerDescription']);
-        // Tag
-        $this->setTagPrefix($params['tagPrefix']);
-        $this->setTagSuffix($params['tagSuffix']);
-        // Skips
-        $this->setSkipBump($params['skipBump']);
-        $this->setSkipTag($params['skipTag']);
-        $this->setSkipVerify($params['skipVerify']);
-        // Hidden
-        $this->setHiddenHash($params['hiddenHash']);
-        $this->setHiddenMentions($params['hiddenMentions']);
-        $this->setHiddenReferences($params['hiddenReferences']);
-        // Formats
-        $this->setPrettyScope($params['prettyScope']);
-        $this->setUrlProtocol($params['urlProtocol']);
-        $this->setCommitUrlFormat($params['commitUrlFormat']);
-        $this->setCompareUrlFormat($params['compareUrlFormat']);
-        $this->setIssueUrlFormat($params['issueUrlFormat']);
-        $this->setUserUrlFormat($params['userUrlFormat']);
-        $this->setReleaseCommitMessageFormat($params['releaseCommitMessageFormat']);
+        $this
+            // Paths
+            ->setRoot($params['root'])
+            ->setPath($params['path'])
+            // Types
+            ->setIgnorePatterns($params['ignorePatterns'])
+            ->setIgnoreTypes($params['ignoreTypes'])
+            ->setTypes($params['preset'])
+            // Document
+            ->setHeaderTitle($params['headerTitle'])
+            ->setHeaderDescription($params['headerDescription'])
+            ->setSortBy($params['sortBy'])
+            // Tag
+            ->setTagPrefix($params['tagPrefix'])
+            ->setTagSuffix($params['tagSuffix'])
+            // Skips
+            ->setSkipBump($params['skipBump'])
+            ->setSkipTag($params['skipTag'])
+            ->setSkipVerify($params['skipVerify'])
+            // Hidden
+            ->setHiddenHash($params['hiddenHash'])
+            ->setHiddenMentions($params['hiddenMentions'])
+            ->setHiddenReferences($params['hiddenReferences'])
+            // Formats
+            ->setPrettyScope($params['prettyScope'])
+            ->setUrlProtocol($params['urlProtocol'])
+            ->setCommitUrlFormat($params['commitUrlFormat'])
+            ->setCompareUrlFormat($params['compareUrlFormat'])
+            ->setIssueUrlFormat($params['issueUrlFormat'])
+            ->setUserUrlFormat($params['userUrlFormat'])
+            ->setReleaseCommitMessageFormat($params['releaseCommitMessageFormat'])
+            // Hooks
+            ->setPreRun($params['preRun'])
+            ->setPostRun($params['postRun']);
     }
 
     /**
@@ -661,6 +705,91 @@ class Configuration
     public function setPrettyScope(bool $prettyScope): self
     {
         $this->prettyScope = $prettyScope;
+
+        return $this;
+    }
+
+    public function getSortBy(): string
+    {
+        $sortBy = $this->sortBy;
+        if ($sortBy === 'date') {
+            $sortBy = 'committerDate';
+        }
+
+        return $sortBy;
+    }
+
+    public function setSortBy(string $sortBy): self
+    {
+        $sortBy = trim($sortBy);
+        $keys = array_keys(self::SORT_BY);
+        if (!in_array($sortBy, $keys)) {
+            $sortBy = 'date';
+        }
+        $this->sortBy = $sortBy;
+
+        return $this;
+    }
+
+    public function getSortOrientation(string $sort): string
+    {
+        return self::SORT_BY[$sort];
+    }
+
+    /**
+     * @param mixed $hook
+     */
+    public function runHook($hook)
+    {
+        if (is_string($hook)) {
+            system($hook);
+        } elseif (is_callable($hook)) {
+            call_user_func($hook);
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPreRun()
+    {
+        return $this->preRun;
+    }
+
+    public function preRun()
+    {
+        $this->runHook($this->preRun);
+    }
+
+    /**
+     * @param mixed $preRun
+     */
+    public function setPreRun($preRun): self
+    {
+        $this->preRun = $preRun;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostRun()
+    {
+        return $this->postRun;
+    }
+
+    public function postRun()
+    {
+        $this->runHook($this->preRun);
+    }
+
+    /**
+     * @param mixed $postRun
+     */
+    public function setPostRun($postRun): self
+    {
+        $this->postRun = $postRun;
 
         return $this;
     }

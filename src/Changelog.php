@@ -54,6 +54,8 @@ class Changelog
         $fromTag = $input->getOption('from-tag');
         $toTag = $input->getOption('to-tag');
         $history = $input->getOption('history');
+        $sortBy = $this->config->getSortBy();
+        $sortOrientation = $this->config->getSortOrientation($sortBy);
 
         $firstRelease = $input->getOption('first-release');
         $alphaRelease = $input->getOption('alpha');
@@ -72,6 +74,9 @@ class Changelog
 
         // Set working directory
         chdir($root);
+
+        // Hook pre run
+        $this->config->preRun();
 
         if (!Repository::isInsideWorkTree()) {
             $output->error('Not a git repository');
@@ -251,6 +256,17 @@ class Changelog
 
         foreach ($options as $version => $params) {
             $commitsRaw = Repository::getCommits($params['options']);
+            usort($commitsRaw, function ($x, $y) use ($sortBy, $sortOrientation) {
+                if (array_key_exists($sortBy, $x)) {
+                    if ($sortOrientation === 'ASC') {
+                        return $x[$sortBy] <=> $y[$sortBy];
+                    }
+
+                    return $y[$sortBy] <=> $x[$sortBy];
+                }
+
+                return 0;
+            });
 
             // Get all commits information
             $commits = [];
@@ -382,6 +398,9 @@ class Changelog
             }
         }
 
+        // Hook post run
+        $this->config->postRun();
+
         return Command::SUCCESS;
     }
 
@@ -410,7 +429,9 @@ class Changelog
             $changelog .= "\n### {$label}\n\n";
             ksort($list);
             foreach ($list as $scope => $items) {
-                asort($items);
+                if ($this->config->getSortBy() === 'subject') {
+                    ksort($items, SORT_NATURAL);
+                }
                 if (is_string($scope) && !empty($scope)) {
                     // scope section
                     $changelog .= "\n##### {$scope}\n\n";
