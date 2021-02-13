@@ -43,7 +43,7 @@ class Footer implements Stringable
             }
         }
 
-        $this->references = array_unique($refs);
+        $this->setReferences($refs);
     }
 
     public function getToken(): string
@@ -54,6 +54,18 @@ class Footer implements Stringable
     public function getValue(): string
     {
         return ucfirst($this->value);
+    }
+
+    /**
+     * Set issues references.
+     *
+     * @return Reference[]
+     */
+    public function setReferences(array $references): self
+    {
+        $this->references = array_unique($references);
+
+        return $this;
     }
 
     /**
