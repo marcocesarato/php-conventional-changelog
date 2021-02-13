@@ -6,6 +6,7 @@ use ConventionalChangelog\Configuration;
 use ConventionalChangelog\Git\Commit\Description;
 use ConventionalChangelog\Git\Commit\Footer;
 use ConventionalChangelog\Git\Commit\Mention;
+use ConventionalChangelog\Git\Commit\Reference;
 use ConventionalChangelog\Git\Commit\Scope;
 use ConventionalChangelog\Git\Commit\Type;
 use ConventionalChangelog\Helper\Formatter;
@@ -183,6 +184,8 @@ class ConventionalCommit extends Commit
 
     /**
      * Get issues references.
+     *
+     * @return Reference[]
      */
     public function getReferences(): array
     {
@@ -196,6 +199,10 @@ class ConventionalCommit extends Commit
 
     /**
      * Set mentions.
+     *
+     * @param Mention[] $mentions
+     *
+     * @return $this
      */
     public function setMentions(array $mentions): self
     {
