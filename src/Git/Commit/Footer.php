@@ -11,21 +11,21 @@ class Footer implements Stringable
      *
      * @var string
      */
-    public $token;
+    protected $token;
 
     /**
      * Value.
      *
      * @var string
      */
-    public $value;
+    protected $value;
 
     /**
      * References.
      *
      * @var Reference[]
      */
-    public $references;
+    protected $references;
 
     public function __construct(string $token, string $value)
     {
@@ -58,6 +58,8 @@ class Footer implements Stringable
 
     /**
      * Get issues references.
+     *
+     * @return Reference[]
      */
     public function getReferences(): array
     {

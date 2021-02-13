@@ -9,7 +9,7 @@ class Description implements Stringable
     /**
      * @var string
      */
-    public $content;
+    protected $content;
 
     public function __construct(string $content)
     {
