@@ -330,6 +330,11 @@ class Commit implements Stringable
      */
     protected function parse()
     {
+        // Empty
+        if (empty($this->raw)) {
+            return;
+        }
+
         $rows = explode("\n", $this->raw);
 
         $subject = $rows[0];
