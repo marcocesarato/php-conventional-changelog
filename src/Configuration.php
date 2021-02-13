@@ -781,7 +781,7 @@ class Configuration
 
     public function postRun()
     {
-        $this->runHook($this->preRun);
+        $this->runHook($this->postRun);
     }
 
     /**
