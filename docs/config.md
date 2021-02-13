@@ -30,6 +30,7 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Pretty Scope:** Prettify the scope commit part (section name) on changelog *(ex. UserManager => User Manager or
   user_config => User config)*
 - **Url Protocol:** The URL protocol of all repository urls on changelogs (http/https)
+- **Date Format:** The [format](https://www.php.net/manual/en/datetime.format.php) of the outputted date string
 - **Commit Url Format:** A URL representing a specific commit at a hash
 - **Compare Url Format:** A URL representing the comparison between two git sha
 - **Issue Url Format:** A URL representing the issue format (allowing a different URL format to be swapped in for
@@ -82,6 +83,7 @@ return [
   'hiddenReferences' => false,
   'prettyScope' => true,
   'urlProtocol' => 'https',
+  'dateFormat' => 'Y-m-d',
   'commitUrlFormat' => '{{host}}/{{owner}}/{{repository}}/commit/{{hash}}',
   'compareUrlFormat' => '{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}',
   'issueUrlFormat' => '{{host}}/{{owner}}/{{repository}}/issues/{{id}}',
