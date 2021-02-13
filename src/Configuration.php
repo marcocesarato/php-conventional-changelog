@@ -153,6 +153,13 @@ class Configuration
     protected $urlProtocol = 'https';
 
     /**
+     * Date format.
+     *
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d';
+
+    /**
      * A URL representing a specific commit at a hash.
      *
      * @var string
@@ -280,6 +287,7 @@ class Configuration
             'hiddenReferences' => $this->isHiddenReferences(),
             'prettyScope' => $this->isPrettyScope(),
             'urlProtocol' => $this->getUrlProtocol(),
+            'dateFormat' => $this->getDateFormat(),
             'commitUrlFormat' => $this->getCommitUrlFormat(),
             'compareUrlFormat' => $this->getCompareUrlFormat(),
             'issueUrlFormat' => $this->getIssueUrlFormat(),
@@ -339,6 +347,7 @@ class Configuration
             // Formats
             ->setPrettyScope($params['prettyScope'])
             ->setUrlProtocol($params['urlProtocol'])
+            ->setDateFormat($params['dateFormat'])
             ->setCommitUrlFormat($params['commitUrlFormat'])
             ->setCompareUrlFormat($params['compareUrlFormat'])
             ->setIssueUrlFormat($params['issueUrlFormat'])
@@ -657,6 +666,18 @@ class Configuration
     public function setUrlProtocol(string $urlProtocol): self
     {
         $this->urlProtocol = $urlProtocol;
+
+        return $this;
+    }
+
+    public function getDateFormat(): string
+    {
+        return $this->dateFormat;
+    }
+
+    public function setDateFormat(string $dateFormat): self
+    {
+        $this->dateFormat = $dateFormat;
 
         return $this;
     }

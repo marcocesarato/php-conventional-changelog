@@ -54,6 +54,7 @@ class Changelog
         $fromTag = $input->getOption('from-tag');
         $toTag = $input->getOption('to-tag');
         $history = $input->getOption('history');
+        $dateFormat = $this->config->getDateFormat();
         $sortBy = $this->config->getSortBy();
         $sortOrientation = $this->config->getSortOrientation($sortBy);
 
@@ -175,10 +176,11 @@ class Changelog
                 if (!empty($previousTag) && $key !== 0) {
                     $fromTag = $previousTag;
                 }
+                $commitDate = Repository::getCommitDate($toTag);
                 $options[$toTag] = [
                     'from' => $fromTag,
                     'to' => $toTag,
-                    'date' => Repository::getCommitDate($toTag),
+                    'date' => $commitDate->format($dateFormat),
                     'options' => "{$fromTag}...{$toTag}",
                     'autoBump' => false,
                 ];
@@ -188,7 +190,7 @@ class Changelog
                 $options[$lastVersion] = [
                     'from' => $lastVersion,
                     'to' => $newVersion,
-                    'date' => $today->format('Y-m-d'),
+                    'date' => $today->format($dateFormat),
                     'options' => "{$lastVersion}...HEAD",
                     'autoBump' => false,
                 ];
@@ -243,7 +245,7 @@ class Changelog
             $options[$lastVersion] = [
                 'from' => $lastVersion,
                 'to' => $newVersion,
-                'date' => $today->format('Y-m-d'),
+                'date' => $today->format($dateFormat),
                 'options' => $additionalParams,
                 'autoBump' => $autoBump,
             ];

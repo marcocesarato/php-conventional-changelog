@@ -76,12 +76,11 @@ class Repository
     /**
      * Get commit date.
      */
-    public static function getCommitDate($hash): string
+    public static function getCommitDate($hash): DateTime
     {
         $date = self::run("git log -1 --format=%aI {$hash}");
-        $today = new DateTime($date);
 
-        return $today->format('Y-m-d');
+        return new DateTime($date);
     }
 
     /**
