@@ -1,9 +1,43 @@
 <?php
 
+namespace ConventionalChangelog;
+
 return [
     'types' => ['feat', 'fix', 'perf', 'docs', 'chore'],
     // Ignore changelogs
     'ignorePatterns' => [
-        '/chore\(changelog\)[:].*/i'
+        '/chore\(changelog\)[:].*/i',
     ],
+    'postRun' => function () {
+        require_once __DIR__ . 'autoload.php';
+        $lastTag = Git\Repository::getLastTag();
+        $lastTagCommit = Git\Repository::getLastTagCommit();
+        $lastCommit = Git\Repository::getLastCommit();
+
+        if ($lastTagCommit !== $lastCommit) {
+            return;
+        }
+
+        $binFile = __DIR__ . '/conventional-changelog';
+        $readmeFile = __DIR__ . '/README.md';
+        $semverRegex = Helper\SemanticVersion::PATTERN;
+
+        // Get version
+        $version = new Helper\SemanticVersion($lastTag);
+
+        // Update version on readme
+        $readme = file_get_contents($readmeFile);
+        $readme = preg_replace("/(https:\/\/img\.shields\.io\/badge\/version)-({$semverRegex})/m", '$1-' . $version->getVersion(), $readme);
+        file_put_contents($readmeFile, $readme);
+
+        // Update version on bin
+        $bin = file_get_contents($binFile);
+        $bin = preg_replace("/(\('conventional-changelog', )'({$semverRegex})'/m", '$1\'' . $version->getVersion() . '\'', $bin);
+        file_put_contents($binFile, $bin);
+
+        // Delete tag
+        Git\Repository::deleteTag($lastTag);
+
+        Git\Repository::commit($version, [$binFile, $readmeFile], true, true, true);
+    },
 ];
