@@ -13,6 +13,8 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Path:** Path to your changelog file (relative to the working dir/root)
 - **Header Title:** Header title of the changelog
 - **Header Description:** Header subtitle of the changelog
+- **Sort By**: Sort changes by commit metadata (date, subject, authorName, authorEmail, authorDate, committerName,
+  committerEmail, committerDate)
 - **Preset:** Add new types preset or modify existing types preset labels and description
 - **Types:** Types allowed and showed on changelog. This setting could overwrite ignored types.
 - **Ignore Types:** Types ignored and so hidden on changelog
@@ -35,6 +37,8 @@ dir or use the `--config` option to specify the location of your configuration f
 - **User Url Format:** A URL representing the a user's profile URL on GitHub, Gitlab, etc. This URL is used for
   substituting @abc with https://github.com/abc in commit messages
 - **Release Commit Message Format:** A string to be used to format the auto-generated release commit message
+- **Pre Run**: Run a callback or command before run the script
+- **Post Run**: Run a callback or command after run the script
 
 ### Default settings
 
@@ -48,6 +52,7 @@ return [
   'path' => 'CHANGELOG.md',
   'headerTitle' => 'Changelog',
   'headerDescription' => 'All notable changes to this project will be documented in this file.',
+  'sortBy' => 'subject',
   'preset' => [
     // Breaking changes section
     'breaking_changes' => ['label' => '⚠ BREAKING CHANGES', 'description' => 'Code changes that potentially causes other components to fail'],
@@ -82,6 +87,8 @@ return [
   'issueUrlFormat' => '{{host}}/{{owner}}/{{repository}}/issues/{{id}}',
   'userUrlFormat' => '{{host}}/{{user}}',
   'releaseCommitMessageFormat' => 'chore(release): {{currentTag}}',
+  'preRun' => null,
+  'postRun' => null,
 ];
 ```
 
