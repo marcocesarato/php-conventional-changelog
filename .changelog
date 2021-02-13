@@ -2,20 +2,23 @@
 
 namespace ConventionalChangelog;
 
+use ConventionalChangelog\Git\Repository;
+use ConventionalChangelog\Helper\SemanticVersion;
+
 $releaseMessagePrefix = 'chore(release): ';
 
 return [
     'types' => ['feat', 'fix', 'perf', 'docs', 'chore'],
     // Ignore changelogs
     'ignorePatterns' => [
+        '/' . preg_quote($releaseMessagePrefix, '/') . '.*/i',
         '/chore\(changelog\)[:].*/i',
     ],
     'releaseCommitMessageFormat' => "{$releaseMessagePrefix}{{currentTag}}",
     'postRun' => function () use ($releaseMessagePrefix) {
-        require_once __DIR__ . '/autoload.php';
-        $lastTag = Git\Repository::getLastTag();
-        $lastTagCommit = Git\Repository::getLastTagCommit();
-        $lastCommit = Git\Repository::getLastCommit();
+        $lastTag = Repository::getLastTag();
+        $lastTagCommit = Repository::getLastTagCommit();
+        $lastCommit = Repository::getLastCommit();
 
         if ($lastTagCommit !== $lastCommit) {
             return;
@@ -23,10 +26,10 @@ return [
 
         $binFile = __DIR__ . '/conventional-changelog';
         $readmeFile = __DIR__ . '/README.md';
-        $semverRegex = Helper\SemanticVersion::PATTERN;
+        $semverRegex = SemanticVersion::PATTERN;
 
         // Get version
-        $version = new Helper\SemanticVersion($lastTag);
+        $version = new SemanticVersion($lastTag);
 
         // Update version on readme
         $readme = file_get_contents($readmeFile);
@@ -39,11 +42,11 @@ return [
         file_put_contents($binFile, $bin);
 
         // Delete tag
-        Git\Repository::deleteTag($lastTag);
+        Repository::deleteTag($lastTag);
 
         // Commit and tag
         $message = $releaseMessagePrefix . $version->getVersion();
-        Git\Repository::commit($message, [$binFile, $readmeFile], true, true, true);
-        Git\Repository::tag($lastTag);
+        Repository::commit($message, [$binFile, $readmeFile], true, true, true);
+        Repository::tag($lastTag);
     },
 ];
