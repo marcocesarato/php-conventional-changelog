@@ -196,6 +196,16 @@ class Repository
     }
 
     /**
+     * Delete Tag.
+     *
+     * @return string
+     */
+    public static function deleteTag(string $name)
+    {
+        return exec("git tag -d {$name}");
+    }
+
+    /**
      * Parse shortcode.
      *
      * @param $content
