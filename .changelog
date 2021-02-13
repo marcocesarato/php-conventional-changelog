@@ -30,7 +30,7 @@ return [
 
         // Update version on readme
         $readme = file_get_contents($readmeFile);
-        $readme = preg_replace("/(https:\/\/img\.shields\.io\/badge\/version)-({$semverRegex})-(brightgreen)/m", '$1-' . $version->getVersion() . '-$3', $readme);
+        $readme = preg_replace("/(https:\/\/img\.shields\.io\/badge\/version)-({$semverRegex})-/m", '$1-' . $version->getVersion() . '-', $readme);
         file_put_contents($readmeFile, $readme);
 
         // Update version on bin
