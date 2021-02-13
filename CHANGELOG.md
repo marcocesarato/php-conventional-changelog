@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.9.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.0...v1.9.1) (2021-02-13)
+
+
+### Features
+
+* Add date format config ([05196a](https://github.com/marcocesarato/php-conventional-changelog/commit/05196ad943bffc5317df575d7a782ca04fb53421))
+
+---
+
 ## [1.9.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.8.0...v1.9.0) (2021-02-13)
 
 
