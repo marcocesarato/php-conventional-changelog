@@ -4,14 +4,17 @@ namespace ConventionalChangelog\Helper;
 
 class SemanticVersion
 {
+    /**
+     * Pattern to detect semver.
+     */
+    public const PATTERN = '([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?';
+
     public const MAJOR = 'major';
     public const MINOR = 'minor';
     public const PATCH = 'patch';
     public const RC = 'rc';
     public const BETA = 'beta';
     public const ALPHA = 'alpha';
-
-    public const PATTERN = '([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?';
 
     /**
      * @var string
@@ -40,7 +43,7 @@ class SemanticVersion
 
         $newVersion = [0, 0, 0];
 
-        if (!preg_match('/^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/', $version)) {
+        if (!preg_match('/^' . self::PATTERN . '$/', $version)) {
             return $version;
         }
 
