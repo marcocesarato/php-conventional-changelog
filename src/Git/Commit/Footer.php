@@ -6,6 +6,18 @@ use ConventionalChangelog\Type\Stringable;
 
 class Footer implements Stringable
 {
+    public const TOKEN_CLOSE_ISSUE = [
+        'close',
+        'closes',
+        'closed',
+        'fix',
+        'fixes',
+        'fixed',
+        'resolve',
+        'resolves',
+        'resolved',
+    ];
+
     /**
      * Token.
      *
@@ -33,12 +45,17 @@ class Footer implements Stringable
         $this->value = trim($value);
 
         $refs = [];
-        if ($value[0] === '#') {
-            $values = explode(' ', $value);
+        $tokenLower = strtolower($this->token);
+        if ($this->value[0] === '#') {
+            $values = explode(' ', $this->value);
             foreach ($values as $val) {
                 $ref = ltrim($val, '#');
                 if (is_numeric($ref)) {
-                    $refs[] = new Reference($ref);
+                    $obj = new Reference($ref);
+                    if (in_array($tokenLower, self::TOKEN_CLOSE_ISSUE)) {
+                        $obj->setClosed(true);
+                    }
+                    $refs[] = $obj;
                 }
             }
         }

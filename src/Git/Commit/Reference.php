@@ -11,6 +11,11 @@ class Reference implements Stringable
      */
     protected $id;
 
+    /**
+     * @var bool
+     */
+    protected $closed = false;
+
     public function __construct(int $id)
     {
         $this->id = $id;
@@ -19,6 +24,18 @@ class Reference implements Stringable
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function isClosed(): bool
+    {
+        return $this->closed;
+    }
+
+    public function setClosed(bool $closed): self
+    {
+        $this->closed = $closed;
+
+        return $this;
     }
 
     public function __toString(): string
