@@ -11,6 +11,8 @@ class SemanticVersion
     public const BETA = 'beta';
     public const ALPHA = 'alpha';
 
+    public const PATTERN = '([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?';
+
     /**
      * @var string
      */
@@ -23,6 +25,9 @@ class SemanticVersion
      */
     public function __construct($version)
     {
+        $version = trim($version);
+        $version = preg_replace('#^v#i', '', $version);
+
         $this->setVersion($version);
     }
 
@@ -34,7 +39,10 @@ class SemanticVersion
         $version = $this->getVersion();
 
         $newVersion = [0, 0, 0];
-        $version = preg_replace('#^v#i', '', $version);
+
+        if (!preg_match('/^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/', $version)) {
+            return $version;
+        }
 
         // Generate new version code
         $split = explode('-', $version, 2);
