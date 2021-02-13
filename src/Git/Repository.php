@@ -48,11 +48,29 @@ class Repository
     }
 
     /**
+     * Get last commit hash.
+     */
+    public static function getLastCommit(): string
+    {
+        return self::run('git log -1 --pretty=format:%H');
+    }
+
+    /**
      * Get last tag.
      */
     public static function getLastTag(): string
     {
         return self::run("git for-each-ref refs/tags --sort=-creatordate --format='%(refname:strip=2)' --count=1");
+    }
+
+    /**
+     * Get last tag commit hash.
+     */
+    public static function getLastTagCommit(): string
+    {
+        $lastTag = self::getLastTag();
+
+        return self::run("git rev-parse --verify {$lastTag}");
     }
 
     /**
@@ -64,16 +82,6 @@ class Repository
         $today = new DateTime($date);
 
         return $today->format('Y-m-d');
-    }
-
-    /**
-     * Get last tag commit hash.
-     */
-    public static function getLastTagCommit(): string
-    {
-        $lastTag = self::getLastTag();
-
-        return self::run("git rev-parse --verify {$lastTag}");
     }
 
     /**
