@@ -4,6 +4,34 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.9.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.1...v1.9.2) (2021-02-14)
+
+
+### Features
+
+
+##### Git
+
+* Add closed attribute to references ([acb104](https://github.com/marcocesarato/php-conventional-changelog/commit/acb10474b5cb4f4002755ca7e55ab785c2750149))
+* Add mention and reference class ([b22fa5](https://github.com/marcocesarato/php-conventional-changelog/commit/b22fa5c46b54ed7de6072445c90ad2a8a1b7408a))
+* Commit classes auto compose when raw is empty ([0f7f9d](https://github.com/marcocesarato/php-conventional-changelog/commit/0f7f9d7d139c8ee0ccf53effa580735a0a40d508))
+
+### Bug Fixes
+
+* Using new reference class on changelog generation ([03e3a2](https://github.com/marcocesarato/php-conventional-changelog/commit/03e3a2bbaebd26db6fef3a7e699020c30d89511c))
+
+##### Config
+
+* Add isset check on setting ignore types ([22ab18](https://github.com/marcocesarato/php-conventional-changelog/commit/22ab180da24dec738f2dc1875590704ad473add9))
+* Remove empty check of setting ignore types ([4b764d](https://github.com/marcocesarato/php-conventional-changelog/commit/4b764def749372df2270ccee7cbb4f9c8dc7ce01))
+
+##### Git
+
+* Add check empty commit on parse ([a26d6a](https://github.com/marcocesarato/php-conventional-changelog/commit/a26d6aeeecdd23e76773b5549b06800c4a240e09))
+* Footer references detection ([6a40c1](https://github.com/marcocesarato/php-conventional-changelog/commit/6a40c1a0a3fa67f088450e1aef45e295371797eb))
+
+---
+
 ## [1.9.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.0...v1.9.1) (2021-02-13)
 
 
