@@ -7,6 +7,7 @@ use ConventionalChangelog\Git\Commit\Description;
 use ConventionalChangelog\Git\Commit\Reference;
 use ConventionalChangelog\Git\Commit\Scope;
 use ConventionalChangelog\Git\Commit\Type;
+use ConventionalChangelog\Helper\Formatter;
 
 class ConventionalCommit extends Commit
 {
@@ -136,13 +137,6 @@ class ConventionalCommit extends Commit
         return $header;
     }
 
-    public function getMessage(): string
-    {
-        $footer = implode("\n", $this->footers);
-
-        return $this->body . "\n\n" . $footer;
-    }
-
     public function setType(string $type): self
     {
         $this->type = new Type($type);
@@ -202,5 +196,18 @@ class ConventionalCommit extends Commit
             ->setScope((string)$matches['scope'])
             ->setBreakingChange(!empty($matches['breaking_before'] || !empty($matches['breaking_after'])) ? true : false)
             ->setDescription((string)$matches['description']);
+    }
+
+    public function __toString(): string
+    {
+        if (!empty($this->raw)) {
+            return $this->raw;
+        }
+
+        $header = $this->getHeader();
+        $message = $this->getMessage();
+        $string = $header . "\n\n" . $message;
+
+        return Formatter::clean($string);
     }
 }

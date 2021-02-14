@@ -91,6 +91,9 @@ class Commit implements Stringable
     {
         // New commit or empty commit
         if (empty($commit)) {
+            $this->setSubject('')
+                 ->setBody('');
+
             return;
         }
 
@@ -286,6 +289,9 @@ class Commit implements Stringable
         return $this;
     }
 
+    /**
+     * @param Footer[] $footers
+     */
     public function setFooters(array $footers): self
     {
         $this->footers = $footers;
@@ -357,6 +363,13 @@ class Commit implements Stringable
              ->setMentions($mentions);
     }
 
+    public function getMessage(): string
+    {
+        $footer = implode("\n", $this->footers);
+
+        return $this->body . "\n\n" . $footer;
+    }
+
     public function __wakeup()
     {
         $this->parse();
@@ -364,6 +377,14 @@ class Commit implements Stringable
 
     public function __toString(): string
     {
-        return (string)$this->getRaw();
+        if (!empty($this->raw)) {
+            return $this->raw;
+        }
+
+        $header = $this->getSubject();
+        $message = $this->getMessage();
+        $string = $header . "\n\n" . $message;
+
+        return Formatter::clean($string);
     }
 }
