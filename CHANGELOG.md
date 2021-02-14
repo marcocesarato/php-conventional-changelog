@@ -22,8 +22,8 @@ All notable changes to this project will be documented in this file.
 
 ##### Config
 
-* Add isset check on setting ignore types ([22ab18](https://github.com/marcocesarato/php-conventional-changelog/commit/22ab180da24dec738f2dc1875590704ad473add9))
-* Remove empty check of setting ignore types ([4b764d](https://github.com/marcocesarato/php-conventional-changelog/commit/4b764def749372df2270ccee7cbb4f9c8dc7ce01))
+* Add isset check on setting ignore types [#4](https://github.com/marcocesarato/php-conventional-changelog/pull/4) ([22ab18](https://github.com/marcocesarato/php-conventional-changelog/commit/22ab180da24dec738f2dc1875590704ad473add9))
+* Remove empty check of setting ignore types [#4](https://github.com/marcocesarato/php-conventional-changelog/pull/4) ([4b764d](https://github.com/marcocesarato/php-conventional-changelog/commit/4b764def749372df2270ccee7cbb4f9c8dc7ce01))
 
 ##### Git
 
