@@ -46,9 +46,9 @@ class Footer implements Stringable
 
         $refs = [];
         $tokenLower = strtolower($this->token);
-        if ($this->value[0] === '#') {
-            $values = explode(' ', $this->value);
-            foreach ($values as $val) {
+        $values = preg_split('/[,\s]/', $this->value);
+        foreach ($values as $val) {
+            if ($val[0] === '#') {
                 $ref = ltrim($val, '#');
                 if (is_numeric($ref)) {
                     $obj = new Reference($ref);
