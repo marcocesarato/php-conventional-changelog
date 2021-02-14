@@ -300,7 +300,9 @@ class Configuration
         $params = array_replace_recursive($defaults, $array);
 
         // Ignore Types
-        $params['ignoreTypes'] = $array['ignoreTypes']; // Overwrite ignored types
+        if (isset($array['ignoreTypes'])) {
+            $params['ignoreTypes'] = $array['ignoreTypes']; // Overwrite ignored types
+        }
 
         // Set Types (overwrite ignored types)
         if (!empty($array['types'])) {
