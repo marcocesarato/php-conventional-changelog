@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.9.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.2...v1.9.3) (2021-02-22)
+
+
+### Bug Fixes
+
+* Add tag prefix and suffix con compare url tag [#5](https://github.com/marcocesarato/php-conventional-changelog/issues/5) ([db81e0](https://github.com/marcocesarato/php-conventional-changelog/commit/db81e0ec63a665d03170165b1623f72b4b70b08e))
+
+---
+
 ## [1.9.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.1...v1.9.2) (2021-02-14)
 
 
