@@ -18,15 +18,23 @@
 
 ## Description
 
-Generate changelogs from a project's commit messages and metadata using composer and automate versioning
-with [semver](https://semver.org) and [conventional-commits](https://conventionalcommits.org).
+When a new release of a software project is announced, it is convenient to generate documents that let the project 
+users know what were the changes and other relevant notes about the new project release.
 
-This package can generate changelog and release notes from committing history. It provides a command that can be run
-from the terminal, or using composer scripts, to generate a changelog file in markdown for the current project.
+This package can help to automatically generate changelog and release note files, so the developers of the project 
+reduce the work that is necessary to finalize and check the new release of the project.
+
+This package can generate a changelog from a project's committing history messages and metadata using composer and automate versioning
+with [**semver**](https://semver.org) and [**conventional-commits**](https://conventionalcommits.org).
+
+It provides a command that can be run from the terminal, or using composer scripts, 
+to generate a changelog file in **markdown** for the current project.
 
 The command may take parameters that define the releases of the project that will be considered to extract the changes
 from the git history to generate the file. The package uses a configuration system with that permit to customize the
 settings you may want to have your desired changelog generated.
+
+Look at our [CHANGELOG](CHANGELOG.md) file if you are looking for an example of a possible final result.
 
 ### How to contribute
 
