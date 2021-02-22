@@ -66,6 +66,9 @@ class Changelog
         $minorRelease = $input->getOption('minor');
         $majorRelease = $input->getOption('major');
 
+	    $tagPrefix = $this->config->getTagPrefix();
+	    $tagSuffix = $this->config->getTagSuffix();
+
         $autoCommit = $autoCommit || $autoCommitAll;
         $autoBump = false;
 
@@ -345,7 +348,7 @@ class Changelog
             }
 
             // Initialize changelogs
-            $compareUrl = $this->getCompareUrl($params['from'], "v{$params['to']}");
+            $compareUrl = $this->getCompareUrl($params['from'], "{$tagPrefix}{$params['to']}{$tagSuffix}");
             $changelogNew .= "## [{$params['to']}]({$compareUrl}) ({$params['date']})\n\n";
             // Add all changes list to new changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
@@ -379,7 +382,7 @@ class Changelog
                 $output->success('Release committed!');
                 // Create tag
                 if ($autoTag) {
-                    $tag = $this->config->getTagPrefix() . $newVersion . $this->config->getTagSuffix();
+                    $tag = $tagPrefix . $newVersion . $tagSuffix;
                     $result = Repository::tag($tag);
                     if ($result !== false) {
                         $output->success("Release tagged with success! New version: {$tag}");
