@@ -66,8 +66,8 @@ class Changelog
         $minorRelease = $input->getOption('minor');
         $majorRelease = $input->getOption('major');
 
-	    $tagPrefix = $this->config->getTagPrefix();
-	    $tagSuffix = $this->config->getTagSuffix();
+        $tagPrefix = $this->config->getTagPrefix();
+        $tagSuffix = $this->config->getTagSuffix();
 
         $autoCommit = $autoCommit || $autoCommitAll;
         $autoBump = false;
