@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
-* Add tag prefix and suffix con compare url tag [#5](https://github.com/marcocesarato/php-conventional-changelog/issues/5) ([db81e0](https://github.com/marcocesarato/php-conventional-changelog/commit/db81e0ec63a665d03170165b1623f72b4b70b08e))
+* Add tag prefix and suffix on compare url tag [#5](https://github.com/marcocesarato/php-conventional-changelog/issues/5) ([db81e0](https://github.com/marcocesarato/php-conventional-changelog/commit/db81e0ec63a665d03170165b1623f72b4b70b08e))
 
 ---
 
