@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.9.4](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.3...v1.9.4) (2021-02-28)
+
+
+### Bug Fixes
+
+* Remove tag prefix and suffix on history release header ([070113](https://github.com/marcocesarato/php-conventional-changelog/commit/070113ac76f2f6606bb2acd9a9c6f03d4fc8da07))
+
+---
+
 ## [1.9.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.2...v1.9.3) (2021-02-22)
 
 
