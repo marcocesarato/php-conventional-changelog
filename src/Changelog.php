@@ -241,7 +241,15 @@ class Changelog
                 }
             }
 
-            $options[$lastVersion] = [
+            // Remove tag prefix
+            $prefix = '/^' . preg_quote($tagPrefix, '/') . '/';
+            $name = preg_replace($prefix, '', $lastVersion);
+
+            // Remove tag suffix
+            $suffix = '/' . preg_quote($tagSuffix, '/') . '$/';
+            $name = preg_replace($suffix, '', $name);
+
+            $options[$name] = [
                 'from' => $lastVersion,
                 'to' => $newVersion,
                 'date' => $today->format($dateFormat),
