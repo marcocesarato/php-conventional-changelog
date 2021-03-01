@@ -11,9 +11,9 @@ class Mention implements Stringable
      */
     protected $user;
 
-    public function __construct(int $id)
+    public function __construct(string $user)
     {
-        $this->user = $id;
+        $this->user = $user;
     }
 
     public function getUser(): string
