@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.9.5](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.4...v1.9.5) (2021-03-02)
+
+
+### Bug Fixes
+
+
+##### Git
+
+* Incorrect user type in Mention ([0c9fc5](https://github.com/marcocesarato/php-conventional-changelog/commit/0c9fc5b7f1a4ad610a1429d38550e7a80d8c82a6))
+
+---
+
 ## [1.9.4](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.3...v1.9.4) (2021-02-28)
 
 
