@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.9.6](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.5...v1.9.6) (2021-03-12)
+
+
+### Bug Fixes
+
+* Incorrect parsing of URLs [#7](https://github.com/marcocesarato/php-conventional-changelog/issues/7) ([24ca1c](https://github.com/marcocesarato/php-conventional-changelog/commit/24ca1c20b579625266ee8de656cb4616bb38fb85))
+
+---
+
 ## [1.9.5](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.4...v1.9.5) (2021-03-02)
 
 
