@@ -58,8 +58,8 @@
   },
   "extra": {
     "hooks": {
-      "pre-commit": "php-cs-fixer fix --config=.php_cs",
-      "pre-push": "php-cs-fixer fix --dry-run --config=.php_cs",
+      "pre-commit": "composer fix-cs",
+      "pre-push": "composer check-cs",
       "post-merge": "composer install"
     }
   }
