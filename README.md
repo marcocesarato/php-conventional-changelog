@@ -42,6 +42,10 @@ Have an idea? Found a bug? Please raise to [ISSUES](https://github.com/marcocesa
 or [PULL REQUEST](https://github.com/marcocesarato/php-conventional-changelog/pulls). Contributions are welcome and are
 greatly appreciated! Every little bit helps.
 
+## 📘 Requirements
+- [php](https://www.php.net) >= 7.1.3
+- [git](https://git-scm.com) >= 2.1.4
+
 ## 📖 Installation
 
 You can install it easily with composer
