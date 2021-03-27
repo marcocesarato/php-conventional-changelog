@@ -267,12 +267,14 @@ class Changelog
         foreach ($options as $params) {
             $commitsRaw = Repository::getCommits($params['options']);
             usort($commitsRaw, function ($x, $y) use ($sortBy, $sortOrientation) {
-                if (array_key_exists($sortBy, $x)) {
-                    if ($sortOrientation === 'ASC') {
-                        return $x[$sortBy] <=> $y[$sortBy];
-                    }
+                if (is_array($x)) {
+                    if (array_key_exists($sortBy, $x)) {
+                        if ($sortOrientation === 'ASC') {
+                            return $x[$sortBy] <=> $y[$sortBy];
+                        }
 
-                    return $y[$sortBy] <=> $x[$sortBy];
+                        return $y[$sortBy] <=> $x[$sortBy];
+                    }
                 }
 
                 return 0;
@@ -474,7 +476,7 @@ class Changelog
                             $user = $mention->getUser();
                             $userUrl = $this->getUserUrl($user);
                             $text = "[*{$mention}*]({$userUrl})";
-                            if (strpos($description, (string) $mention) !== false) {
+                            if (strpos($description, (string)$mention) !== false) {
                                 $description = str_replace($mention, $text, $description);
                             } elseif (!$this->config->isHiddenMentions()) {
                                 $mentionsGroup[] = $text;

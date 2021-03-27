@@ -317,7 +317,6 @@ class Commit implements Stringable
      * Set mentions.
      *
      * @param Mention[] $mentions
-     *
      */
     public function setMentions(array $mentions): self
     {
