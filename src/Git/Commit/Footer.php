@@ -6,6 +6,9 @@ use ConventionalChangelog\Type\Stringable;
 
 class Footer implements Stringable
 {
+    /**
+     * @var string[]
+     */
     public const TOKEN_CLOSE_ISSUE = [
         'close',
         'closes',
@@ -37,7 +40,7 @@ class Footer implements Stringable
      *
      * @var Reference[]
      */
-    protected $references;
+    protected $references = [];
 
     public function __construct(string $token, string $value)
     {

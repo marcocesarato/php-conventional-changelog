@@ -6,14 +6,34 @@ class SemanticVersion
 {
     /**
      * Pattern to detect semver.
+     *
+     * @var string
      */
     public const PATTERN = '([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?';
 
+    /**
+     * @var string
+     */
     public const MAJOR = 'major';
+    /**
+     * @var string
+     */
     public const MINOR = 'minor';
+    /**
+     * @var string
+     */
     public const PATCH = 'patch';
+    /**
+     * @var string
+     */
     public const RC = 'rc';
+    /**
+     * @var string
+     */
     public const BETA = 'beta';
+    /**
+     * @var string
+     */
     public const ALPHA = 'alpha';
 
     /**

@@ -9,10 +9,19 @@ use ConventionalChangelog\Git\Commit\Subject;
 use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Type\Stringable;
 use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
 
 class Commit implements Stringable
 {
+    /**
+     * @var string
+     */
     protected const PATTERN_FOOTER = "/(?<token>^([a-z0-9_-]+|BREAKING[[:blank:]]CHANGES?))(?<value>([:][[:blank:]]|[:]?[[:blank:]][#](?=\w)).*?)$/iums";
+    /**
+     * @var string
+     */
     protected const PATTERN_MENTION = "/(?:^|\s+)(?<mention>@(?<user>[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}))(?:$|\s+)/smi";
 
     /**
@@ -105,7 +114,7 @@ class Commit implements Stringable
     /**
      * From array.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function fromArray(array $array): self
     {
@@ -185,9 +194,9 @@ class Commit implements Stringable
     }
 
     /**
-     * @param \DateTime|\DateTimeImmutable $authorDate
+     * @param DateTime|DateTimeImmutable $authorDate
      */
-    public function setAuthorDate(\DateTimeInterface $authorDate): Commit
+    public function setAuthorDate(DateTimeInterface $authorDate): Commit
     {
         $this->authorDate = $authorDate;
 
@@ -224,9 +233,9 @@ class Commit implements Stringable
     }
 
     /**
-     * @param \DateTime|\DateTimeImmutable $committerDate
+     * @param DateTime|DateTimeImmutable $committerDate
      */
-    public function setCommitterDate(\DateTimeInterface $committerDate): Commit
+    public function setCommitterDate(DateTimeInterface $committerDate): Commit
     {
         $this->committerDate = $committerDate;
 
