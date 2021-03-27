@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.9.7](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.6...v1.9.7) (2021-03-27)
+
+
+### Bug Fixes
+
+* Array key exists on mixed value check ([4007ab](https://github.com/marcocesarato/php-conventional-changelog/commit/4007abe2b325ae7235c69cd4d4f66fb1f2d8d461))
+
+---
+
 ## [1.9.6](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.5...v1.9.6) (2021-03-12)
 
 
