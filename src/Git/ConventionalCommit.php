@@ -53,8 +53,8 @@ class ConventionalCommit extends Commit
     public static function fromCommit(Commit $commit): self
     {
         return unserialize(
-            preg_replace('/^O:\d+:"[^"]++"/', 'O:' . strlen(__CLASS__) . ':"' . __CLASS__ . '"', serialize($commit)),
-            [__CLASS__]
+            preg_replace('/^O:\d+:"[^"]++"/', 'O:' . strlen(self::class) . ':"' . self::class . '"', serialize($commit)),
+            [self::class]
         );
     }
 
@@ -132,9 +132,8 @@ class ConventionalCommit extends Commit
         if ($this->isBreakingChange) {
             $header .= '!';
         }
-        $header .= ': ' . $this->description;
 
-        return $header;
+        return $header . (': ' . $this->description);
     }
 
     public function setType(string $type): self
@@ -194,7 +193,7 @@ class ConventionalCommit extends Commit
         preg_match(self::PATTERN_HEADER, $header, $matches);
         $this->setType((string)$matches['type'])
             ->setScope((string)$matches['scope'])
-            ->setBreakingChange(!empty($matches['breaking_before'] || !empty($matches['breaking_after'])) ? true : false)
+            ->setBreakingChange(!empty($matches['breaking_before'] || !empty($matches['breaking_after'])))
             ->setDescription((string)$matches['description']);
     }
 

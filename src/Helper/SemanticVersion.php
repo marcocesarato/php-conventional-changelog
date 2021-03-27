@@ -49,14 +49,14 @@ class SemanticVersion
 
         // Generate new version code
         $split = explode('-', $version, 2);
-        $extra = !empty($split[1]) ? $split[1] : '';
+        $extra = empty($split[1]) ? '' : $split[1];
 
         $extraReleases = [self::RC, self::BETA, self::ALPHA];
 
         if (in_array($release, $extraReleases)) {
             $partsExtra = explode('.', $extra);
             $extraName = $partsExtra[0];
-            $extraVersion = !empty($partsExtra[1]) ? $partsExtra[1] : 0;
+            $extraVersion = empty($partsExtra[1]) ? 0 : $partsExtra[1];
             if (is_numeric($extraName) && (empty($partsExtra[1]) || !is_numeric($partsExtra[1]))) {
                 $extraVersion = $partsExtra[0];
             } elseif ($extraName !== $release) {
@@ -83,7 +83,7 @@ class SemanticVersion
         }
 
         // Recompose semver
-        $version = implode('.', $newVersion) . (!empty($extra) ? '-' . $extra : '');
+        $version = implode('.', $newVersion) . (empty($extra) ? '' : '-' . $extra);
         $this->setVersion($version);
 
         return $version;

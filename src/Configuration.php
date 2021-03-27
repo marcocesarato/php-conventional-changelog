@@ -253,11 +253,7 @@ class Configuration
      */
     public static function validate($settings): bool
     {
-        if (!is_array($settings)) {
-            return false;
-        }
-
-        return true;
+        return is_array($settings);
     }
 
     /**
@@ -402,7 +398,7 @@ class Configuration
      */
     public function getTypeDescription(string $type): string
     {
-        return isset($this->types[$type]['description']) ? $this->types[$type]['description'] : '';
+        return $this->types[$type]['description'] ?? '';
     }
 
     /**
@@ -743,8 +739,7 @@ class Configuration
     public function setSortBy(string $sortBy): self
     {
         $sortBy = trim($sortBy);
-        $keys = array_keys(self::SORT_BY);
-        if (!in_array($sortBy, $keys)) {
+        if (!array_key_exists($sortBy, self::SORT_BY)) {
             $sortBy = 'date';
         }
         $this->sortBy = $sortBy;

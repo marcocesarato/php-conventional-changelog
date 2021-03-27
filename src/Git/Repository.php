@@ -24,9 +24,8 @@ class Repository
 
         // Fix for some git versions
         $value = trim($value, "'");
-        $value = str_replace(self::$delimiter . "'\n'", self::$delimiter . "\n", $value);
 
-        return $value;
+        return str_replace(self::$delimiter . "'\n'", self::$delimiter . "\n", $value);
     }
 
     /**
@@ -90,9 +89,8 @@ class Repository
     {
         $url = self::run('git config --get remote.origin.url');
         $url = preg_replace("/\.git$/", '', $url);
-        $url = preg_replace('/^(https?:\/\/)([0-9a-z.\-_:%]+@)/i', '$1', $url);
 
-        return $url;
+        return preg_replace('/^(https?:\/\/)([0-9a-z.\-_:%]+@)/i', '$1', $url);
     }
 
     /**
@@ -142,9 +140,7 @@ class Repository
         $tagsArray = explode(self::$delimiter . "\n", $tags);
         array_pop($tagsArray);
 
-        $tagsArray = array_reverse($tagsArray);
-
-        return $tagsArray;
+        return array_reverse($tagsArray);
     }
 
     /**
@@ -255,9 +251,7 @@ class Repository
         ];
         foreach ($patterns as $pattern) {
             if (preg_match($pattern, $url, $match)) {
-                $match = array_filter($match, 'is_string', ARRAY_FILTER_USE_KEY);
-
-                return $match;
+                return array_filter($match, 'is_string', ARRAY_FILTER_USE_KEY);
             }
         }
 

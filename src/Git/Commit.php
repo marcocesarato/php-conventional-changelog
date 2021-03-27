@@ -184,7 +184,10 @@ class Commit implements Stringable
         return $this->authorDate;
     }
 
-    public function setAuthorDate(DateTime $authorDate): Commit
+    /**
+     * @param \DateTime|\DateTimeImmutable $authorDate
+     */
+    public function setAuthorDate(\DateTimeInterface $authorDate): Commit
     {
         $this->authorDate = $authorDate;
 
@@ -220,7 +223,10 @@ class Commit implements Stringable
         return $this->committerDate;
     }
 
-    public function setCommitterDate(DateTime $committerDate): Commit
+    /**
+     * @param \DateTime|\DateTimeImmutable $committerDate
+     */
+    public function setCommitterDate(\DateTimeInterface $committerDate): Commit
     {
         $this->committerDate = $committerDate;
 
@@ -312,7 +318,6 @@ class Commit implements Stringable
      *
      * @param Mention[] $mentions
      *
-     * @return $this
      */
     public function setMentions(array $mentions): self
     {

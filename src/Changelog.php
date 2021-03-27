@@ -58,6 +58,7 @@ class Changelog
         $sortBy = $this->config->getSortBy();
         $sortOrientation = $this->config->getSortOrientation($sortBy);
 
+        $lastVersion = null;
         $firstRelease = $input->getOption('first-release');
         $alphaRelease = $input->getOption('alpha');
         $betaRelease = $input->getOption('beta');
@@ -146,7 +147,7 @@ class Changelog
             } elseif ($alphaRelease) {
                 $bumpRelease = SemanticVersion::ALPHA;
             } else {
-                $autoBump = $this->config->skipBump() ? false : true;
+                $autoBump = !$this->config->skipBump();
             }
 
             // Generate new version code
@@ -259,11 +260,11 @@ class Changelog
         }
 
         $summary = [];
-        foreach ($this->config->getTypes() as $key => $type) {
+        foreach ($this->config->getTypes() as $type) {
             $summary[$type] = 0;
         }
 
-        foreach ($options as $version => $params) {
+        foreach ($options as $params) {
             $commitsRaw = Repository::getCommits($params['options']);
             usort($commitsRaw, function ($x, $y) use ($sortBy, $sortOrientation) {
                 if (array_key_exists($sortBy, $x)) {
@@ -303,7 +304,7 @@ class Changelog
 
             // Changes groups sorting
             $changes = [];
-            foreach ($this->config->getTypes() as $key => $type) {
+            foreach ($this->config->getTypes() as $type) {
                 $changes[$type] = [];
             }
 
@@ -319,23 +320,21 @@ class Changelog
                         $scope = $commit->getScope()->toPrettyString();
                     }
                     $hash = $commit->getHash();
-                    if (!empty($breakingChanges)) {
-                        foreach ($breakingChanges as $description) {
-                            $breakingType = Configuration::BREAKING_CHANGES_TYPE;
-                            $key = $this->getItemKey($description);
-                            if (empty($description) || $itemKey === $key) {
-                                $commit->setBreakingChange(true);
-                                continue;
-                            }
-                            // Clone commit as breaking with different description message
-                            $breakingCommit = new ConventionalCommit();
-                            $breakingCommit->setType($breakingType)
-                                           ->setDescription($description)
-                                           ->setScope($scope)
-                                           ->setHash($hash);
-                            $changes[$breakingType][$scope][$key][$hash] = $breakingCommit;
-                            $summary[$breakingType]++;
+                    foreach ($breakingChanges as $description) {
+                        $breakingType = Configuration::BREAKING_CHANGES_TYPE;
+                        $key = $this->getItemKey($description);
+                        if (empty($description) || $itemKey === $key) {
+                            $commit->setBreakingChange(true);
+                            continue;
                         }
+                        // Clone commit as breaking with different description message
+                        $breakingCommit = new ConventionalCommit();
+                        $breakingCommit->setType($breakingType)
+                                       ->setDescription($description)
+                                       ->setScope($scope)
+                                       ->setHash($hash);
+                        $changes[$breakingType][$scope][$key][$hash] = $breakingCommit;
+                        $summary[$breakingType]++;
                     }
                     $changes[$type][$scope][$itemKey][$hash] = $commit;
                     $summary[$type]++;
@@ -456,21 +455,17 @@ class Changelog
                     foreach ($itemsList as $item) {
                         $description = ucfirst($item->getDescription());
                         // Hashes
-                        if (!$this->config->isHiddenHash()) {
-                            if (!empty($item->getHash())) {
-                                $commitUrl = $this->getCommitUrl($item->getHash());
-                                $shaGroup[] = '[' . $item->getShortHash() . "]({$commitUrl})";
-                            }
+                        if (!$this->config->isHiddenHash() && !empty($item->getHash())) {
+                            $commitUrl = $this->getCommitUrl($item->getHash());
+                            $shaGroup[] = '[' . $item->getShortHash() . "]({$commitUrl})";
                         }
                         // References
                         if (!$this->config->isHiddenReferences()) {
                             $refs = $item->getReferences();
-                            if (!empty($refs)) {
-                                foreach ($refs as $ref) {
-                                    $refId = $ref->getId();
-                                    $refUrl = $this->getIssueUrl($refId);
-                                    $refsGroup[] = "[{$ref}]({$refUrl})";
-                                }
+                            foreach ($refs as $ref) {
+                                $refId = $ref->getId();
+                                $refUrl = $this->getIssueUrl($refId);
+                                $refsGroup[] = "[{$ref}]({$refUrl})";
                             }
                         }
                         // Mentions
@@ -479,7 +474,7 @@ class Changelog
                             $user = $mention->getUser();
                             $userUrl = $this->getUserUrl($user);
                             $text = "[*{$mention}*]({$userUrl})";
-                            if (strpos($description, $mention) !== false) {
+                            if (strpos($description, (string) $mention) !== false) {
                                 $description = str_replace($mention, $text, $description);
                             } elseif (!$this->config->isHiddenMentions()) {
                                 $mentionsGroup[] = $text;
