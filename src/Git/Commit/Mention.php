@@ -16,13 +16,13 @@ class Mention implements Stringable
         $this->user = $user;
     }
 
-    public function getUser(): string
-    {
-        return $this->user;
-    }
-
     public function __toString(): string
     {
         return '@' . $this->user;
+    }
+
+    public function getUser(): string
+    {
+        return $this->user;
     }
 }

@@ -50,15 +50,17 @@ class ConventionalCommit extends Commit
         $this->parse();
     }
 
-    /**
-     * From commit.
-     */
-    public static function fromCommit(Commit $commit): self
+    public function __toString(): string
     {
-        return unserialize(
-            preg_replace('/^O:\d+:"[^"]++"/', 'O:' . strlen(self::class) . ':"' . self::class . '"', serialize($commit)),
-            [self::class]
-        );
+        if (!empty($this->raw)) {
+            return $this->raw;
+        }
+
+        $header = $this->getHeader();
+        $message = $this->getMessage();
+        $string = $header . "\n\n" . $message;
+
+        return Formatter::clean($string);
     }
 
     /**
@@ -168,6 +170,17 @@ class ConventionalCommit extends Commit
     }
 
     /**
+     * From commit.
+     */
+    public static function fromCommit(Commit $commit): self
+    {
+        return unserialize(
+            preg_replace('/^O:\d+:"[^"]++"/', 'O:' . strlen(self::class) . ':"' . self::class . '"', serialize($commit)),
+            [self::class]
+        );
+    }
+
+    /**
      * Parse raw commit.
      */
     protected function parse()
@@ -198,18 +211,5 @@ class ConventionalCommit extends Commit
             ->setScope((string)$matches['scope'])
             ->setBreakingChange(!empty($matches['breaking_before'] || !empty($matches['breaking_after'])))
             ->setDescription((string)$matches['description']);
-    }
-
-    public function __toString(): string
-    {
-        if (!empty($this->raw)) {
-            return $this->raw;
-        }
-
-        $header = $this->getHeader();
-        $message = $this->getMessage();
-        $string = $header . "\n\n" . $message;
-
-        return Formatter::clean($string);
     }
 }

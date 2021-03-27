@@ -12,13 +12,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class DefaultCommand extends Command
 {
     /**
-     * Command name.
-     *
-     * @var string
-     */
-    protected static $defaultName = 'changelog';
-
-    /**
      * Changelog.
      *
      * @var Changelog
@@ -34,6 +27,12 @@ class DefaultCommand extends Command
      * @var array
      */
     public $settings = [];
+    /**
+     * Command name.
+     *
+     * @var string
+     */
+    protected static $defaultName = 'changelog';
 
     /**
      * Constructor.
@@ -52,7 +51,7 @@ class DefaultCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Generate changelogs and release notes from a project\'s commit messages' .
+            ->setDescription("Generate changelogs and release notes from a project's commit messages" .
                 'and metadata and automate versioning with semver.org and conventionalcommits.org')
             ->setDefinition([
                 new InputArgument('path', InputArgument::OPTIONAL, 'Specify the path directory where generate changelog'),
@@ -60,7 +59,7 @@ class DefaultCommand extends Command
                 new InputOption('commit', 'c', InputOption::VALUE_NONE, 'Commit the new release once changelog is generated'),
                 new InputOption('amend', 'a', InputOption::VALUE_NONE, 'Amend commit the new release once changelog is generated'),
                 new InputOption('commit-all', null, InputOption::VALUE_NONE, 'Commit all changes the new release once changelog is generated'),
-                new InputOption('first-release', null, InputOption::VALUE_NONE, 'Run at first release (if --ver isn\'t specified version code it will be 1.0.0)'),
+                new InputOption('first-release', null, InputOption::VALUE_NONE, "Run at first release (if --ver isn't specified version code it will be 1.0.0)"),
                 new InputOption('from-date', null, InputOption::VALUE_REQUIRED, 'Get commits from specified date [YYYY-MM-DD]'),
                 new InputOption('to-date', null, InputOption::VALUE_REQUIRED, 'Get commits last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]'),
                 new InputOption('from-tag', null, InputOption::VALUE_REQUIRED, 'Get commits from specified tag'),

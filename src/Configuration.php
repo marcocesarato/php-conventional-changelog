@@ -203,6 +203,8 @@ class Configuration
 
     /**
      * Sort by options and orientation.
+     *
+     * @var array<string, string>
      */
     protected const SORT_BY = [
         'date' => 'DESC',
@@ -244,16 +246,6 @@ class Configuration
         $this->setRoot();
         $this->setTypes($this->preset);
         $this->fromArray($settings);
-    }
-
-    /**
-     * Validate settings.
-     *
-     * @param mixed $settings
-     */
-    public static function validate($settings): bool
-    {
-        return is_array($settings);
     }
 
     /**
@@ -352,18 +344,6 @@ class Configuration
             // Hooks
             ->setPreRun($params['preRun'])
             ->setPostRun($params['postRun']);
-    }
-
-    /**
-     * Check if is regex.
-     *
-     * @param $pattern
-     *
-     * @return bool
-     */
-    protected function isRegex(string $pattern)
-    {
-        return @preg_match($pattern, null) !== false;
     }
 
     /**
@@ -808,5 +788,27 @@ class Configuration
         $this->postRun = $postRun;
 
         return $this;
+    }
+
+    /**
+     * Validate settings.
+     *
+     * @param mixed $settings
+     */
+    public static function validate($settings): bool
+    {
+        return is_array($settings);
+    }
+
+    /**
+     * Check if is regex.
+     *
+     * @param $pattern
+     *
+     * @return bool
+     */
+    protected function isRegex(string $pattern)
+    {
+        return @preg_match($pattern, null) !== false;
     }
 }

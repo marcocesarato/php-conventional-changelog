@@ -66,6 +66,11 @@ class Footer implements Stringable
         $this->setReferences($refs);
     }
 
+    public function __toString(): string
+    {
+        return $this->token . ': ' . $this->value;
+    }
+
     public function getToken(): string
     {
         return strtolower($this->token);
@@ -96,10 +101,5 @@ class Footer implements Stringable
     public function getReferences(): array
     {
         return $this->references;
-    }
-
-    public function __toString(): string
-    {
-        return $this->token . ': ' . $this->value;
     }
 }

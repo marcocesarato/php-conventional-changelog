@@ -111,6 +111,24 @@ class Commit implements Stringable
         $this->parse();
     }
 
+    public function __wakeup()
+    {
+        $this->parse();
+    }
+
+    public function __toString(): string
+    {
+        if (!empty($this->raw)) {
+            return $this->raw;
+        }
+
+        $header = $this->getSubject();
+        $message = $this->getMessage();
+        $string = $header . "\n\n" . $message;
+
+        return Formatter::clean($string);
+    }
+
     /**
      * From array.
      *
@@ -147,14 +165,6 @@ class Commit implements Stringable
         $this->parse();
 
         return $this;
-    }
-
-    /**
-     * Check if is valid SHA-1.
-     */
-    protected function isValidHash(string $hash): bool
-    {
-        return (bool)preg_match('/^[0-9a-f]{40}$/i', $hash);
     }
 
     public function setRaw(string $raw): self
@@ -344,6 +354,21 @@ class Commit implements Stringable
         return $this->mentions;
     }
 
+    public function getMessage(): string
+    {
+        $footer = implode("\n", $this->footers);
+
+        return $this->body . "\n\n" . $footer;
+    }
+
+    /**
+     * Check if is valid SHA-1.
+     */
+    protected function isValidHash(string $hash): bool
+    {
+        return (bool)preg_match('/^[0-9a-f]{40}$/i', $hash);
+    }
+
     /**
      * Parse raw commit.
      */
@@ -374,30 +399,5 @@ class Commit implements Stringable
         $this->setSubject($subject)
              ->setBody($body)
              ->setMentions($mentions);
-    }
-
-    public function getMessage(): string
-    {
-        $footer = implode("\n", $this->footers);
-
-        return $this->body . "\n\n" . $footer;
-    }
-
-    public function __wakeup()
-    {
-        $this->parse();
-    }
-
-    public function __toString(): string
-    {
-        if (!empty($this->raw)) {
-            return $this->raw;
-        }
-
-        $header = $this->getSubject();
-        $message = $this->getMessage();
-        $string = $header . "\n\n" . $message;
-
-        return Formatter::clean($string);
     }
 }

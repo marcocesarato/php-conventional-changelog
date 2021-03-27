@@ -21,6 +21,11 @@ class Reference implements Stringable
         $this->id = $id;
     }
 
+    public function __toString(): string
+    {
+        return '#' . $this->id;
+    }
+
     public function getId(): string
     {
         return $this->id;
@@ -36,10 +41,5 @@ class Reference implements Stringable
         $this->closed = $closed;
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return '#' . $this->id;
     }
 }

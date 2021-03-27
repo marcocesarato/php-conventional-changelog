@@ -267,14 +267,12 @@ class Changelog
         foreach ($options as $params) {
             $commitsRaw = Repository::getCommits($params['options']);
             usort($commitsRaw, function ($x, $y) use ($sortBy, $sortOrientation) {
-                if (is_array($x)) {
-                    if (array_key_exists($sortBy, $x)) {
-                        if ($sortOrientation === 'ASC') {
-                            return $x[$sortBy] <=> $y[$sortBy];
-                        }
-
-                        return $y[$sortBy] <=> $x[$sortBy];
+                if (is_array($x) && array_key_exists($sortBy, $x)) {
+                    if ($sortOrientation === 'ASC') {
+                        return $x[$sortBy] <=> $y[$sortBy];
                     }
+
+                    return $y[$sortBy] <=> $x[$sortBy];
                 }
 
                 return 0;
@@ -353,7 +351,8 @@ class Changelog
                 }
 
                 $semver = new SemanticVersion($params['from']);
-                $newVersion = $params['to'] = $semver->bump($bumpRelease);
+                $newVersion = $semver->bump($bumpRelease);
+                $params['to'] = $newVersion;
             }
 
             // Initialize changelogs

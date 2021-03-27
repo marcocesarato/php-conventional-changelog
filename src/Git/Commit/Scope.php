@@ -17,6 +17,11 @@ class Scope implements Stringable
         $this->content = (string)$content;
     }
 
+    public function __toString(): string
+    {
+        return $this->content;
+    }
+
     /**
      * Prettify.
      */
@@ -28,10 +33,5 @@ class Scope implements Stringable
         $string = preg_replace('/\.(php|md|json|txt|csv|js)($|\s)/', '', $string);
 
         return Formatter::clean($string);
-    }
-
-    public function __toString(): string
-    {
-        return $this->content;
     }
 }
