@@ -29,72 +29,72 @@ class Commit implements Stringable
      *
      * @var string
      */
-    protected $raw;
+    public $raw;
 
     /**
      * Subject content.
      *
      * @var Subject
      */
-    protected $subject;
+    public $subject;
 
     /**
      * Body content.
      *
      * @var Body
      */
-    protected $body;
+    public $body;
 
     /**
      * Footers.
      *
      * @var Footer[]
      */
-    protected $footers = [];
+    public $footers = [];
 
     /**
      * User Mentions.
      *
      * @var Mention[]
      */
-    protected $mentions = [];
+    public $mentions = [];
 
     /**
      * Sha hash.
      *
      * @var string
      */
-    protected $hash;
+    public $hash;
 
     /**
      * @var DateTime
      */
-    protected $authorDate;
+    public $authorDate;
 
     /**
      * @var string
      */
-    protected $authorName;
+    public $authorName;
 
     /**
      * @var string
      */
-    protected $authorEmail;
+    public $authorEmail;
 
     /**
      * @var DateTime
      */
-    protected $committerDate;
+    public $committerDate;
 
     /**
      * @var string
      */
-    protected $committerName;
+    public $committerName;
 
     /**
      * @var string
      */
-    protected $committerEmail;
+    public $committerEmail;
 
     public function __construct(string $commit = null)
     {
