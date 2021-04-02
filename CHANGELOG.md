@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.9.9](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.8...v1.9.9) (2021-04-02)
+
+
+### Bug Fixes
+
+* Commit properties from protected to public for sorting ([d3b658](https://github.com/marcocesarato/php-conventional-changelog/commit/d3b65854ee00139e43577b03d3d2eb04dd489fd3))
+
+---
+
 ## [1.9.8](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.7...v1.9.8) (2021-04-02)
 
 
