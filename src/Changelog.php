@@ -86,7 +86,7 @@ class Changelog
         if (!Repository::isInsideWorkTree()) {
             $output->error('Not a git repository');
 
-            return Command::FAILURE;
+            return 1; //Command::FAILURE;
         }
 
         // If have amend option enable commit
@@ -397,20 +397,20 @@ class Changelog
                     } else {
                         $output->error('An error occurred tagging the release!');
 
-                        return Command::FAILURE;
+                        return 1; //Command::FAILURE;
                     }
                 }
             } else {
                 $output->error('An error occurred committing the release!');
 
-                return Command::FAILURE;
+                return 1; //Command::FAILURE;
             }
         }
 
         // Hook post run
         $this->config->postRun();
 
-        return Command::SUCCESS;
+        return 0; //Command::SUCCESS;
     }
 
     /**
