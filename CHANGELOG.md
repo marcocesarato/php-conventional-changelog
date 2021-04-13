@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.9.10](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.9...v1.9.10) (2021-04-13)
+
+
+### Bug Fixes
+
+* Replace command constants response for symfony 4 compatibility [#10](https://github.com/marcocesarato/php-conventional-changelog/issues/10) ([639aec](https://github.com/marcocesarato/php-conventional-changelog/commit/639aec65cdcb86a0d5cfe9715d8a6516594700e6))
+
+---
+
 ## [1.9.9](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.8...v1.9.9) (2021-04-02)
 
 
