@@ -21,28 +21,28 @@ class ConventionalCommit extends Commit
      *
      * @var Type
      */
-    protected $type;
+    public $type;
 
     /**
      * Scope.
      *
      * @var Scope
      */
-    protected $scope;
+    public $scope;
 
     /**
      * Is breaking change.
      *
      * @var bool
      */
-    protected $isBreakingChange = false;
+    public $isBreakingChange = false;
 
     /**
      * Description.
      *
      * @var Description
      */
-    protected $description;
+    public $description;
 
     public function __construct(?string $commit = null)
     {

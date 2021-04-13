@@ -267,12 +267,12 @@ class Changelog
         foreach ($options as $params) {
             $commitsRaw = Repository::getCommits($params['options']);
             usort($commitsRaw, function ($x, $y) use ($sortBy, $sortOrientation) {
-                if (is_array($x) && array_key_exists($sortBy, $x)) {
+                if (property_exists($x, $sortBy)) {
                     if ($sortOrientation === 'ASC') {
-                        return $x[$sortBy] <=> $y[$sortBy];
+                        return $x->{$sortBy} <=> $y->{$sortBy};
                     }
 
-                    return $y[$sortBy] <=> $x[$sortBy];
+                    return $y->{$sortBy} <=> $x->{$sortBy};
                 }
 
                 return 0;
