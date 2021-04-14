@@ -2,11 +2,15 @@
 
 namespace ConventionalChangelog;
 
+use ConventionalChangelog\Bump\ComposerJson;
+use ConventionalChangelog\Bump\PackageJson;
 use ConventionalChangelog\Git\ConventionalCommit;
 use ConventionalChangelog\Git\Repository;
 use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Helper\SemanticVersion;
+use ConventionalChangelog\Type\Bump;
 use DateTime;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -72,6 +76,13 @@ class Changelog
 
         $autoCommit = $autoCommit || $autoCommitAll;
         $autoBump = false;
+        /**
+         * @var Bump[]
+         */
+        $packageBumps = [
+            ComposerJson::class,
+            PackageJson::class,
+        ];
 
         if (empty($root) || !is_dir($root)) {
             $root = $this->config->getRoot();
@@ -361,6 +372,22 @@ class Changelog
             // Add all changes list to new changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
         }
+        $filesToCommit = [$file];
+        foreach ($packageBumps as $packageBump) {
+            try {
+                /**
+                 * @var Bump
+                 */
+                $bumper = new $packageBump($root);
+                if ($bumper->exists()) {
+                    $bumper->setVersion($newVersion);
+                    $bumper->save();
+                    $filesToCommit[] = $bumper->getFilePath();
+                }
+            } catch (Exception $e) {
+                $output->error('An error occurred bumping package version: ' . $e->getMessage());
+            }
+        }
 
         // Print summary
         if (!empty($summary)) {
@@ -385,7 +412,7 @@ class Changelog
                 Repository::addAll();
             }
             $message = $this->getReleaseCommitMessage($newVersion);
-            $result = Repository::commit($message, [$file], $amend, $hooks);
+            $result = Repository::commit($message, $filesToCommit, $amend, $hooks);
             if ($result !== false) {
                 $output->success('Release committed!');
                 // Create tag
