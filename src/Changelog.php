@@ -374,7 +374,7 @@ class Changelog
         }
         $filesToCommit = [$file];
 
-        if ($this->config->isBumpPackage()) {
+        if ($this->config->isPackageBump()) {
             foreach ($packageBumps as $packageBump) {
                 try {
                     /**
