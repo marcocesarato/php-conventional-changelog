@@ -13,6 +13,12 @@ abstract class Bump
      */
     protected $fileName;
     /**
+     * Package lock files.
+     *
+     * @var array
+     */
+    protected $lockFiles;
+    /**
      * Package file type.
      *
      * @var string
@@ -106,6 +112,31 @@ abstract class Bump
     public function getFileName(): string
     {
         return $this->fileName;
+    }
+
+    /**
+     * Get all existing lock files.
+     */
+    public function getExistingLockFiles(): array
+    {
+        $paths = [];
+        foreach ($this->lockFiles as $lockFile) {
+            $path = $this->getPath() . DIRECTORY_SEPARATOR . $lockFile;
+            $path = preg_replace('/' . preg_quote(DIRECTORY_SEPARATOR, '/') . '+/', DIRECTORY_SEPARATOR, $path);
+            if (is_file($path)) {
+                $paths[] = $path;
+            }
+        }
+
+        return $paths;
+    }
+
+    /**
+     * Get lock file name.
+     */
+    public function getLockFiles(): array
+    {
+        return $this->lockFiles;
     }
 
     /**

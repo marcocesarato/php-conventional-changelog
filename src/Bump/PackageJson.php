@@ -13,6 +13,10 @@ class PackageJson extends Bump
     /**
      * {@inheritdoc}
      */
+    protected $lockFiles = ['package.lock', 'yarn.lock', 'pnpm-lock.yaml'];
+    /**
+     * {@inheritdoc}
+     */
     protected $fileType = 'json';
 
     /**

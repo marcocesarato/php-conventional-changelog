@@ -14,6 +14,10 @@ class ComposerJson extends Bump
     /**
      * {@inheritdoc}
      */
+    protected $lockFiles = ['composer.lock'];
+    /**
+     * {@inheritdoc}
+     */
     protected $fileType = 'json';
 
     /**
