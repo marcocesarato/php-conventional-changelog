@@ -2,6 +2,7 @@
 
 namespace ConventionalChangelog\Bump;
 
+use ConventionalChangelog\Helper\ShellCommand;
 use ConventionalChangelog\Type\Bump;
 
 class ComposerJson extends Bump
@@ -29,6 +30,19 @@ class ComposerJson extends Bump
     public function setVersion(string $version): self
     {
         $this->content->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(): self
+    {
+        parent::save();
+        if (ShellCommand::exists('composer')) {
+            ShellCommand::exec('cd "' . escapeshellarg($this->getPath()) . '" && composer update');
+        }
 
         return $this;
     }
