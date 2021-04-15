@@ -79,14 +79,23 @@ abstract class Bump
     }
 
     /**
-     * Get file path.
+     * Get root path.
      */
-    public function getFilePath(): string
+    public function getPath(): string
     {
         if (empty($this->path)) {
             $this->path = getcwd();
         }
-        $path = $this->path . DIRECTORY_SEPARATOR . $this->fileName;
+
+        return $this->path;
+    }
+
+    /**
+     * Get file path.
+     */
+    public function getFilePath(): string
+    {
+        $path = $this->getPath() . DIRECTORY_SEPARATOR . $this->fileName;
 
         return preg_replace('/' . preg_quote(DIRECTORY_SEPARATOR, '/') . '+/', DIRECTORY_SEPARATOR, $path);
     }
