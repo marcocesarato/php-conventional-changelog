@@ -17,6 +17,7 @@ dir or use the `--config` option to specify the location of your configuration f
   committerEmail, committerDate)
 - **Preset:** Add new types preset or modify existing types preset labels and description
 - **Types:** Types allowed and showed on changelog. This setting could overwrite ignored types.
+- **Bump Package:** Bump the package version in `composer.json` or `package.json` if files exists on the root path
 - **Ignore Types:** Types ignored and so hidden on changelog
 - **Ignore Patterns:** Patterns ignored and so hidden on changelog with a specific description. *(Regex are enabled)*
 - **Tag Prefix:** Add prefix to release tag
@@ -71,6 +72,7 @@ return [
     'revert'   => ['label' => 'Reverts', 'description' => 'Reverts a previous commit'],
   ],
   'types' => [],
+  'bumpPackage' => true,
   'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'perf', 'refactor', 'revert', 'style', 'test'],
   'ignorePatterns' => ['/^chore\(release\):/i'],
   'tagPrefix' => 'v',
