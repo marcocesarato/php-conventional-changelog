@@ -2,6 +2,7 @@
 
 namespace ConventionalChangelog;
 
+use ConventionalChangelog\Helper\ShellCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -85,6 +86,12 @@ class DefaultCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $outputStyle = new SymfonyStyle($input, $output);
+
+        if (!ShellCommand::exists('git')) {
+            $outputStyle->error('It looks like Git is not installed on your system. Please check how install it from https://git-scm.com before run this command.');
+
+            return 1; //Command::FAILURE;
+        }
 
         // Retrieve configuration settings
         $config = $input->getOption('config');
