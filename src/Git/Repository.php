@@ -2,7 +2,7 @@
 
 namespace ConventionalChangelog\Git;
 
-use ConventionalChangelog\Helper\Formatter;
+use ConventionalChangelog\Helper\ShellCommand;
 use DateTime;
 
 class Repository
@@ -14,13 +14,10 @@ class Repository
 
     /**
      * Run shell command on working dir.
-     *
-     * @param $string
      */
-    protected static function run($string): string
+    protected static function run(string $string): string
     {
-        $value = shell_exec($string);
-        $value = Formatter::clean((string)$value);
+        $value = ShellCommand::exec($string);
 
         // Fix for some git versions
         $value = trim($value, "'");
