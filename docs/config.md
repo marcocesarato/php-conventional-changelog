@@ -18,6 +18,7 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Preset:** Add new types preset or modify existing types preset labels and description
 - **Types:** Types allowed and showed on changelog. This setting could overwrite ignored types.
 - **Package Bump:** Bump the package version in `composer.json` or `package.json` if files exists on the root path
+- **Package Lock Commit:** Commit the package lock file (ex. `composer.lock`, `package.lock`, `yarn.lock`...)
 - **Ignore Types:** Types ignored and so hidden on changelog
 - **Ignore Patterns:** Patterns ignored and so hidden on changelog with a specific description. *(Regex are enabled)*
 - **Tag Prefix:** Add prefix to release tag
@@ -73,6 +74,7 @@ return [
   ],
   'types' => [],
   'packageBump' => true,
+  'packageLockCommit' => true,
   'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'perf', 'refactor', 'revert', 'style', 'test'],
   'ignorePatterns' => ['/^chore\(release\):/i'],
   'tagPrefix' => 'v',
