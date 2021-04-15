@@ -373,19 +373,22 @@ class Changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
         }
         $filesToCommit = [$file];
-        foreach ($packageBumps as $packageBump) {
-            try {
-                /**
-                 * @var Bump
-                 */
-                $bumper = new $packageBump($root);
-                if ($bumper->exists()) {
-                    $bumper->setVersion($newVersion);
-                    $bumper->save();
-                    $filesToCommit[] = $bumper->getFilePath();
+
+        if ($this->config->isBumpPackage()) {
+            foreach ($packageBumps as $packageBump) {
+                try {
+                    /**
+                     * @var Bump
+                     */
+                    $bumper = new $packageBump($root);
+                    if ($bumper->exists()) {
+                        $bumper->setVersion($newVersion);
+                        $bumper->save();
+                        $filesToCommit[] = $bumper->getFilePath();
+                    }
+                } catch (Exception $e) {
+                    $output->error('An error occurred bumping package version: ' . $e->getMessage());
                 }
-            } catch (Exception $e) {
-                $output->error('An error occurred bumping package version: ' . $e->getMessage());
             }
         }
 

@@ -74,6 +74,13 @@ class Configuration
     protected $types = [];
 
     /**
+     * Bump package.
+     *
+     * @var bool
+     */
+    protected $bumpPackage = true;
+
+    /**
      * Ignore message commit patterns.
      *
      * @var string[]
@@ -263,6 +270,7 @@ class Configuration
             'path' => $this->getPath(),
             'preset' => $this->getPreset(),
             'types' => [],
+            'bumpPackage' => $this->isBumpPackage(),
             'ignoreTypes' => $this->getIgnoreTypes(),
             'ignorePatterns' => $this->getIgnorePatterns(),
             'tagPrefix' => $this->getTagPrefix(),
@@ -317,6 +325,8 @@ class Configuration
             ->setIgnorePatterns($params['ignorePatterns'])
             ->setIgnoreTypes($params['ignoreTypes'])
             ->setTypes($params['preset'])
+            // Bump Package
+            ->setBumpPackage($params['bumpPackage'])
             // Document
             ->setHeaderTitle($params['headerTitle'])
             ->setHeaderDescription($params['headerDescription'])
@@ -786,6 +796,18 @@ class Configuration
     public function setPostRun($postRun): self
     {
         $this->postRun = $postRun;
+
+        return $this;
+    }
+
+    public function isBumpPackage(): bool
+    {
+        return $this->bumpPackage;
+    }
+
+    public function setBumpPackage(bool $bumpPackage): Configuration
+    {
+        $this->bumpPackage = $bumpPackage;
 
         return $this;
     }
