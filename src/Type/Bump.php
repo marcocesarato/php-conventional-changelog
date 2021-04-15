@@ -126,7 +126,7 @@ abstract class Bump
         if ($this->exists()) {
             switch ($this->fileType) {
                 case 'json':
-                    $content = json_encode($this->content, JSON_PRETTY_PRINT);
+                    $content = json_encode($this->content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
                     if ($content === null && json_last_error() !== JSON_ERROR_NONE) {
                         throw new Exception(json_last_error_msg(), json_last_error());
                     }
