@@ -4,6 +4,33 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.10.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.10...v1.10.0) (2021-04-15)
+
+
+### Features
+
+* Add packages bumper [#11](https://github.com/marcocesarato/php-conventional-changelog/issues/11) ([0849aa](https://github.com/marcocesarato/php-conventional-changelog/commit/0849aad6d04e6640777a819391736edde56f00ba))
+
+##### Composer Json
+
+* Add composer update on save [#11](https://github.com/marcocesarato/php-conventional-changelog/issues/11) ([ea8fb7](https://github.com/marcocesarato/php-conventional-changelog/commit/ea8fb7eded13e6924388f044044a9898ec810163))
+
+##### Config
+
+* Add bump package setting [#11](https://github.com/marcocesarato/php-conventional-changelog/issues/11) ([343dd6](https://github.com/marcocesarato/php-conventional-changelog/commit/343dd6e47259c0190aa41cad5a42597df64a0d0d))
+* Add package lock commit setting [#11](https://github.com/marcocesarato/php-conventional-changelog/issues/11) ([2fc824](https://github.com/marcocesarato/php-conventional-changelog/commit/2fc8247fa77792ac1a6f6805196f3f42605321ea))
+
+### Bug Fixes
+
+* Add git command exists check ([9ecd9e](https://github.com/marcocesarato/php-conventional-changelog/commit/9ecd9ebb4979352f93e071a4b74686fe10c3b060))
+
+##### Bump
+
+* Add lock files to commit [#11](https://github.com/marcocesarato/php-conventional-changelog/issues/11) ([4da206](https://github.com/marcocesarato/php-conventional-changelog/commit/4da2061af0fb9e8da24215ed174896d5d8f4eb04))
+* Unescape slashes on json encode [#11](https://github.com/marcocesarato/php-conventional-changelog/issues/11) ([29a83e](https://github.com/marcocesarato/php-conventional-changelog/commit/29a83e243c8fd29df984dfe33253f2836c8f9435))
+
+---
+
 ## [1.9.10](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.9...v1.9.10) (2021-04-13)
 
 
