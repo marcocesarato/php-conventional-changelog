@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.10.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.0...v1.10.1) (2021-04-15)
+
+
+### Bug Fixes
+
+
+##### Composer Json
+
+* Composer update change path command ([18bb19](https://github.com/marcocesarato/php-conventional-changelog/commit/18bb19395d9c33905786ff1b1d834db369142c20))
+
+---
+
 ## [1.10.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.9.10...v1.10.0) (2021-04-15)
 
 
