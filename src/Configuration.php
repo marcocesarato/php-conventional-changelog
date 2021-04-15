@@ -81,6 +81,13 @@ class Configuration
     protected $packageBump = true;
 
     /**
+     * Commit package lock file.
+     *
+     * @var bool
+     */
+    protected $packageLockCommit = true;
+
+    /**
      * Ignore message commit patterns.
      *
      * @var string[]
@@ -271,6 +278,7 @@ class Configuration
             'preset' => $this->getPreset(),
             'types' => [],
             'packageBump' => $this->isPackageBump(),
+            'packageLockCommit' => $this->isPackageLockCommit(),
             'ignoreTypes' => $this->getIgnoreTypes(),
             'ignorePatterns' => $this->getIgnorePatterns(),
             'tagPrefix' => $this->getTagPrefix(),
@@ -325,8 +333,9 @@ class Configuration
             ->setIgnorePatterns($params['ignorePatterns'])
             ->setIgnoreTypes($params['ignoreTypes'])
             ->setTypes($params['preset'])
-            // Bump Package
+            // Package
             ->setPackageBump($params['packageBump'])
+            ->setPackageLockCommit($params['packageLockCommit'])
             // Document
             ->setHeaderTitle($params['headerTitle'])
             ->setHeaderDescription($params['headerDescription'])
@@ -808,6 +817,18 @@ class Configuration
     public function setPackageBump(bool $packageBump): Configuration
     {
         $this->packageBump = $packageBump;
+
+        return $this;
+    }
+
+    public function isPackageLockCommit(): bool
+    {
+        return $this->packageLockCommit;
+    }
+
+    public function setPackageLockCommit(bool $packageLockCommit): Configuration
+    {
+        $this->packageLockCommit = $packageLockCommit;
 
         return $this;
     }

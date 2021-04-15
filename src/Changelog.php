@@ -385,7 +385,9 @@ class Changelog
                         $bumper->setVersion($newVersion);
                         $bumper->save();
                         $filesToCommit[] = $bumper->getFilePath();
-                        $filesToCommit = array_merge($filesToCommit, $bumper->getExistingLockFiles());
+                        if ($this->config->isPackageLockCommit()) {
+                            $filesToCommit = array_merge($filesToCommit, $bumper->getExistingLockFiles());
+                        }
                     }
                 } catch (Exception $e) {
                     $output->error('An error occurred bumping package version: ' . $e->getMessage());
