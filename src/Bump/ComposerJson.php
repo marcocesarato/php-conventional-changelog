@@ -45,7 +45,7 @@ class ComposerJson extends Bump
     {
         parent::save();
         if (ShellCommand::exists('composer')) {
-            ShellCommand::exec('cd "' . escapeshellarg($this->getPath()) . '" && composer update');
+            exec('cd "' . escapeshellarg($this->getPath()) . '" && composer update');
         }
 
         return $this;
