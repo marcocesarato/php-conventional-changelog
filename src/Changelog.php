@@ -48,8 +48,7 @@ class Changelog
         $nextVersion = $input->getOption('ver');
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
         $autoCommitAll = $input->getOption('commit-all'); // Commit all changes once changelog is generated
-        $autoTag = !$input->getOption('no-tag') && !$this->config->skipTag(); // Tag release once is committed
-        $autoTag = $autoTag && $this->config->skipTag() ? false : true;
+        $autoTag = !($input->getOption('no-tag') || $this->config->skipTag()); // Tag release once is committed
         $amend = $input->getOption('amend'); // Amend commit
         $hooks = !$input->getOption('no-verify'); // Verify git hooks
         $hooks = $hooks && $this->config->skipVerify() ? false : true;
