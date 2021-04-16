@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.10.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.1...v1.10.2) (2021-04-16)
+
+
+### Bug Fixes
+
+* Skip tags and --not-tag are not working ([7f4d45](https://github.com/marcocesarato/php-conventional-changelog/commit/7f4d45886ad2723da11e4cb0073a7d29ead14e2d))
+
+---
+
 ## [1.10.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.0...v1.10.1) (2021-04-15)
 
 
