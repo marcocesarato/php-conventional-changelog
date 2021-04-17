@@ -2,13 +2,13 @@
 
 namespace ConventionalChangelog;
 
-use ConventionalChangelog\Bump\ComposerJson;
-use ConventionalChangelog\Bump\PackageJson;
 use ConventionalChangelog\Git\ConventionalCommit;
 use ConventionalChangelog\Git\Repository;
 use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Helper\SemanticVersion;
-use ConventionalChangelog\Type\Bump;
+use ConventionalChangelog\PackageBump\ComposerJson;
+use ConventionalChangelog\PackageBump\PackageJson;
+use ConventionalChangelog\Type\PackageBump;
 use DateTime;
 use Exception;
 use Symfony\Component\Console\Command\Command;
@@ -76,7 +76,7 @@ class Changelog
         $autoCommit = $autoCommit || $autoCommitAll;
         $autoBump = false;
         /**
-         * @var Bump[]
+         * @var PackageBump[]
          */
         $packageBumps = [
             ComposerJson::class,
@@ -377,7 +377,7 @@ class Changelog
             foreach ($packageBumps as $packageBump) {
                 try {
                     /**
-                     * @var Bump
+                     * @var PackageBump
                      */
                     $bumper = new $packageBump($root);
                     if ($bumper->exists()) {
@@ -536,7 +536,10 @@ class Changelog
         return $changelog;
     }
 
-    public function getFormattedString(string $format, array $values): string
+    /**
+     * Compile string with values.
+     */
+    public function getCompiledString(string $format, array $values): string
     {
         $string = $format;
         $values = array_merge($this->remote, $values);
@@ -547,46 +550,61 @@ class Changelog
         return $string;
     }
 
-    public function getCommitUrl($hash): string
+    /**
+     * Get commit url.
+     */
+    public function getCommitUrl(string $hash): string
     {
         $protocol = $this->config->getUrlProtocol();
         $format = $this->config->getCommitUrlFormat();
-        $url = $this->getFormattedString($format, ['hash' => $hash]);
+        $url = $this->getCompiledString($format, ['hash' => $hash]);
 
         return "{$protocol}://{$url}";
     }
 
-    public function getCompareUrl($previousTag, $currentTag): string
+    /**
+     * Get commit compare url.
+     */
+    public function getCompareUrl(string $previousTag, string $currentTag): string
     {
         $protocol = $this->config->getUrlProtocol();
         $format = $this->config->getCompareUrlFormat();
-        $url = $this->getFormattedString($format, ['previousTag' => $previousTag, 'currentTag' => $currentTag]);
+        $url = $this->getCompiledString($format, ['previousTag' => $previousTag, 'currentTag' => $currentTag]);
 
         return "{$protocol}://{$url}";
     }
 
-    public function getIssueUrl($id): string
+    /**
+     * Get issue url.
+     */
+    public function getIssueUrl(string $id): string
     {
         $protocol = $this->config->getUrlProtocol();
         $format = $this->config->getIssueUrlFormat();
-        $url = $this->getFormattedString($format, ['id' => $id]);
+        $url = $this->getCompiledString($format, ['id' => $id]);
 
         return "{$protocol}://{$url}";
     }
 
-    public function getUserUrl($user): string
+    /**
+     * Get user url.
+     */
+    public function getUserUrl(string $user): string
     {
         $protocol = $this->config->getUrlProtocol();
         $format = $this->config->getUserUrlFormat();
-        $url = $this->getFormattedString($format, ['user' => $user]);
+        $url = $this->getCompiledString($format, ['user' => $user]);
 
         return "{$protocol}://{$url}";
     }
 
-    public function getReleaseCommitMessage($tag): string
+    /**
+     * Get release commit message.
+     */
+    public function getReleaseCommitMessage(string $tag): string
     {
         $format = $this->config->getReleaseCommitMessageFormat();
 
-        return $this->getFormattedString($format, ['currentTag' => $tag]);
+        return $this->getCompiledString($format, ['currentTag' => $tag]);
     }
 }

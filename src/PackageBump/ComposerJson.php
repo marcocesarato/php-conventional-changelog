@@ -1,11 +1,11 @@
 <?php
 
-namespace ConventionalChangelog\Bump;
+namespace ConventionalChangelog\PackageBump;
 
 use ConventionalChangelog\Helper\ShellCommand;
-use ConventionalChangelog\Type\Bump;
+use ConventionalChangelog\Type\PackageBump;
 
-class ComposerJson extends Bump
+class ComposerJson extends PackageBump
 {
     /**
      * {@inheritdoc}

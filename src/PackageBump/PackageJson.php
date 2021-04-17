@@ -1,10 +1,10 @@
 <?php
 
-namespace ConventionalChangelog\Bump;
+namespace ConventionalChangelog\PackageBump;
 
-use ConventionalChangelog\Type\Bump;
+use ConventionalChangelog\Type\PackageBump;
 
-class PackageJson extends Bump
+class PackageJson extends PackageBump
 {
     /**
      * {@inheritdoc}

@@ -4,7 +4,7 @@ namespace ConventionalChangelog\Type;
 
 use Exception;
 
-abstract class Bump
+abstract class PackageBump
 {
     /**
      * Package filename.

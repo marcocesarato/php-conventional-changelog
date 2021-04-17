@@ -218,7 +218,7 @@ class Configuration
     /**
      * Sort by options and orientation.
      *
-     * @var array<string, string>
+     * @var string[]
      */
     protected const SORT_BY = [
         'date' => 'DESC',
@@ -384,17 +384,11 @@ class Configuration
         return array_keys($types);
     }
 
-    /**
-     * @param $type
-     */
     public function getTypeLabel(string $type): string
     {
         return $this->types[$type]['label'];
     }
 
-    /**
-     * @param $type
-     */
     public function getTypeDescription(string $type): string
     {
         return $this->types[$type]['description'] ?? '';
