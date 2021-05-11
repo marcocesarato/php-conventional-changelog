@@ -44,9 +44,11 @@ class ComposerJson extends PackageBump
     public function save(): self
     {
         parent::save();
+        /* Feature: https://github.com/marcocesarato/php-conventional-changelog/issues/11#issuecomment-819829828
+        /* Bug: https://github.com/marcocesarato/php-conventional-changelog/issues/13
         if (ShellCommand::exists('composer')) {
             exec('cd ' . escapeshellarg($this->getPath()) . ' && composer update');
-        }
+        }*/
 
         return $this;
     }
