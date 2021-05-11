@@ -4,6 +4,18 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.10.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.2...v1.10.3) (2021-05-11)
+
+
+### Bug Fixes
+
+
+##### Composer Json
+
+* Disable composer update on bump [#13](https://github.com/marcocesarato/php-conventional-changelog/issues/13) ([669262](https://github.com/marcocesarato/php-conventional-changelog/commit/669262ba6ceba78f82d6bb557c47564a90710716))
+
+---
+
 ## [1.10.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.1...v1.10.2) (2021-04-16)
 
 
