@@ -135,7 +135,8 @@ class Changelog
 
         // Current Dates
         $today = new DateTime();
-
+        // First release
+        $newVersion = '1.0.0';
         // First commit
         $firstCommit = Repository::getFirstCommit();
 
@@ -171,10 +172,6 @@ class Changelog
         }
         $newVersion = preg_replace('#^v#i', '', $newVersion);
 
-        if (empty($newVersion)) {
-            $newVersion = '1.0.0';
-        }
-
         $options = []; // Git retrieve options per version
 
         if ($history) {
@@ -188,7 +185,8 @@ class Changelog
                     $fromTag = $previousTag;
                 }
                 $commitDate = Repository::getCommitDate($toTag);
-                $options[$toTag] = [
+                $versionCode = $this->getVersionCode($lastVersion, $tagPrefix, $toTag);
+                $options[$versionCode] = [
                     'from' => $fromTag,
                     'to' => $toTag,
                     'date' => $commitDate->format($dateFormat),
@@ -198,7 +196,8 @@ class Changelog
                 $previousTag = $toTag;
             }
             if ($autoCommit) {
-                $options[$lastVersion] = [
+                $versionCode = $this->getVersionCode($lastVersion, $tagPrefix, $tagSuffix);
+                $options[$versionCode] = [
                     'from' => $lastVersion,
                     'to' => $newVersion,
                     'date' => $today->format($dateFormat),
@@ -252,15 +251,8 @@ class Changelog
                 }
             }
 
-            // Remove tag prefix
-            $prefix = '/^' . preg_quote($tagPrefix, '/') . '/';
-            $name = preg_replace($prefix, '', $lastVersion);
-
-            // Remove tag suffix
-            $suffix = '/' . preg_quote($tagSuffix, '/') . '$/';
-            $name = preg_replace($suffix, '', $name);
-
-            $options[$name] = [
+            $versionCode = $this->getVersionCode($lastVersion, $tagPrefix, $tagSuffix);
+            $options[$versionCode] = [
                 'from' => $lastVersion,
                 'to' => $newVersion,
                 'date' => $today->format($dateFormat),
@@ -444,6 +436,24 @@ class Changelog
         $this->config->postRun();
 
         return 0; //Command::SUCCESS;
+    }
+
+    /**
+     * Get version code.
+     */
+    protected function getVersionCode(string $tag, string $prefix, string $suffix): string
+    {
+        $version = preg_replace('#^v#i', '', $tag);
+
+        // Remove tag prefix
+        $rePrefix = '/^' . preg_quote($prefix, '/') . '/';
+        $version = preg_replace($rePrefix, '', $version);
+
+        // Remove tag suffix
+        $reSuffix = '/' . preg_quote($suffix, '/') . '$/';
+        $version = preg_replace($reSuffix, '', $version);
+
+        return $version;
     }
 
     /**
