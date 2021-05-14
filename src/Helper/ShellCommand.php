@@ -27,4 +27,14 @@ class ShellCommand
 
         return !empty($return);
     }
+
+    /**
+     * Check if can execute shell commands.
+     */
+    public static function isEnabled(): bool
+    {
+        return function_exists('shell_exec') &&
+            is_callable('shell_exec') &&
+            stripos(ini_get('disable_functions'), 'shell_exec') === false;
+    }
 }
