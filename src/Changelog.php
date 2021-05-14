@@ -170,8 +170,7 @@ class Changelog
                     $fromTag = $previousTag;
                 }
                 $commitDate = Repository::getCommitDate($toTag);
-                $versionCode = $this->getVersionCode($lastVersion, $tagPrefix, $toTag);
-                $options[$versionCode] = [
+                $options[$toTag] = [
                     'from' => $fromTag,
                     'to' => $toTag,
                     'date' => $commitDate->format($dateFormat),
@@ -181,8 +180,7 @@ class Changelog
                 $previousTag = $toTag;
             }
             if ($autoCommit) {
-                $versionCode = $this->getVersionCode($lastVersion, $tagPrefix, $tagSuffix);
-                $options[$versionCode] = [
+                $options[$newVersion] = [
                     'from' => $lastVersion,
                     'to' => $newVersion,
                     'date' => $today->format($dateFormat),
@@ -236,8 +234,7 @@ class Changelog
                 }
             }
 
-            $versionCode = $this->getVersionCode($lastVersion, $tagPrefix, $tagSuffix);
-            $options[$versionCode] = [
+            $options[$newVersion] = [
                 'from' => $lastVersion,
                 'to' => $newVersion,
                 'date' => $today->format($dateFormat),
@@ -343,6 +340,7 @@ class Changelog
             }
 
             // Initialize changelogs
+            $params['to'] = $this->getVersionCode($params['to'], $tagPrefix, $tagSuffix);
             $compareUrl = $this->getCompareUrl($params['from'], "{$tagPrefix}{$params['to']}{$tagSuffix}");
             $changelogNew .= "## [{$params['to']}]({$compareUrl}) ({$params['date']})\n\n";
             // Add all changes list to new changelog
