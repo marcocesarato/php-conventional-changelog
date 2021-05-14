@@ -236,7 +236,7 @@ class Repository
     /**
      * Parse remote url.
      *
-     * @return array|false
+     * @return array
      */
     public static function parseRemoteUrl()
     {
@@ -253,6 +253,6 @@ class Repository
             }
         }
 
-        return false;
+        return [];
     }
 }

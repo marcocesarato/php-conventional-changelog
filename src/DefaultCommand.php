@@ -163,7 +163,21 @@ class DefaultCommand extends Command
 
             return 1; //Command::FAILURE;
         }
-        $this->validRequirement('Valid git repository detected');
+        $this->validRequirement('Valid git worktree detected');
+
+        // Check git repository
+        if (empty(Repository::parseRemoteUrl())) {
+            $url = Repository::getRemoteUrl();
+            $output->error(
+                'The remote url of your git repository ("' . $url . '") not been parsed correctly. ' .
+                'Please open and issue including your repository url format to make it compatible with this tool: ' .
+                "\nhttps://github.com/marcocesarato/php-conventional-changelog/issues"
+            );
+
+            return 1; //Command::FAILURE;
+        }
+        $this->validRequirement('Valid git remote repository url');
+
         $this->outputStyle->newLine();
 
         // Initialize changelog
