@@ -41,10 +41,8 @@ class Changelog
     /**
      * Generate changelog.
      */
-    public function generate(InputInterface $input, SymfonyStyle $output): int
+    public function generate(string $root, InputInterface $input, SymfonyStyle $output): int
     {
-        $root = $input->getArgument('path'); // Root
-
         $nextVersion = $input->getOption('ver');
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
         $autoCommitAll = $input->getOption('commit-all'); // Commit all changes once changelog is generated
@@ -83,21 +81,8 @@ class Changelog
             PackageJson::class,
         ];
 
-        if (empty($root) || !is_dir($root)) {
-            $root = $this->config->getRoot();
-        }
-
-        // Set working directory
-        chdir($root);
-
         // Hook pre run
         $this->config->preRun();
-
-        if (!Repository::isInsideWorkTree()) {
-            $output->error('Not a git repository');
-
-            return 1; //Command::FAILURE;
-        }
 
         // If have amend option enable commit
         if ($amend) {
@@ -389,7 +374,7 @@ class Changelog
 
         // Print summary
         if (!empty($summary)) {
-            $output->title('Summary');
+            $output->section('Summary');
             $elements = [];
             foreach ($summary as $type => $count) {
                 if ($count > 0) {

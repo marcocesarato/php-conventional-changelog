@@ -2,6 +2,8 @@
 
 namespace ConventionalChangelog;
 
+use ConventionalChangelog\Git\Repository;
+use ConventionalChangelog\Helper\SemanticVersion;
 use ConventionalChangelog\Helper\ShellCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -34,6 +36,12 @@ class DefaultCommand extends Command
      * @var string
      */
     protected static $defaultName = 'changelog';
+    /**
+     * Output with style.
+     *
+     * @var SymfonyStyle
+     */
+    protected $outputStyle;
 
     /**
      * Constructor.
@@ -85,12 +93,12 @@ class DefaultCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $outputStyle = new SymfonyStyle($input, $output);
-
-        if (!ShellCommand::exists('git')) {
-            $outputStyle->error('It looks like Git is not installed on your system. Please check how install it from https://git-scm.com before run this command.');
-
-            return 1; //Command::FAILURE;
+        // Initialize
+        $this->outputStyle = new SymfonyStyle($input, $output);
+        if ($this->getApplication()) {
+            $appName = $this->getApplication()->getName();
+            $appVersion = $this->getApplication()->getVersion();
+            $this->outputStyle->title($appName . ' ' . $appVersion);
         }
 
         // Retrieve configuration settings
@@ -98,17 +106,78 @@ class DefaultCommand extends Command
         if (!empty($config) && is_file($config)) {
             $this->settings = require $config;
         }
-
         if (!Configuration::validate($this->settings)) {
-            $outputStyle->error('Not a valid configuration! Using default settings.');
+            $this->outputStyle->error('Not a valid configuration! Using default settings.');
             $this->settings = [];
         }
-
         $this->config = new Configuration($this->settings);
 
+        // Check environment
+        $this->outputStyle->writeln('Checking environment requirements');
+
+        // Check shell exec function
+        if (!ShellCommand::isEnabled()) {
+            $this->outputStyle->error(
+                'It looks like shell_exec function is disabled on disable_functions config of your php.ini settings file. ' .
+                'Please check you configuration and enabled shell_exec to proceed.'
+            );
+
+            return 1; //Command::FAILURE;
+        }
+        $this->validRequirement('Shell exec enabled');
+
+        // Check git command
+        if (!ShellCommand::exists('git')) {
+            $this->outputStyle->error(
+                'It looks like Git is not installed on your system. ' .
+                'Please check how to install it from https://git-scm.com before run this command.'
+            );
+
+            return 1; //Command::FAILURE;
+        }
+        $this->validRequirement('Git detected');
+
+        // Check git version
+        $gitVersion = ShellCommand::exec('git --version');
+        $gitSemver = new SemanticVersion($gitVersion);
+        $gitVersionCode = $gitSemver->getVersionCode();
+        if (version_compare($gitVersionCode, '2.1.4', '<')) {
+            $this->outputStyle->error(
+                'It looks like your Git version is ' . $gitVersionCode . ' that isn\'t compatible with this tool (min required is 2.1.4). ' .
+                'Please check how to update it from https://git-scm.com before run this command.'
+            );
+
+            return 1; //Command::FAILURE;
+        }
+        $this->validRequirement('Git version ' . $gitVersionCode);
+
+        // Check working directory
+        $root = $input->getArgument('path');
+        if (empty($root) || !is_dir($root)) {
+            $root = $this->config->getRoot();
+        }
+        // Set working directory
+        chdir($root);
+        if (!Repository::isInsideWorkTree()) {
+            $output->error('The directory "' . $root . '" isn\'t a valid git repository or isn\'t been detected correctly.');
+
+            return 1; //Command::FAILURE;
+        }
+        $this->validRequirement('Valid git repository detected');
+        $this->outputStyle->newLine();
+
         // Initialize changelog
+        $this->outputStyle->writeln('Generating changelog');
         $this->changelog = new Changelog($this->config);
 
-        return $this->changelog->generate($input, $outputStyle);
+        return $this->changelog->generate($root, $input, $this->outputStyle);
+    }
+
+    /**
+     * Print with valid requirement format.
+     */
+    protected function validRequirement(string $messages)
+    {
+        $this->outputStyle->writeln(' ✓ ' . $messages);
     }
 }
