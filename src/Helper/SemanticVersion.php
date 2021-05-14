@@ -12,6 +12,13 @@ class SemanticVersion
     public const PATTERN = '([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?';
 
     /**
+     * Pattern no extra.
+     *
+     * @var string
+     */
+    public const PATTERN_NO_EXTRA = '([0-9]+)\.([0-9]+)\.([0-9]+)';
+
+    /**
      * @var string
      */
     public const MAJOR = 'major';
@@ -112,6 +119,15 @@ class SemanticVersion
     public function getVersion(): string
     {
         return $this->version;
+    }
+
+    public function getVersionCode(): string
+    {
+        if (preg_match('/' . self::PATTERN_NO_EXTRA . '/', $this->version, $match)) {
+            return $match[0];
+        }
+
+        return '0.0.0';
     }
 
     public function setVersion(string $version): SemanticVersion
