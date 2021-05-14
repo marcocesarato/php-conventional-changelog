@@ -4,6 +4,30 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.10.4](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.3...v1.10.4) (2021-05-14)
+
+
+### Bug Fixes
+
+* Add git remote repository url format check ([56aff6](https://github.com/marcocesarato/php-conventional-changelog/commit/56aff6304296c239aad8646e96d5452927857e84))
+* Add requirements checks at startup [#14](https://github.com/marcocesarato/php-conventional-changelog/issues/14) ([b0b124](https://github.com/marcocesarato/php-conventional-changelog/commit/b0b1245cfca1bae60950d313fdb6d131c7cd5852))
+* History version code ([eebfbe](https://github.com/marcocesarato/php-conventional-changelog/commit/eebfbea5e02a2e93d36eee3ba8ef357ecb269c79))
+* Version code format and initialization [#14](https://github.com/marcocesarato/php-conventional-changelog/issues/14) ([b65bb6](https://github.com/marcocesarato/php-conventional-changelog/commit/b65bb669eaa33964b25b8fff97f0b1901d42b152))
+
+##### Git
+
+* Detect is inside work tree check remote url ([cb57a6](https://github.com/marcocesarato/php-conventional-changelog/commit/cb57a6e9c2d62e3c4009af6dd060acd6854b2bc2))
+
+##### Semver
+
+* Add get version code method ([54599f](https://github.com/marcocesarato/php-conventional-changelog/commit/54599fb8e91d6bc06bfc7881978f3a0fcde2602f))
+
+##### Shell
+
+* Add is enabled method ([edee7d](https://github.com/marcocesarato/php-conventional-changelog/commit/edee7de39313697b3c327a8729cc06c8d0774fb1))
+
+---
+
 ## [1.10.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.2...v1.10.3) (2021-05-11)
 
 
