@@ -31,8 +31,9 @@ class Repository
     public static function isInsideWorkTree(): bool
     {
         $result = self::run('git rev-parse --is-inside-work-tree');
+        $remote = self::getRemoteUrl();
 
-        return $result === 'true';
+        return $result === 'true' && !empty($remote);
     }
 
     /**
