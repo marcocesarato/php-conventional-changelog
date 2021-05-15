@@ -93,7 +93,7 @@ class Repository
     /**
      * Has remote url.
      */
-    public static function hasRemoteUrl(): string
+    public static function hasRemoteUrl(): bool
     {
         $url = self::getRemoteUrl();
 

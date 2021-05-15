@@ -97,7 +97,7 @@ class DefaultCommand extends Command
          * Initialize.
          */
         $this->output = new SymfonyStyle($input, $output);
-        if ($this->getApplication()) {
+        if ($this->getApplication() !== null) {
             $appName = $this->getApplication()->getName();
             $appVersion = $this->getApplication()->getVersion();
             $this->output->title($appName . ' ' . $appVersion);
