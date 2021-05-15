@@ -30,11 +30,11 @@ class Changelog
     protected $remote = [];
 
     /**
-     * Has remote url.
+     * Has valid remote url.
      *
      * @var bool
      */
-    protected $hasRemoteUrl = false;
+    protected $hasValidRemoteUrl = false;
 
     /**
      * Changelog constructor.
@@ -88,7 +88,7 @@ class Changelog
             PackageJson::class,
         ];
 
-        $this->hasRemoteUrl = Repository::hasRemoteUrl();
+        $this->hasValidRemoteUrl = Repository::hasRemoteUrl() && !empty(Repository::parseRemoteUrl());
 
         // Hook pre run
         $this->config->preRun();
@@ -557,7 +557,7 @@ class Changelog
      */
     public function getCommitUrl(string $hash): string
     {
-        if (!$this->hasRemoteUrl) {
+        if (!$this->hasValidRemoteUrl) {
             return '#';
         }
 
@@ -573,7 +573,7 @@ class Changelog
      */
     public function getCompareUrl(string $previousTag, string $currentTag): string
     {
-        if (!$this->hasRemoteUrl) {
+        if (!$this->hasValidRemoteUrl) {
             return '#';
         }
 
@@ -589,7 +589,7 @@ class Changelog
      */
     public function getIssueUrl(string $id): string
     {
-        if (!$this->hasRemoteUrl) {
+        if (!$this->hasValidRemoteUrl) {
             return '#';
         }
 
@@ -605,7 +605,7 @@ class Changelog
      */
     public function getUserUrl(string $user): string
     {
-        if (!$this->hasRemoteUrl) {
+        if (!$this->hasValidRemoteUrl) {
             return '#';
         }
 
