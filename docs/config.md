@@ -26,6 +26,7 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Skip Bump:** Skip automatic version code bump
 - **Skip Tag:** Skip automatic commit tagging
 - **Skip Verify:** Skip the pre-commit and commit-msg hooks
+- **Disable Links:** Render text instead of link in changelog
 - **Hidden Hash:** Hide commit hash from changelog
 - **Hidden Mentions:** Hide users mentions from changelog
 - **Hidden References:** Hide issue references from changelog
@@ -82,6 +83,7 @@ return [
   'skipBump' => false,
   'skipTag' => false,
   'skipVerify' => false,
+  'disableLinks' => false,
   'hiddenHash' => false,
   'hiddenMentions' => false,
   'hiddenReferences' => false,

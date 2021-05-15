@@ -132,6 +132,13 @@ class Configuration
     protected $skipVerify = false;
 
     /**
+     * Render text instead of links.
+     *
+     * @var bool
+     */
+    protected $disableLinks = false;
+
+    /**
      * Hidden references.
      *
      * @var bool
@@ -286,6 +293,7 @@ class Configuration
             'skipBump' => $this->skipBump(),
             'skipTag' => $this->skipTag(),
             'skipVerify' => $this->skipVerify(),
+            'disableLinks' => $this->isDisableLinks(),
             'hiddenHash' => $this->isHiddenHash(),
             'hiddenMentions' => $this->isHiddenMentions(),
             'hiddenReferences' => $this->isHiddenReferences(),
@@ -347,6 +355,8 @@ class Configuration
             ->setSkipBump($params['skipBump'])
             ->setSkipTag($params['skipTag'])
             ->setSkipVerify($params['skipVerify'])
+            // Links
+            ->setDisableLinks($params['disableLinks'])
             // Hidden
             ->setHiddenHash($params['hiddenHash'])
             ->setHiddenMentions($params['hiddenMentions'])
@@ -667,6 +677,18 @@ class Configuration
     public function setDateFormat(string $dateFormat): self
     {
         $this->dateFormat = $dateFormat;
+
+        return $this;
+    }
+
+    public function isDisableLinks(): bool
+    {
+        return $this->disableLinks;
+    }
+
+    public function setDisableLinks(bool $disableLinks): self
+    {
+        $this->disableLinks = $disableLinks;
 
         return $this;
     }
