@@ -41,7 +41,7 @@ class DefaultCommand extends Command
      *
      * @var SymfonyStyle
      */
-    protected $outputStyle;
+    protected $output;
 
     /**
      * Constructor.
@@ -94,11 +94,11 @@ class DefaultCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // Initialize
-        $this->outputStyle = new SymfonyStyle($input, $output);
+        $this->output = new SymfonyStyle($input, $output);
         if ($this->getApplication()) {
             $appName = $this->getApplication()->getName();
             $appVersion = $this->getApplication()->getVersion();
-            $this->outputStyle->title($appName . ' ' . $appVersion);
+            $this->output->title($appName . ' ' . $appVersion);
         }
 
         // Retrieve configuration settings
@@ -107,17 +107,17 @@ class DefaultCommand extends Command
             $this->settings = require $config;
         }
         if (!Configuration::validate($this->settings)) {
-            $this->outputStyle->error('Not a valid configuration! Using default settings.');
+            $this->output->error('Not a valid configuration! Using default settings.');
             $this->settings = [];
         }
         $this->config = new Configuration($this->settings);
 
         // Check environment
-        $this->outputStyle->writeln('Checking environment requirements');
+        $this->output->writeln('Checking environment requirements');
 
         // Check shell exec function
         if (!ShellCommand::isEnabled()) {
-            $this->outputStyle->error(
+            $this->output->error(
                 'It looks like shell_exec function is disabled on disable_functions config of your php.ini settings file. ' .
                 'Please check you configuration and enabled shell_exec to proceed.'
             );
@@ -128,7 +128,7 @@ class DefaultCommand extends Command
 
         // Check git command
         if (!ShellCommand::exists('git')) {
-            $this->outputStyle->error(
+            $this->output->error(
                 'It looks like Git is not installed on your system. ' .
                 'Please check how to install it from https://git-scm.com before run this command.'
             );
@@ -142,7 +142,7 @@ class DefaultCommand extends Command
         $gitSemver = new SemanticVersion($gitVersion);
         $gitVersionCode = $gitSemver->getVersionCode();
         if (version_compare($gitVersionCode, '2.1.4', '<')) {
-            $this->outputStyle->error(
+            $this->output->error(
                 'It looks like your Git version is ' . $gitVersionCode . ' that isn\'t compatible with this tool (min required is 2.1.4). ' .
                 'Please check how to update it from https://git-scm.com before run this command.'
             );
@@ -159,7 +159,7 @@ class DefaultCommand extends Command
         // Set working directory
         chdir($root);
         if (!Repository::isInsideWorkTree()) {
-            $output->error('The directory "' . $root . '" isn\'t a valid git repository or isn\'t been detected correctly.');
+            $this->output->error('The directory "' . $root . '" isn\'t a valid git repository or isn\'t been detected correctly.');
 
             return 1; //Command::FAILURE;
         }
@@ -168,7 +168,7 @@ class DefaultCommand extends Command
         // Check git repository
         if (empty(Repository::parseRemoteUrl())) {
             $url = Repository::getRemoteUrl();
-            $output->error(
+            $this->output->error(
                 'The remote url of your git repository ("' . $url . '") not been parsed correctly. ' .
                 'Please open and issue including your repository url format to make it compatible with this tool: ' .
                 "\nhttps://github.com/marcocesarato/php-conventional-changelog/issues"
@@ -178,13 +178,13 @@ class DefaultCommand extends Command
         }
         $this->validRequirement('Valid git remote repository url');
 
-        $this->outputStyle->newLine();
+        $this->output->newLine();
 
         // Initialize changelog
-        $this->outputStyle->writeln('Generating changelog');
+        $this->output->writeln('Generating changelog');
         $this->changelog = new Changelog($this->config);
 
-        return $this->changelog->generate($root, $input, $this->outputStyle);
+        return $this->changelog->generate($root, $input, $this->output);
     }
 
     /**
@@ -192,6 +192,6 @@ class DefaultCommand extends Command
      */
     protected function validRequirement(string $messages)
     {
-        $this->outputStyle->writeln(' ✓ ' . $messages);
+        $this->output->writeln(' ✓ ' . $messages);
     }
 }
