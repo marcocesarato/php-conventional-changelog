@@ -93,7 +93,9 @@ class DefaultCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Initialize
+        /**
+         * Initialize.
+         */
         $this->output = new SymfonyStyle($input, $output);
         if ($this->getApplication()) {
             $appName = $this->getApplication()->getName();
@@ -101,7 +103,9 @@ class DefaultCommand extends Command
             $this->output->title($appName . ' ' . $appVersion);
         }
 
-        // Retrieve configuration settings
+        /**
+         * Retrieve configuration settings.
+         */
         $config = $input->getOption('config');
         if (!empty($config) && is_file($config)) {
             $this->settings = require $config;
@@ -111,10 +115,18 @@ class DefaultCommand extends Command
             $this->settings = [];
         }
         $this->config = new Configuration($this->settings);
+        // Get root path
+        $root = $input->getArgument('path');
+        if (empty($root) || !is_dir($root)) {
+            $root = $this->config->getRoot();
+        }
+        // Set working directory
+        chdir($root);
 
-        // Check environment
+        /**
+         * Check environment.
+         */
         $this->output->writeln('Checking environment requirements');
-
         // Check shell exec function
         if (!ShellCommand::isEnabled()) {
             $this->output->error(
@@ -124,8 +136,7 @@ class DefaultCommand extends Command
 
             return 1; //Command::FAILURE;
         }
-        $this->validRequirement('Shell exec enabled');
-
+        $this->validRequirement('Commands executions enabled');
         // Check git command
         if (!ShellCommand::exists('git')) {
             $this->output->error(
@@ -135,8 +146,7 @@ class DefaultCommand extends Command
 
             return 1; //Command::FAILURE;
         }
-        $this->validRequirement('Git detected');
-
+        $this->validRequirement('Git detected correctly');
         // Check git version
         $gitVersion = ShellCommand::exec('git --version');
         $gitSemver = new SemanticVersion($gitVersion);
@@ -149,38 +159,38 @@ class DefaultCommand extends Command
 
             return 1; //Command::FAILURE;
         }
-        $this->validRequirement('Git version ' . $gitVersionCode);
-
+        $this->validRequirement('Git version detected: ' . $gitVersionCode);
         // Check working directory
-        $root = $input->getArgument('path');
-        if (empty($root) || !is_dir($root)) {
-            $root = $this->config->getRoot();
-        }
-        // Set working directory
-        chdir($root);
         if (!Repository::isInsideWorkTree()) {
             $this->output->error('The directory "' . $root . '" isn\'t a valid git repository or isn\'t been detected correctly.');
 
             return 1; //Command::FAILURE;
         }
-        $this->validRequirement('Valid git worktree detected');
-
+        $this->validRequirement('Valid git worktree directory: ' . $root);
         // Check git repository
-        if (empty(Repository::parseRemoteUrl())) {
+        if (Repository::hasRemoteUrl()) {
             $url = Repository::getRemoteUrl();
-            $this->output->error(
-                'The remote url of your git repository ("' . $url . '") not been parsed correctly. ' .
-                'Please open and issue including your repository url format to make it compatible with this tool: ' .
-                "\nhttps://github.com/marcocesarato/php-conventional-changelog/issues"
+            if (empty(Repository::parseRemoteUrl())) {
+                $this->output->warning(
+                    'The remote url of your git repository ("' . $url . '") not been parsed correctly. ' .
+                    'Please open and issue including your repository url format to make it compatible with this tool here ' .
+                    'https://github.com/marcocesarato/php-conventional-changelog/issues'
+                );
+            } else {
+                $this->validRequirement('Valid git remote repository url: ' . $url);
+            }
+        } else {
+            $this->output->warning(
+                'Remote repository url not detected. ' .
+                'It looks like your project is running only locally and not on a remote repository. ' .
+                'Care, all urls on the changelog will be empty.'
             );
-
-            return 1; //Command::FAILURE;
         }
-        $this->validRequirement('Valid git remote repository url');
-
         $this->output->newLine();
 
-        // Initialize changelog
+        /**
+         * Generate changelog.
+         */
         $this->output->writeln('Generating changelog');
         $this->changelog = new Changelog($this->config);
 

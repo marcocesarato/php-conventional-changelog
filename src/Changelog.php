@@ -30,6 +30,13 @@ class Changelog
     protected $remote = [];
 
     /**
+     * Has remote url.
+     *
+     * @var bool
+     */
+    protected $hasRemoteUrl = false;
+
+    /**
      * Changelog constructor.
      */
     public function __construct(Configuration $config)
@@ -80,6 +87,8 @@ class Changelog
             ComposerJson::class,
             PackageJson::class,
         ];
+
+        $this->hasRemoteUrl = Repository::hasRemoteUrl();
 
         // Hook pre run
         $this->config->preRun();
@@ -548,6 +557,10 @@ class Changelog
      */
     public function getCommitUrl(string $hash): string
     {
+        if (!$this->hasRemoteUrl) {
+            return '#';
+        }
+
         $protocol = $this->config->getUrlProtocol();
         $format = $this->config->getCommitUrlFormat();
         $url = $this->getCompiledString($format, ['hash' => $hash]);
@@ -560,6 +573,10 @@ class Changelog
      */
     public function getCompareUrl(string $previousTag, string $currentTag): string
     {
+        if (!$this->hasRemoteUrl) {
+            return '#';
+        }
+
         $protocol = $this->config->getUrlProtocol();
         $format = $this->config->getCompareUrlFormat();
         $url = $this->getCompiledString($format, ['previousTag' => $previousTag, 'currentTag' => $currentTag]);
@@ -572,6 +589,10 @@ class Changelog
      */
     public function getIssueUrl(string $id): string
     {
+        if (!$this->hasRemoteUrl) {
+            return '#';
+        }
+
         $protocol = $this->config->getUrlProtocol();
         $format = $this->config->getIssueUrlFormat();
         $url = $this->getCompiledString($format, ['id' => $id]);
@@ -584,6 +605,10 @@ class Changelog
      */
     public function getUserUrl(string $user): string
     {
+        if (!$this->hasRemoteUrl) {
+            return '#';
+        }
+
         $protocol = $this->config->getUrlProtocol();
         $format = $this->config->getUserUrlFormat();
         $url = $this->getCompiledString($format, ['user' => $user]);
