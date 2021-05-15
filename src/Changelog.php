@@ -11,7 +11,6 @@ use ConventionalChangelog\PackageBump\PackageJson;
 use ConventionalChangelog\Type\PackageBump;
 use DateTime;
 use Exception;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -351,7 +350,8 @@ class Changelog
             // Initialize changelogs
             $params['to'] = $this->getVersionCode($params['to'], $tagPrefix, $tagSuffix);
             $compareUrl = $this->getCompareUrl($params['from'], "{$tagPrefix}{$params['to']}{$tagSuffix}");
-            $changelogNew .= "## [{$params['to']}]({$compareUrl}) ({$params['date']})\n\n";
+            $markdownCompareLink = $this->getMarkdownLink($params['to'], $compareUrl);
+            $changelogNew .= "## {$markdownCompareLink} ({$params['date']})\n\n";
             // Add all changes list to new changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
         }
@@ -493,7 +493,7 @@ class Changelog
                         // Hashes
                         if (!$this->config->isHiddenHash() && !empty($item->getHash())) {
                             $commitUrl = $this->getCommitUrl($item->getHash());
-                            $shaGroup[] = '[' . $item->getShortHash() . "]({$commitUrl})";
+                            $shaGroup[] = $this->getMarkdownLink($item->getShortHash(), $commitUrl);
                         }
                         // References
                         if (!$this->config->isHiddenReferences()) {
@@ -501,7 +501,7 @@ class Changelog
                             foreach ($refs as $ref) {
                                 $refId = $ref->getId();
                                 $refUrl = $this->getIssueUrl($refId);
-                                $refsGroup[] = "[{$ref}]({$refUrl})";
+                                $refsGroup[] = $this->getMarkdownLink($ref, $refUrl);
                             }
                         }
                         // Mentions
@@ -509,7 +509,7 @@ class Changelog
                         foreach ($commitMentions as $mention) {
                             $user = $mention->getUser();
                             $userUrl = $this->getUserUrl($user);
-                            $text = "[*{$mention}*]({$userUrl})";
+                            $text = $this->getMarkdownLink("*{$mention}*", $userUrl);
                             if (strpos($description, (string)$mention) !== false) {
                                 $description = str_replace($mention, $text, $description);
                             } elseif (!$this->config->isHiddenMentions()) {
@@ -536,6 +536,14 @@ class Changelog
         $changelog .= "\n---\n\n";
 
         return $changelog;
+    }
+
+    /**
+     * Get Markdown link.
+     */
+    protected function getMarkdownLink(string $text, string $url): string
+    {
+        return !$this->config->isDisableLinks() ? "[{$text}]({$url})" : $text;
     }
 
     /**
