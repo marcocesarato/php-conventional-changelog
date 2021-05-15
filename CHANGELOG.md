@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.10.7](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.6...v1.10.7) (2021-05-15)
+
+
+### Features
+
+* Add option to render text instead of links in generated changelog ([5cb2e5](https://github.com/marcocesarato/php-conventional-changelog/commit/5cb2e5d2d8b9b445e38eede49dbc3a8036ba36a6))
+
+---
+
 ## [1.10.6](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.5...v1.10.6) (2021-05-15)
 
 
