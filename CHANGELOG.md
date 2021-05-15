@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.10.6](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.5...v1.10.6) (2021-05-15)
+
+
+### Bug Fixes
+
+* Check if valid remote url [#14](https://github.com/marcocesarato/php-conventional-changelog/issues/14) ([7bc76c](https://github.com/marcocesarato/php-conventional-changelog/commit/7bc76cdaa11109efd43699d62ff3e71d1b445a15))
+* Explicit compare ([78a084](https://github.com/marcocesarato/php-conventional-changelog/commit/78a084dca3f22e82614d2287ec350fe9cc05f539))
+
+---
+
 ## [1.10.5](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.4...v1.10.5) (2021-05-15)
 
 
