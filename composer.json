@@ -39,8 +39,8 @@
     },
     "scripts": {
         "changelog": "php conventional-changelog",
-        "check-cs": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php_cs",
-        "fix-cs": "php-cs-fixer fix --config=.php_cs --verbose",
+        "check-cs": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php-cs-fixer.php",
+        "fix-cs": "php-cs-fixer fix --config=.php-cs-fixer.php --verbose",
         "release": "php conventional-changelog --commit",
         "release:patch": "php conventional-changelog --commit --patch",
         "release:minor": "php conventional-changelog --commit --minor",
