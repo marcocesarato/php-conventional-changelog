@@ -527,7 +527,12 @@ class Changelog
                     if (!$this->config->isHiddenMentions() && !empty($mentionsGroup)) {
                         $mentions = '*[*' . implode(', ', $mentionsGroup) . '*]*';
                     }
-                    $changelog .= Formatter::clean("* {$description} {$references} {$sha} {$mentions}");
+                    $itemDescription = Formatter::clean("* {$description} {$references} {$sha} {$mentions}");
+                    if ($this->config->hasPostProcessEnabled()) {
+                        $itemDescription = preg_replace($this->config->getPostProcessRegex(), $this->config->getPostProcessReplace(), $itemDescription);
+                    }
+                    $changelog .= $itemDescription;
+
                     $changelog .= PHP_EOL;
                 }
             }

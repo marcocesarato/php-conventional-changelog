@@ -14,6 +14,8 @@ return [
         '/' . preg_quote($releaseMessagePrefix, '/') . '.*/i',
         '/chore\(changelog\)[:].*/i',
     ],
+    'postProcessRegex' => '/\[([A-Z]{2,3})\-([0-9]+)\]/',
+    'postProcessReplace' => '[[$1-$2]](https://bcvevolve.atlassian.net/browse/$1-$2)',
     'releaseCommitMessageFormat' => "{$releaseMessagePrefix}{{currentTag}}",
     'postRun' => function () use ($releaseMessagePrefix) {
         $lastTag = Repository::getLastTag();
