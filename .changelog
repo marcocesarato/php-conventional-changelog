@@ -15,7 +15,7 @@ return [
         '/chore\(changelog\)[:].*/i',
     ],
     'postProcessRegex' => '/\[([A-Z]{2,3})\-([0-9]+)\]/',
-    'postProcessReplace' => '[[$1-$2]](https://bcvevolve.atlassian.net/browse/$1-$2)',
+    'postProcessReplace' => '[[$1-$2]](https://some.jira-host.url/browse/$1-$2)',
     'releaseCommitMessageFormat' => "{$releaseMessagePrefix}{{currentTag}}",
     'postRun' => function () use ($releaseMessagePrefix) {
         $lastTag = Repository::getLastTag();

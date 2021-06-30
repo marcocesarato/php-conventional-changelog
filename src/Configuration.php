@@ -262,12 +262,16 @@ class Configuration
     /**
      * A Regex string to be used on the commit text post processing.
      *
+     * i.e. Jira task link regex [projectLeters-taskNumbers]: '/\[([A-Z]{2,3})\-([0-9]+)\]/'
+     *
      * @var string
      */
     protected $postProcessRegex = '';
 
     /**
      * A Regex replace string to be used on the commit text post processing.
+     *
+     * i.e. Jira task link replacement markdown: '[[$1-$2]](https://some.jira-host.url/browse/$1-$2)'
      *
      * @var string
      */
