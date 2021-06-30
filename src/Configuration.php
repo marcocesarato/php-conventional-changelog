@@ -260,6 +260,24 @@ class Configuration
     protected $postRun;
 
     /**
+     * A Regex string to be used on the commit text post processing.
+     *
+     * i.e. Jira task link regex [projectLeters-taskNumbers]: '/\[([A-Z]{2,3})\-([0-9]+)\]/'
+     *
+     * @var string
+     */
+    protected $postProcessRegex = '';
+
+    /**
+     * A Regex replace string to be used on the commit text post processing.
+     *
+     * i.e. Jira task link replacement markdown: '[[$1-$2]](https://some.jira-host.url/browse/$1-$2)'
+     *
+     * @var string
+     */
+    protected $postProcessReplace = '';
+
+    /**
      * Constructor.
      */
     public function __construct(array $settings = [])
@@ -307,6 +325,8 @@ class Configuration
             'releaseCommitMessageFormat' => $this->getReleaseCommitMessageFormat(),
             'preRun' => $this->getPreRun(),
             'postRun' => $this->getPostRun(),
+            'postProcessRegex' => $this->getPostProcessRegex(),
+            'postProcessReplace' => $this->getPostProcessReplace(),
         ];
 
         $params = array_replace_recursive($defaults, $array);
@@ -372,7 +392,10 @@ class Configuration
             ->setReleaseCommitMessageFormat($params['releaseCommitMessageFormat'])
             // Hooks
             ->setPreRun($params['preRun'])
-            ->setPostRun($params['postRun']);
+            ->setPostRun($params['postRun'])
+            // Text PostProcessing
+            ->setPostProcessRegex($params['postProcessRegex'])
+            ->setPostProcessReplace($params['postProcessReplace']);
     }
 
     /**
@@ -823,6 +846,41 @@ class Configuration
         $this->postRun = $postRun;
 
         return $this;
+    }
+
+    public function getPostProcessRegex(): string
+    {
+        return $this->postProcessRegex;
+    }
+
+    /**
+     * @param mixed $postProcessRegex
+     */
+    public function setPostProcessRegex($postProcessRegex): self
+    {
+        $this->postProcessRegex = $postProcessRegex;
+
+        return $this;
+    }
+
+    public function getPostProcessReplace(): string
+    {
+        return $this->postProcessReplace;
+    }
+
+    /**
+     * @param mixed $postProcessReplace
+     */
+    public function setPostProcessReplace($postProcessReplace): self
+    {
+        $this->postProcessReplace = $postProcessReplace;
+
+        return $this;
+    }
+
+    public function hasPostProcessEnabled(): bool
+    {
+        return !empty($this->getPostProcessRegex()) && !empty($this->getPostProcessReplace());
     }
 
     public function isPackageBump(): bool
