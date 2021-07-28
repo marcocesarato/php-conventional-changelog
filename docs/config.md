@@ -27,6 +27,7 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Skip Tag:** Skip automatic commit tagging
 - **Skip Verify:** Skip the pre-commit and commit-msg hooks
 - **Disable Links:** Render text instead of link in changelog
+- **Changelog Version Format:** Allows the version header in changelog to have a configurable format
 - **Hidden Hash:** Hide commit hash from changelog
 - **Hidden Mentions:** Hide users mentions from changelog
 - **Hidden References:** Hide issue references from changelog
@@ -84,6 +85,7 @@ return [
   'skipTag' => false,
   'skipVerify' => false,
   'disableLinks' => false,
+  'changelogVersionFormat' => '## {{version}} ({{date}})',
   'hiddenHash' => false,
   'hiddenMentions' => false,
   'hiddenReferences' => false,
