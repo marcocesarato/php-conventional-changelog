@@ -351,7 +351,8 @@ class Changelog
             $params['to'] = $this->getVersionCode($params['to'], $tagPrefix, $tagSuffix);
             $compareUrl = $this->getCompareUrl($params['from'], "{$tagPrefix}{$params['to']}{$tagSuffix}");
             $markdownCompareLink = $this->getMarkdownLink($params['to'], $compareUrl);
-            $changelogNew .= "## {$markdownCompareLink} ({$params['date']})\n\n";
+            $changeLogVersionHeading = $this->getChangelogVersionHeading($markdownCompareLink, $params['date']);
+            $changelogNew .= $changeLogVersionHeading;
             // Add all changes list to new changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
         }
@@ -544,6 +545,19 @@ class Changelog
     protected function getMarkdownLink(string $text, string $url): string
     {
         return !$this->config->isDisableLinks() ? "[{$text}]({$url})" : $text;
+    }
+
+    protected function getChangelogVersionHeading($markdownCompareLink, $versionDate)
+    {
+        $versionFormat = $this->config->getChangelogVersionFormat();
+
+        // Handle the replacements.
+        $versionData = $this->getCompiledString($versionFormat, [
+            'version' => $markdownCompareLink,
+            'date' => $versionDate,
+        ]);
+
+        return $versionData;
     }
 
     /**

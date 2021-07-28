@@ -139,6 +139,13 @@ class Configuration
     protected $disableLinks = false;
 
     /**
+     * Allows configurable changelog version header format.
+     *
+     * @var string
+     */
+    protected $changelogVersionFormat = '## {{version}} ({{date}})';
+
+    /**
      * Hidden references.
      *
      * @var bool
@@ -294,6 +301,7 @@ class Configuration
             'skipTag' => $this->skipTag(),
             'skipVerify' => $this->skipVerify(),
             'disableLinks' => $this->isDisableLinks(),
+            'changelogVersionFormat' => $this->getChangelogVersionFormat(),
             'hiddenHash' => $this->isHiddenHash(),
             'hiddenMentions' => $this->isHiddenMentions(),
             'hiddenReferences' => $this->isHiddenReferences(),
@@ -370,6 +378,8 @@ class Configuration
             ->setIssueUrlFormat($params['issueUrlFormat'])
             ->setUserUrlFormat($params['userUrlFormat'])
             ->setReleaseCommitMessageFormat($params['releaseCommitMessageFormat'])
+            ->setDisableLinks($params['disableLinks'])
+            ->setChangelogVersionFormat($params['changelogVersionFormat'])
             // Hooks
             ->setPreRun($params['preRun'])
             ->setPostRun($params['postRun']);
@@ -689,6 +699,18 @@ class Configuration
     public function setDisableLinks(bool $disableLinks): self
     {
         $this->disableLinks = $disableLinks;
+
+        return $this;
+    }
+
+    public function getChangelogVersionFormat(): string
+    {
+        return $this->changelogVersionFormat;
+    }
+
+    public function setChangelogVersionFormat($changelogVersionFormat): self
+    {
+        $this->changelogVersionFormat = $changelogVersionFormat;
 
         return $this;
     }
