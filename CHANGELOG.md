@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.11.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.7...v1.11.0) (2021-07-28)
+### Features
+
+* Allows generated changelog to have configurable version headers ([f57e95](https://github.com/marcocesarato/php-conventional-changelog/commit/f57e953b7a8c3b96519238e0122bbb3cb949b9ba))
+
+---
+
 ## [1.10.7](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.6...v1.10.7) (2021-05-15)
 
 
