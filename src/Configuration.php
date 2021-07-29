@@ -139,13 +139,6 @@ class Configuration
     protected $disableLinks = false;
 
     /**
-     * Allows configurable changelog version header format.
-     *
-     * @var string
-     */
-    protected $changelogVersionFormat = '## {{version}} ({{date}})';
-
-    /**
      * Hidden references.
      *
      * @var bool
@@ -186,6 +179,13 @@ class Configuration
      * @var string
      */
     protected $dateFormat = 'Y-m-d';
+
+    /**
+     * Allows configurable changelog version header format.
+     *
+     * @var string
+     */
+    protected $changelogVersionFormat = '## {{version}} ({{date}})';
 
     /**
      * A URL representing a specific commit at a hash.
@@ -301,13 +301,13 @@ class Configuration
             'skipTag' => $this->skipTag(),
             'skipVerify' => $this->skipVerify(),
             'disableLinks' => $this->isDisableLinks(),
-            'changelogVersionFormat' => $this->getChangelogVersionFormat(),
             'hiddenHash' => $this->isHiddenHash(),
             'hiddenMentions' => $this->isHiddenMentions(),
             'hiddenReferences' => $this->isHiddenReferences(),
             'prettyScope' => $this->isPrettyScope(),
             'urlProtocol' => $this->getUrlProtocol(),
             'dateFormat' => $this->getDateFormat(),
+            'changelogVersionFormat' => $this->getChangelogVersionFormat(),
             'commitUrlFormat' => $this->getCommitUrlFormat(),
             'compareUrlFormat' => $this->getCompareUrlFormat(),
             'issueUrlFormat' => $this->getIssueUrlFormat(),

@@ -27,7 +27,6 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Skip Tag:** Skip automatic commit tagging
 - **Skip Verify:** Skip the pre-commit and commit-msg hooks
 - **Disable Links:** Render text instead of link in changelog
-- **Changelog Version Format:** Allows the version header in changelog to have a configurable format
 - **Hidden Hash:** Hide commit hash from changelog
 - **Hidden Mentions:** Hide users mentions from changelog
 - **Hidden References:** Hide issue references from changelog
@@ -35,6 +34,7 @@ dir or use the `--config` option to specify the location of your configuration f
   user_config => User config)*
 - **Url Protocol:** The URL protocol of all repository urls on changelogs (http/https)
 - **Date Format:** The [format](https://www.php.net/manual/en/datetime.format.php) of the outputted date string
+- **Changelog Version Format:** Allows the version header in changelog to have a configurable format
 - **Commit Url Format:** A URL representing a specific commit at a hash
 - **Compare Url Format:** A URL representing the comparison between two git sha
 - **Issue Url Format:** A URL representing the issue format (allowing a different URL format to be swapped in for
@@ -85,13 +85,13 @@ return [
   'skipTag' => false,
   'skipVerify' => false,
   'disableLinks' => false,
-  'changelogVersionFormat' => '## {{version}} ({{date}})',
   'hiddenHash' => false,
   'hiddenMentions' => false,
   'hiddenReferences' => false,
   'prettyScope' => true,
   'urlProtocol' => 'https',
   'dateFormat' => 'Y-m-d',
+  'changelogVersionFormat' => '## {{version}} ({{date}})',
   'commitUrlFormat' => '{{host}}/{{owner}}/{{repository}}/commit/{{hash}}',
   'compareUrlFormat' => '{{host}}/{{owner}}/{{repository}}/compare/{{previousTag}}...{{currentTag}}',
   'issueUrlFormat' => '{{host}}/{{owner}}/{{repository}}/issues/{{id}}',
