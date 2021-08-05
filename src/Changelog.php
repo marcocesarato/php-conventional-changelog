@@ -534,7 +534,12 @@ class Changelog
             }
         }
         // Add version separator
-        $changelog .= "\n---\n\n";
+        if (! $this->config->isHiddenVersionSeparator()) {
+            $changelog .= "\n---\n";
+        }
+
+        $changelog .= "\n";
+
 
         return $changelog;
     }

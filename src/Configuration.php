@@ -230,6 +230,13 @@ class Configuration
     protected $prettyScope = true;
 
     /**
+     * Hide Version Separator.
+     *
+     * @var boolean
+     */
+    protected $hiddenVersionSeparator = false;
+
+    /**
      * Sort by options and orientation.
      *
      * @var string[]
@@ -312,6 +319,7 @@ class Configuration
             'compareUrlFormat' => $this->getCompareUrlFormat(),
             'issueUrlFormat' => $this->getIssueUrlFormat(),
             'userUrlFormat' => $this->getUserUrlFormat(),
+            'hiddenVersionSeparator' => $this->isHiddenVersionSeparator(),
             'releaseCommitMessageFormat' => $this->getReleaseCommitMessageFormat(),
             'preRun' => $this->getPreRun(),
             'postRun' => $this->getPostRun(),
@@ -369,6 +377,7 @@ class Configuration
             ->setHiddenHash($params['hiddenHash'])
             ->setHiddenMentions($params['hiddenMentions'])
             ->setHiddenReferences($params['hiddenReferences'])
+            ->setHiddenVersionSeparator($params['hiddenVersionSeparator'])
             // Formats
             ->setPrettyScope($params['prettyScope'])
             ->setUrlProtocol($params['urlProtocol'])
@@ -867,6 +876,18 @@ class Configuration
     public function setPackageLockCommit(bool $packageLockCommit): Configuration
     {
         $this->packageLockCommit = $packageLockCommit;
+
+        return $this;
+    }
+
+    public function isHiddenVersionSeparator(): bool
+    {
+        return $this->hiddenVersionSeparator;
+    }
+
+    public function setHiddenVersionSeparator($hiddenVersionSeparator): Configuration
+    {
+        $this->hiddenVersionSeparator = $hiddenVersionSeparator;
 
         return $this;
     }
