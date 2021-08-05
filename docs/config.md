@@ -41,6 +41,7 @@ dir or use the `--config` option to specify the location of your configuration f
   Gitlab, Bitbucket, etc)
 - **User Url Format:** A URL representing the a user's profile URL on GitHub, Gitlab, etc. This URL is used for
   substituting @abc with https://github.com/abc in commit messages
+- **Hidden Version Separator:** Hide version separator
 - **Release Commit Message Format:** A string to be used to format the auto-generated release commit message
 - **Pre Run**: Run a callback or command before run the script
 - **Post Run**: Run a callback or command after run the script
@@ -97,6 +98,7 @@ return [
   'issueUrlFormat' => '{{host}}/{{owner}}/{{repository}}/issues/{{id}}',
   'userUrlFormat' => '{{host}}/{{user}}',
   'releaseCommitMessageFormat' => 'chore(release): {{currentTag}}',
+  'hiddenVersionSeparator' => false,
   'preRun' => null,
   'postRun' => null,
 ];
