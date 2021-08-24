@@ -4,6 +4,13 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.12.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.11.0...v1.12.0) (2021-08-24)
+### Features
+
+* Allows ability to hide version separator. ([e74c4d](https://github.com/marcocesarato/php-conventional-changelog/commit/e74c4d47130baa742397c7701fb27f5f6681d95d))
+
+---
+
 ## [1.11.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.10.7...v1.11.0) (2021-07-28)
 ### Features
 
