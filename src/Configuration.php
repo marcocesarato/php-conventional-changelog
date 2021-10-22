@@ -232,7 +232,7 @@ class Configuration
     /**
      * Hide Version Separator.
      *
-     * @var boolean
+     * @var bool
      */
     protected $hiddenVersionSeparator = false;
 
