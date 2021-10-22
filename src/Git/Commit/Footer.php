@@ -53,13 +53,11 @@ class Footer implements Stringable
         foreach ($values as $val) {
             if ($val[0] === '#') {
                 $ref = ltrim($val, '#');
-                if (is_numeric($ref)) {
-                    $obj = new Reference($ref);
-                    if (in_array($tokenLower, self::TOKEN_CLOSE_ISSUE)) {
-                        $obj->setClosed(true);
-                    }
-                    $refs[] = $obj;
+                $obj = new Reference($ref);
+                if (in_array($tokenLower, self::TOKEN_CLOSE_ISSUE)) {
+                    $obj->setClosed(true);
                 }
+                $refs[] = $obj;
             }
         }
 
