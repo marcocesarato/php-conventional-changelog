@@ -591,7 +591,7 @@ class Changelog
         $format = $this->config->getCommitUrlFormat();
         $url = $this->getCompiledString($format, ['hash' => $hash]);
 
-        return "{$protocol}://{$url}";
+        return self::cleanUrl("{$protocol}://{$url}");
     }
 
     /**
@@ -607,7 +607,7 @@ class Changelog
         $format = $this->config->getCompareUrlFormat();
         $url = $this->getCompiledString($format, ['previousTag' => $previousTag, 'currentTag' => $currentTag]);
 
-        return "{$protocol}://{$url}";
+        return self::cleanUrl("{$protocol}://{$url}");
     }
 
     /**
@@ -623,7 +623,7 @@ class Changelog
         $format = $this->config->getIssueUrlFormat();
         $url = $this->getCompiledString($format, ['id' => $id]);
 
-        return "{$protocol}://{$url}";
+        return self::cleanUrl("{$protocol}://{$url}");
     }
 
     /**
@@ -639,7 +639,7 @@ class Changelog
         $format = $this->config->getUserUrlFormat();
         $url = $this->getCompiledString($format, ['user' => $user]);
 
-        return "{$protocol}://{$url}";
+        return self::cleanUrl("{$protocol}://{$url}");
     }
 
     /**
@@ -650,5 +650,13 @@ class Changelog
         $format = $this->config->getReleaseCommitMessageFormat();
 
         return $this->getCompiledString($format, ['currentTag' => $tag]);
+    }
+
+    /**
+     * Clean url format.
+     */
+    private static function cleanUrl(string $url): string
+    {
+        return preg_replace('/([^:])(\/{2,})/', '$1/', $url);
     }
 }
