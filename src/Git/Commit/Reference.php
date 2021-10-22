@@ -7,7 +7,7 @@ use ConventionalChangelog\Type\Stringable;
 class Reference implements Stringable
 {
     /**
-     * @var int
+     * @var string
      */
     protected $id;
 
@@ -16,7 +16,7 @@ class Reference implements Stringable
      */
     protected $closed = false;
 
-    public function __construct(int $id)
+    public function __construct(string $id)
     {
         $this->id = $id;
     }
