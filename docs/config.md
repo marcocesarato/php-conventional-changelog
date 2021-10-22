@@ -24,6 +24,7 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Tag Prefix:** Add prefix to release tag
 - **Tag Suffix:** Add suffix to release tag
 - **Skip Bump:** Skip automatic version code bump
+- **Package Bumps:** Array of files to replace version, defaults to `['ConventionalChangelog\PackageBump\ComposerJson', 'ConventionalChangelog\PackageBump\PackageJson']`
 - **Skip Tag:** Skip automatic commit tagging
 - **Skip Verify:** Skip the pre-commit and commit-msg hooks
 - **Disable Links:** Render text instead of link in changelog
@@ -77,6 +78,7 @@ return [
   ],
   'types' => [],
   'packageBump' => true,
+  'packageBumps' => [],
   'packageLockCommit' => true,
   'ignoreTypes' => ['build', 'chore', 'ci', 'docs', 'perf', 'refactor', 'revert', 'style', 'test'],
   'ignorePatterns' => ['/^chore\(release\):/i'],

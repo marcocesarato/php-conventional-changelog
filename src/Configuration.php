@@ -81,6 +81,13 @@ class Configuration
     protected $packageBump = true;
 
     /**
+     * Bump packages.
+     *
+     * @var array
+     */
+    protected $packageBumps = [];
+
+    /**
      * Commit package lock file.
      *
      * @var bool
@@ -299,6 +306,7 @@ class Configuration
             'preset' => $this->getPreset(),
             'types' => [],
             'packageBump' => $this->isPackageBump(),
+            'packageBumps' => [],
             'packageLockCommit' => $this->isPackageLockCommit(),
             'ignoreTypes' => $this->getIgnoreTypes(),
             'ignorePatterns' => $this->getIgnorePatterns(),
@@ -359,6 +367,7 @@ class Configuration
             ->setTypes($params['preset'])
             // Package
             ->setPackageBump($params['packageBump'])
+            ->setPackageBumps($params['packageBumps'])
             ->setPackageLockCommit($params['packageLockCommit'])
             // Document
             ->setHeaderTitle($params['headerTitle'])
@@ -866,6 +875,18 @@ class Configuration
         $this->packageBump = $packageBump;
 
         return $this;
+    }
+
+    public function setPackageBumps(array $packageBumps): Configuration
+    {
+        $this->packageBumps = $packageBumps;
+
+        return $this;
+    }
+
+    public function getPackageBumps(): array
+    {
+        return $this->packageBumps;
     }
 
     public function isPackageLockCommit(): bool
