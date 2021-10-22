@@ -4,6 +4,19 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.12.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.12.0...v1.12.1) (2021-10-22)
+### Features
+
+* Allows issue id to be string ([30c20e](https://github.com/marcocesarato/php-conventional-changelog/commit/30c20e52369c723b53b054fa2199c8c52256d9a9))
+
+### Bug Fixes
+
+* Change repo parse remote url regex ([2dd6c8](https://github.com/marcocesarato/php-conventional-changelog/commit/2dd6c87faf67b809a8b37a763a2e33d5357141a4))
+* Version separator markdown ([08092d](https://github.com/marcocesarato/php-conventional-changelog/commit/08092d21e8fa223de2bf4954b5d8f738109c36c1))
+
+
+---
+
 ## [1.12.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.11.0...v1.12.0) (2021-08-24)
 ### Features
 
