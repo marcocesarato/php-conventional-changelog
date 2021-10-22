@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.12.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.12.1...v1.12.2) (2021-10-22)
+### Bug Fixes
+
+* Repository url format detector [#22](https://github.com/marcocesarato/php-conventional-changelog/issues/22) ([63ff44](https://github.com/marcocesarato/php-conventional-changelog/commit/63ff443cbc53d2453ee217950d4664a15e9b3dd4))
+
+
+---
+
 ## [1.12.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.12.0...v1.12.1) (2021-10-22)
 ### Features
 
