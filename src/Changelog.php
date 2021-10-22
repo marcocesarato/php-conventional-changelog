@@ -548,6 +548,8 @@ class Changelog
      */
     protected function getMarkdownLink(string $text, string $url): string
     {
+        $url = preg_replace('/([^:])(\/{2,})/', '$1/', $url); // Remove double slashes
+
         return !$this->config->isDisableLinks() ? "[{$text}]({$url})" : $text;
     }
 
@@ -591,7 +593,7 @@ class Changelog
         $format = $this->config->getCommitUrlFormat();
         $url = $this->getCompiledString($format, ['hash' => $hash]);
 
-        return self::cleanUrl("{$protocol}://{$url}");
+        return "{$protocol}://{$url}";
     }
 
     /**
@@ -607,7 +609,7 @@ class Changelog
         $format = $this->config->getCompareUrlFormat();
         $url = $this->getCompiledString($format, ['previousTag' => $previousTag, 'currentTag' => $currentTag]);
 
-        return self::cleanUrl("{$protocol}://{$url}");
+        return "{$protocol}://{$url}";
     }
 
     /**
@@ -623,7 +625,7 @@ class Changelog
         $format = $this->config->getIssueUrlFormat();
         $url = $this->getCompiledString($format, ['id' => $id]);
 
-        return self::cleanUrl("{$protocol}://{$url}");
+        return "{$protocol}://{$url}";
     }
 
     /**
@@ -639,7 +641,7 @@ class Changelog
         $format = $this->config->getUserUrlFormat();
         $url = $this->getCompiledString($format, ['user' => $user]);
 
-        return self::cleanUrl("{$protocol}://{$url}");
+        return "{$protocol}://{$url}";
     }
 
     /**
@@ -650,13 +652,5 @@ class Changelog
         $format = $this->config->getReleaseCommitMessageFormat();
 
         return $this->getCompiledString($format, ['currentTag' => $tag]);
-    }
-
-    /**
-     * Clean url format.
-     */
-    private static function cleanUrl(string $url): string
-    {
-        return preg_replace('/([^:])(\/{2,})/', '$1/', $url);
     }
 }
