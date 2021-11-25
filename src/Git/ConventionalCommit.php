@@ -122,7 +122,7 @@ class ConventionalCommit extends Commit
     {
         $refs = [];
         foreach ($this->footers as $footer) {
-            $refs = array_merge($footer->getReferences());
+            $refs = array_merge($refs, $footer->getReferences());
         }
 
         return array_unique($refs);
