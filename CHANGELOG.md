@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.12.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.12.2...v1.12.3) (2021-11-25)
+### Features
+
+* Allows own package bumpers ([e4aef9](https://github.com/marcocesarato/php-conventional-changelog/commit/e4aef903f14c981b8978ab1299eedc2f7e0888cb))
+
+
+---
+
 ## [1.12.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.12.1...v1.12.2) (2021-10-22)
 ### Bug Fixes
 
