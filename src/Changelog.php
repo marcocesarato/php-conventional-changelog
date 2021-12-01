@@ -64,6 +64,7 @@ class Changelog
         $dateFormat = $this->config->getDateFormat();
         $sortBy = $this->config->getSortBy();
         $sortOrientation = $this->config->getSortOrientation($sortBy);
+        $merged = $input->getOption('merged');
 
         $lastVersion = null;
         $firstRelease = $input->getOption('first-release');
@@ -139,7 +140,7 @@ class Changelog
         $firstCommit = Repository::getFirstCommit();
 
         if (!$firstRelease) {
-            $lastVersion = Repository::getLastTag(); // Last version
+            $lastVersion = Repository::getLastTag($merged); // Last version
 
             $bumpRelease = SemanticVersion::PATCH;
 
