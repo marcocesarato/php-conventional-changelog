@@ -340,15 +340,19 @@ class Changelog
             }
 
             if ($params['autoBump']) {
+                $semver = new SemanticVersion($params['from']);
                 $bumpRelease = SemanticVersion::PATCH;
 
                 if ($summary['breaking_changes'] > 0) {
                     $bumpRelease = SemanticVersion::MAJOR;
+
+                    if (version_compare($semver->getVersion(), '1.0.0', '<')) {
+                        $bumpRelease = SemanticVersion::MINOR;
+                    }
                 } elseif ($summary['feat'] > 0) {
                     $bumpRelease = SemanticVersion::MINOR;
                 }
 
-                $semver = new SemanticVersion($params['from']);
                 $newVersion = $semver->bump($bumpRelease);
                 $params['to'] = $newVersion;
             }
