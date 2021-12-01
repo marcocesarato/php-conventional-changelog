@@ -195,4 +195,5 @@ php vendor/bin/conventional-changelog --ver="2.0.1"
         --history         bool        Generate the entire history of changes of all releases
         --no-verify       bool        Skip the pre-commit and commit-msg hooks
         --no-tag          bool        Disable release auto tagging when commit enabled
+        --merged          bool        Only include commits whose tips are reachable from HEAD
 ```
