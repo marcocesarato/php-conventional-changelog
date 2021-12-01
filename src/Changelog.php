@@ -139,7 +139,7 @@ class Changelog
         $firstCommit = Repository::getFirstCommit();
 
         if (!$firstRelease) {
-            $lastVersion = Repository::getLastTag(); // Last version
+            $lastVersion = Repository::getLastTag($tagPrefix); // Last version
 
             $bumpRelease = SemanticVersion::PATCH;
 
@@ -174,7 +174,7 @@ class Changelog
 
         if ($history) {
             $changelogCurrent = ''; // Clean changelog file
-            $tags = Repository::getTags();
+            $tags = Repository::getTags($tagPrefix);
 
             $previousTag = null;
             foreach ($tags as $key => $toTag) {

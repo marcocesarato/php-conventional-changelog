@@ -54,17 +54,17 @@ class Repository
     /**
      * Get last tag.
      */
-    public static function getLastTag(): string
+    public static function getLastTag($prefix = ''): string
     {
-        return self::run("git for-each-ref refs/tags --sort=-creatordate --format='%(refname:strip=2)' --count=1");
+        return self::run("git for-each-ref 'refs/tags/". $prefix . "*' --sort=-v:refname --format='%(refname:strip=2)' --count=1");
     }
 
     /**
      * Get last tag commit hash.
      */
-    public static function getLastTagCommit(): string
+    public static function getLastTagCommit($prefix = ''): string
     {
-        $lastTag = self::getLastTag();
+        $lastTag = self::getLastTag($prefix);
 
         return self::run("git rev-parse --verify {$lastTag}");
     }
@@ -141,9 +141,9 @@ class Repository
     /**
      * Get tags.
      */
-    public static function getTags(): array
+    public static function getTags($prefix = ''): array
     {
-        $tags = self::run("git tag --sort=-creatordate --list --format='%(refname:strip=2)" . self::$delimiter . "'") . "\n";
+        $tags = self::run("git tag '". $prefix . "*' --sort=-v:refname --list --format='%(refname:strip=2)" . self::$delimiter . "'") . "\n";
         $tagsArray = explode(self::$delimiter . "\n", $tags);
         array_pop($tagsArray);
 
