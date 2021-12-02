@@ -64,6 +64,7 @@ class Changelog
         $dateFormat = $this->config->getDateFormat();
         $sortBy = $this->config->getSortBy();
         $sortOrientation = $this->config->getSortOrientation($sortBy);
+        $merged = $input->getOption('merged');
 
         $lastVersion = null;
         $firstRelease = $input->getOption('first-release');
@@ -139,7 +140,7 @@ class Changelog
         $firstCommit = Repository::getFirstCommit();
 
         if (!$firstRelease) {
-            $lastVersion = Repository::getLastTag($tagPrefix); // Last version
+            $lastVersion = Repository::getLastTag($merged, $tagPrefix); // Last version
 
             $bumpRelease = SemanticVersion::PATCH;
 
@@ -339,15 +340,19 @@ class Changelog
             }
 
             if ($params['autoBump']) {
+                $semver = new SemanticVersion($params['from']);
                 $bumpRelease = SemanticVersion::PATCH;
 
                 if ($summary['breaking_changes'] > 0) {
                     $bumpRelease = SemanticVersion::MAJOR;
+
+                    if (version_compare($semver->getVersion(), '1.0.0', '<')) {
+                        $bumpRelease = SemanticVersion::MINOR;
+                    }
                 } elseif ($summary['feat'] > 0) {
                     $bumpRelease = SemanticVersion::MINOR;
                 }
 
-                $semver = new SemanticVersion($params['from']);
                 $newVersion = $semver->bump($bumpRelease);
                 $params['to'] = $newVersion;
             }
