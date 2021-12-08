@@ -83,7 +83,7 @@ class DefaultCommand extends Command
                 new InputOption('history', null, InputOption::VALUE_NONE, 'Generate the entire history of changes of all releases'),
                 new InputOption('no-verify', null, InputOption::VALUE_NONE, 'Bypasses the pre-commit and commit-msg hooks'),
                 new InputOption('no-tag', null, InputOption::VALUE_NONE, 'Disable release auto tagging'),
-                new InputOption('merged', null, InputOption::VALUE_NONE, 'Only include commits whose tips are reachable from HEAD.' )
+                new InputOption('merged', null, InputOption::VALUE_NONE, 'Only include commits whose tips are reachable from HEAD.'),
             ]);
     }
 

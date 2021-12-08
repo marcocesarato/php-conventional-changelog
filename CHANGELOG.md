@@ -4,6 +4,21 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.13.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.12.3...v1.13.0) (2021-12-08)
+### Features
+
+* Added support for limiting commits to current branch. ([6aad51](https://github.com/marcocesarato/php-conventional-changelog/commit/6aad514354334b9a3041bfdbe0c81b98e8f118b1))
+
+### Bug Fixes
+
+
+##### Semver
+
+* Bump minor version when breaking change before 1.0.0 ([5b13aa](https://github.com/marcocesarato/php-conventional-changelog/commit/5b13aa1408459be415f475a23e55983aaa297111))
+
+
+---
+
 ## [1.12.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.12.2...v1.12.3) (2021-11-25)
 ### Features
 

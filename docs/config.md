@@ -46,6 +46,7 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Release Commit Message Format:** A string to be used to format the auto-generated release commit message
 - **Pre Run**: Run a callback or command before run the script
 - **Post Run**: Run a callback or command after run the script
+- **Merged**: Only include commits whose tips are reachable from HEAD
 
 ### Default settings
 
@@ -103,6 +104,7 @@ return [
   'hiddenVersionSeparator' => false,
   'preRun' => null,
   'postRun' => null,
+  'merged' => false,
 ];
 ```
 
