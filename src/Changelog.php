@@ -90,7 +90,7 @@ class Changelog
 
         // Allow config to specify own packages.
         if ($this->config->getPackageBumps()) {
-          $packageBumps = $this->config->getPackageBumps();
+            $packageBumps = $this->config->getPackageBumps();
         }
 
         $this->hasValidRemoteUrl = Repository::hasRemoteUrl() && !empty(Repository::parseRemoteUrl());
