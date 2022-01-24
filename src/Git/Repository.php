@@ -57,8 +57,8 @@ class Repository
     public static function getLastTag($merged = false, $prefix = ''): string
     {
         $merged = ($merged) ? '--merged' : '';
-  
-        return self::run("git for-each-ref 'refs/tags/". $prefix . "*' --sort=-v:refname --format='%(refname:strip=2)' --count=1 {$merged}");
+
+        return self::run("git for-each-ref 'refs/tags/" . $prefix . "*' --sort=-v:refname --format='%(refname:strip=2)' --count=1 {$merged}");
     }
 
     /**
@@ -145,7 +145,7 @@ class Repository
      */
     public static function getTags($prefix = ''): array
     {
-        $tags = self::run("git tag '". $prefix . "*' --sort=-v:refname --list --format='%(refname:strip=2)" . self::$delimiter . "'") . "\n";
+        $tags = self::run("git tag '" . $prefix . "*' --sort=-v:refname --list --format='%(refname:strip=2)" . self::$delimiter . "'") . "\n";
         $tagsArray = explode(self::$delimiter . "\n", $tags);
         array_pop($tagsArray);
 
@@ -205,9 +205,12 @@ class Repository
      *
      * @return string
      */
-    public static function tag(string $name)
+    public static function tag(string $name, $annotation = false)
     {
-        return exec("git tag {$name}");
+        $message = $annotation ?: $name;
+        $flags = $annotation !== false ? "-a -m {$message}" : '';
+
+        return exec("git tag {$flags} {$name}");
     }
 
     /**

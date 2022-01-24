@@ -53,6 +53,7 @@ class Changelog
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
         $autoCommitAll = $input->getOption('commit-all'); // Commit all changes once changelog is generated
         $autoTag = !($input->getOption('no-tag') || $this->config->skipTag()); // Tag release once is committed
+        $annotateTag = $input->getOption('annotate-tag');
         $amend = $input->getOption('amend'); // Amend commit
         $hooks = !$input->getOption('no-verify'); // Verify git hooks
         $hooks = $hooks && $this->config->skipVerify() ? false : true;
@@ -419,7 +420,7 @@ class Changelog
                 // Create tag
                 if ($autoTag) {
                     $tag = $tagPrefix . $newVersion . $tagSuffix;
-                    $result = Repository::tag($tag);
+                    $result = Repository::tag($tag, $annotateTag);
                     if ($result !== false) {
                         $output->success("Release tagged with success! New version: {$tag}");
                     } else {
