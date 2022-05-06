@@ -932,6 +932,6 @@ class Configuration
      */
     protected function isRegex(string $pattern)
     {
-        return @preg_match($pattern, null) !== false;
+        return @preg_match($pattern, '') !== false;
     }
 }

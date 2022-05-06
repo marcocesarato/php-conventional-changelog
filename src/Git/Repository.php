@@ -54,9 +54,9 @@ class Repository
     /**
      * Get last tag.
      */
-    public static function getLastTag($merged = false, $prefix = ''): string
+    public static function getLastTag($prefix = '', $merged = false): string
     {
-        $merged = ($merged) ? '--merged' : '';
+        $merged = $merged ? '--merged' : '';
 
         return self::run("git for-each-ref 'refs/tags/" . $prefix . "*' --sort=-v:refname --format='%(refname:strip=2)' --count=1 {$merged}");
     }

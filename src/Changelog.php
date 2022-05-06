@@ -141,7 +141,7 @@ class Changelog
         $firstCommit = Repository::getFirstCommit();
 
         if (!$firstRelease) {
-            $lastVersion = Repository::getLastTag($merged, $tagPrefix); // Last version
+            $lastVersion = Repository::getLastTag($tagPrefix, $merged); // Last version
 
             $bumpRelease = SemanticVersion::PATCH;
 
@@ -426,20 +426,20 @@ class Changelog
                     } else {
                         $output->error('An error occurred tagging the release!');
 
-                        return 1; //Command::FAILURE;
+                        return 1; // Command::FAILURE;
                     }
                 }
             } else {
                 $output->error('An error occurred committing the release!');
 
-                return 1; //Command::FAILURE;
+                return 1; // Command::FAILURE;
             }
         }
 
         // Hook post run
         $this->config->postRun();
 
-        return 0; //Command::SUCCESS;
+        return 0; // Command::SUCCESS;
     }
 
     /**
