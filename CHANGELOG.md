@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.14.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.14.0...v1.14.1) (2022-05-24)
+### Bug Fixes
+
+* Breaking changes check [#37](https://github.com/marcocesarato/php-conventional-changelog/issues/37) ([476ff7](https://github.com/marcocesarato/php-conventional-changelog/commit/476ff7f8b2e6d3efffbfa4af152f4d0269491934))
+
+
+---
+
 ## [1.14.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.13.0...v1.14.0) (2022-05-06)
 ### ⚠ BREAKING CHANGES
 
