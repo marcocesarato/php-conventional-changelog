@@ -58,7 +58,7 @@ class Repository
     {
         $merged = $merged ? '--merged' : '';
 
-        return self::run("git for-each-ref " /*'refs/tags/" . $prefix . "*'*/ . " --sort=-v:refname --format='%(refname:strip=2)' --count=1 {$merged}");
+        return self::run('git for-each-ref ' /* 'refs/tags/" . $prefix . "*' */ . " --sort=-v:refname --format='%(refname:strip=2)' --count=1 {$merged}");
     }
 
     /**
