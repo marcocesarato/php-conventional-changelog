@@ -105,7 +105,7 @@ class ConventionalCommit extends Commit
     {
         $messages = [];
         foreach ($this->footers as $footer) {
-            if ($footer->getToken() === 'breaking changes') {
+            if (preg_match('/^breaking[[:blank:]]changes?$/', $footer->getToken())) {
                 $messages[] = $footer->getValue();
             }
         }
