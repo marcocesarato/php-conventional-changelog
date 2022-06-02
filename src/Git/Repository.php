@@ -76,8 +76,7 @@ class Repository
      */
     public static function getCurrentBranch(): string
     {
-
-        return self::run("git branch --show-current");
+        return self::run('git branch --show-current');
     }
 
     /**
