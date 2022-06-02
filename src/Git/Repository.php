@@ -72,6 +72,15 @@ class Repository
     }
 
     /**
+     * Get current branch name.
+     */
+    public static function getCurrentBranch(): string
+    {
+
+        return self::run("git branch --show-current");
+    }
+
+    /**
      * Get commit date.
      */
     public static function getCommitDate($hash): DateTime
