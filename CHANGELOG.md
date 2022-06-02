@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.15.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.14.1...v1.15.0) (2022-06-02)
+### Features
+
+* Add a getCurrentBranch method to Repository ([8b6266](https://github.com/marcocesarato/php-conventional-changelog/commit/8b62668eea440b64683f0af20a13065a7890be3f))
+
+
+---
+
 ## [1.14.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.14.0...v1.14.1) (2022-05-24)
 ### Bug Fixes
 
