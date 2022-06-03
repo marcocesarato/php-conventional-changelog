@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.15.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.0...v1.15.1) (2022-06-03)
+
+### Bug Fixes
+
+* Add blank line after changeLogVersionHeading [#39](https://github.com/marcocesarato/php-conventional-changelog/issues/39) ([9e4108](https://github.com/marcocesarato/php-conventional-changelog/commit/9e41083adb9d898c97c3e5d3d8561e9b84cae410))
+
+
+---
+
 ## [1.15.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.14.1...v1.15.0) (2022-06-02)
 ### Features
 
