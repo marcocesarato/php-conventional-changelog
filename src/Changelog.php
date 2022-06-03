@@ -363,7 +363,7 @@ class Changelog
             $compareUrl = $this->getCompareUrl($params['from'], "{$tagPrefix}{$params['to']}{$tagSuffix}");
             $markdownCompareLink = $this->getMarkdownLink($params['to'], $compareUrl);
             $changeLogVersionHeading = $this->getChangelogVersionHeading($markdownCompareLink, $params['date']);
-            $changelogNew .= $changeLogVersionHeading;
+            $changelogNew .= $changeLogVersionHeading . "\n";
             // Add all changes list to new changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
         }
