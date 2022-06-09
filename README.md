@@ -176,24 +176,36 @@ php vendor/bin/conventional-changelog --ver="2.0.1"
 > **Info:** You can have more info about running  `php vendor/bin/conventional-changelog --help`
 
 ```
-        --config          str         Specify the configuration file path
--c      --commit          bool        Commit the new release once changelog is generated
-        --commit-all      bool        Commit all changes the new release once changelog is generated
--a      --amend           bool        Amend commit the new release once changelog is generated
-        --major           bool        Major release (important changes)
-        --minor           bool        Minor release (add functionality)
-        --patch           bool        Patch release (bug fixes) [default]
-        --rc              bool        Release Candidate
-        --beta            bool        Beta release
-        --alpha           bool        Alpha release
-        --first-release   bool        Run at first release (if --ver isn't specified version code will be 1.0.0)
-        --to-date         str         Get commits from last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
-        --from-date       str         Get commits from specified date [YYYY-MM-DD]
-        --to-tag          str         Get commits from last tag (or specified on --from-tag) to specified tag
-        --from-tag        str         Get commits from specified tag
-        --ver             str         Specify the next release version code (semver)
-        --history         bool        Generate the entire history of changes of all releases
-        --no-verify       bool        Skip the pre-commit and commit-msg hooks
-        --no-tag          bool        Disable release auto tagging when commit enabled
-        --merged          bool        Only include commits whose tips are reachable from HEAD
+Description:
+  Generate changelogs and release notes from a project's commit messagesand metadata and automate versioning with semver.org and conventionalcommits.org
+
+Usage:
+  changelog [options] [--] [<path>]
+
+Arguments:
+  path                               Specify the path directory where generate changelog
+
+Options:
+      --config=CONFIG                Specify the configuration file path
+  -c, --commit                       Commit the new release once changelog is generated
+  -a, --amend                        Amend commit the new release once changelog is generated
+      --commit-all                   Commit all changes the new release once changelog is generated
+      --first-release                Run at first release (if --ver isn't specified version code it will be 1.0.0)
+      --from-date=FROM-DATE          Get commits from specified date [YYYY-MM-DD]
+      --to-date=TO-DATE              Get commits last tag date (or specified on --from-date) to specified date [YYYY-MM-DD]
+      --from-tag=FROM-TAG            Get commits from specified tag
+      --to-tag=TO-TAG                Get commits last tag (or specified on --from-tag) to specified tag
+      --major                        Major release (important changes)
+      --minor                        Minor release (add functionality)
+      --patch                        Patch release (bug fixes) [default]
+      --rc                           Release candidate
+      --beta                         Beta release
+      --alpha                        Alpha release
+      --ver=VER                      Specify the next release version code (semver)
+      --history                      Generate the entire history of changes of all releases
+      --no-verify                    Bypasses the pre-commit and commit-msg hooks
+      --no-tag                       Disable release auto tagging
+      --annotate-tag[=ANNOTATE-TAG]  Make an unsigned, annotated tag object once changelog is generated [default: false]
+      --merged                       Only include commits whose tips are reachable from HEAD
+  -h, --help                         Display help for the given command. When no command is given display help for the changelog command
 ```

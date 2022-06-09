@@ -84,7 +84,7 @@ class DefaultCommand extends Command
                 new InputOption('no-verify', null, InputOption::VALUE_NONE, 'Bypasses the pre-commit and commit-msg hooks'),
                 new InputOption('no-tag', null, InputOption::VALUE_NONE, 'Disable release auto tagging'),
                 new InputOption('annotate-tag', null, InputOption::VALUE_OPTIONAL, 'Make an unsigned, annotated tag object once changelog is generated', false),
-                new InputOption('merged', null, InputOption::VALUE_NONE, 'Only include commits whose tips are reachable from HEAD.'),
+                new InputOption('merged', null, InputOption::VALUE_NONE, 'Only include commits whose tips are reachable from HEAD'),
             ]);
     }
 
