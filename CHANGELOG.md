@@ -4,6 +4,190 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.0.0](https://github.com/jeremycab/php-conventional-changelog/compare/021a49f43ef65ac7a594450374f1772eef1fd8b0...v1.0.0) (2022-10-07)
+
+### ⚠ BREAKING CHANGES
+
+* Sort git tags by version instead of creation date, match prefix when listing tags ([042af9](https://github.com/jeremycab/php-conventional-changelog/commit/042af9ec98d85519a9e91130e2fcbdd15b981565))
+* Workflows which rely on the chronological order of tags will potentially break. Also workflows with mixed tag prefixes will potentially break. ([042af9](https://github.com/jeremycab/php-conventional-changelog/commit/042af9ec98d85519a9e91130e2fcbdd15b981565))
+
+### Features
+
+* Add a getCurrentBranch method to Repository ([8b6266](https://github.com/jeremycab/php-conventional-changelog/commit/8b62668eea440b64683f0af20a13065a7890be3f))
+* Add amend and no verify options ([625ed1](https://github.com/jeremycab/php-conventional-changelog/commit/625ed1bfa6fc70716736be303b1f7a048b894756))
+* Add and implementat configuration moving default values from changelog class to it ([28001b](https://github.com/jeremycab/php-conventional-changelog/commit/28001b4fa9de6da256641a5cf377a72f281bbc2a))
+* Add autoloader ([8e5667](https://github.com/jeremycab/php-conventional-changelog/commit/8e5667550c2188e78a0d3ec8e5d388f413f0b813))
+* Add auto versioning semver bump ([82c883](https://github.com/jeremycab/php-conventional-changelog/commit/82c8839300880d16c428abebca8f999f866baaeb))
+* Add breaking changes and issues references ([bda545](https://github.com/jeremycab/php-conventional-changelog/commit/bda5458e6c190a861417fb0239f86057c1d0c22f))
+* Add check if inside a git work tree ([e3ad12](https://github.com/jeremycab/php-conventional-changelog/commit/e3ad1287e1bfccfddf18bf52152dd1edba4eff2a))
+* Add commit all option ([323a5c](https://github.com/jeremycab/php-conventional-changelog/commit/323a5c0c4bdb030938cea7b41056240cfbc4a9a6))
+* Add commit parent class with raw metadata ([962e0f](https://github.com/jeremycab/php-conventional-changelog/commit/962e0f7474ba34d7cfe01660025f272df9742eb8))
+* Add commit type exclusions options and add changelog file on commit ([259f47](https://github.com/jeremycab/php-conventional-changelog/commit/259f47b0eac706e88cb8297c5fa2fdb9b9d3a2c3))
+* Add config file inclusion from working dir ([2cbb9f](https://github.com/jeremycab/php-conventional-changelog/commit/2cbb9ff0bae2d25d4801845fec46d01d529fafe9))
+* Add date format config ([05196a](https://github.com/jeremycab/php-conventional-changelog/commit/05196ad943bffc5317df575d7a782ca04fb53421))
+* Added support for limiting commits to current branch. ([6aad51](https://github.com/jeremycab/php-conventional-changelog/commit/6aad514354334b9a3041bfdbe0c81b98e8f118b1))
+* Add first release option ([143d6b](https://github.com/jeremycab/php-conventional-changelog/commit/143d6b7828c8989e33ef23d22476ed14a7d4d935))
+* Add hidden configurations ([42c9af](https://github.com/jeremycab/php-conventional-changelog/commit/42c9afe7aee84ab75ccc4ce9f7add83cf1922f51))
+* Add history option ([d53555](https://github.com/jeremycab/php-conventional-changelog/commit/d53555442dbff0375db46649a306234309ba60ae))
+* Add information output about commit tag and file path ([7c7f4f](https://github.com/jeremycab/php-conventional-changelog/commit/7c7f4f43995dd88a5b836b7c5f45b1144b7856fe))
+* Add new conventional commit parser ([603f72](https://github.com/jeremycab/php-conventional-changelog/commit/603f724dc759f4762c9b09489cb7620a98a10d67))
+* Add not tag option and add errors on commit and tagging ([285ad0](https://github.com/jeremycab/php-conventional-changelog/commit/285ad0a1bfe13b2460653a02ad40243184e7d80a))
+* Add option to render text instead of links in generated changelog ([5cb2e5](https://github.com/jeremycab/php-conventional-changelog/commit/5cb2e5d2d8b9b445e38eede49dbc3a8036ba36a6))
+* Add packages bumper [#11](https://github.com/jeremycab/php-conventional-changelog/issues/11) ([0849aa](https://github.com/jeremycab/php-conventional-changelog/commit/0849aad6d04e6640777a819391736edde56f00ba))
+* Add pre and post run hooks and changes sorting ([a38ef1](https://github.com/jeremycab/php-conventional-changelog/commit/a38ef1d6f74128322d031ef9404888a6e1706d38), [668d2e](https://github.com/jeremycab/php-conventional-changelog/commit/668d2ea679f92c9f1022b95f93b83b614fd6d461))
+* Add pretty scope config ([f47356](https://github.com/jeremycab/php-conventional-changelog/commit/f47356fac49edd01dab3f9cceb29481bab66758c))
+* Add rc, alpha and beta release method ([f955e1](https://github.com/jeremycab/php-conventional-changelog/commit/f955e18309fa8c304bb3fce0faaf23eb3e35eebe))
+* Add semantic version parser ([7b5a9f](https://github.com/jeremycab/php-conventional-changelog/commit/7b5a9fd99a4557bc7c167b99baa7ac3107d6f6c6))
+* Add skip verify, bump and tag ([1ae0e9](https://github.com/jeremycab/php-conventional-changelog/commit/1ae0e964abf46ba2668c6562f59133654bea700d))
+* Add summary ([c37116](https://github.com/jeremycab/php-conventional-changelog/commit/c371169f3dde9bcdb16a9de6e339ae26d70a477a))
+* Add tag prefix and suffix ([469f16](https://github.com/jeremycab/php-conventional-changelog/commit/469f166f117478198d9fbdb55a4ea2b7f1d02ff3))
+* Add to tag and from tag options ([0b0c4b](https://github.com/jeremycab/php-conventional-changelog/commit/0b0c4b06fcdb5e472914fa33f3175dbad3bac60e))
+* Add user mentions ([214c75](https://github.com/jeremycab/php-conventional-changelog/commit/214c75f84874ef4a92fd869230762c257d97c638))
+* Allows ability to hide version separator. ([e74c4d](https://github.com/jeremycab/php-conventional-changelog/commit/e74c4d47130baa742397c7701fb27f5f6681d95d))
+* Allows generated changelog to have configurable version headers ([f57e95](https://github.com/jeremycab/php-conventional-changelog/commit/f57e953b7a8c3b96519238e0122bbb3cb949b9ba))
+* Allows issue id to be string ([30c20e](https://github.com/jeremycab/php-conventional-changelog/commit/30c20e52369c723b53b054fa2199c8c52256d9a9))
+* Allows own package bumpers ([e4aef9](https://github.com/jeremycab/php-conventional-changelog/commit/e4aef903f14c981b8978ab1299eedc2f7e0888cb))
+* Annotated tags ([e738b2](https://github.com/jeremycab/php-conventional-changelog/commit/e738b29b22cbdaa1cd1490408cff3b1b4299a2f2))
+* Implementing symfony console ([78e11b](https://github.com/jeremycab/php-conventional-changelog/commit/78e11be242147cee1f7ab8ce526a9b969ef79b09))
+* Implement new commit parser and refactoring of helper classes ([f2f2ec](https://github.com/jeremycab/php-conventional-changelog/commit/f2f2ec80adfa787d453817faa64906e9dd988e44))
+* Split types and presets configuration ([4239ec](https://github.com/jeremycab/php-conventional-changelog/commit/4239ec0866ca0d2e21b8bf3394f2d888bf44c08a))
+* Urls and release commit formats ([7cb62a](https://github.com/jeremycab/php-conventional-changelog/commit/7cb62acf85196bb576791bba6afd7ba55e2a3690))
+
+##### Command
+
+* Add custom configuration file option ([d65fc7](https://github.com/jeremycab/php-conventional-changelog/commit/d65fc7472885116e891f383a6600d3df43b72e58))
+
+##### Commit Parser
+
+* Add getters and has scope method ([83d99a](https://github.com/jeremycab/php-conventional-changelog/commit/83d99aa44cba23bc0fe6b829c337cb9814a10bf9))
+* Set default values on body and scope ([b362bd](https://github.com/jeremycab/php-conventional-changelog/commit/b362bd5167b2951333c12397c544233266676eda))
+
+##### Composer Json
+
+* Add composer update on save [#11](https://github.com/jeremycab/php-conventional-changelog/issues/11) ([ea8fb7](https://github.com/jeremycab/php-conventional-changelog/commit/ea8fb7eded13e6924388f044044a9898ec810163))
+
+##### Config
+
+* Add bump package setting [#11](https://github.com/jeremycab/php-conventional-changelog/issues/11) ([343dd6](https://github.com/jeremycab/php-conventional-changelog/commit/343dd6e47259c0190aa41cad5a42597df64a0d0d))
+* Add package lock commit setting [#11](https://github.com/jeremycab/php-conventional-changelog/issues/11) ([2fc824](https://github.com/jeremycab/php-conventional-changelog/commit/2fc8247fa77792ac1a6f6805196f3f42605321ea))
+* Add root setting ([2ad49c](https://github.com/jeremycab/php-conventional-changelog/commit/2ad49c5614e5bcba17c95f142ea11e698d07a644))
+
+##### Git
+
+* Add closed attribute to references ([acb104](https://github.com/jeremycab/php-conventional-changelog/commit/acb10474b5cb4f4002755ca7e55ab785c2750149))
+* Add delete tag method ([7712c2](https://github.com/jeremycab/php-conventional-changelog/commit/7712c24494972365270aff896421f127003c2108))
+* Add get last commit hash method ([c650b5](https://github.com/jeremycab/php-conventional-changelog/commit/c650b5e48b3c79959af2d8b941818c2740cc4fae))
+* Add inside work tree method ([081196](https://github.com/jeremycab/php-conventional-changelog/commit/0811968babb8de519a3f249b4dcdb7da33a5ad99))
+* Add mention and reference class ([b22fa5](https://github.com/jeremycab/php-conventional-changelog/commit/b22fa5c46b54ed7de6072445c90ad2a8a1b7408a))
+* Add no edit param to commit method ([bf4d1a](https://github.com/jeremycab/php-conventional-changelog/commit/bf4d1a85e8303307dcd42c0318d6a33089bf49d7))
+* Add parse remote url method ([81812c](https://github.com/jeremycab/php-conventional-changelog/commit/81812c0838964198d577240ae12e79d059e18cc4))
+* Commit classes auto compose when raw is empty ([0f7f9d](https://github.com/jeremycab/php-conventional-changelog/commit/0f7f9d7d139c8ee0ccf53effa580735a0a40d508))
+
+##### Semver
+
+* Pattern version validation ([e19170](https://github.com/jeremycab/php-conventional-changelog/commit/e191708265b8764823f397dbd28a8597edd2e0cd))
+
+### Bug Fixes
+
+* Add blank line after changeLogVersionHeading [#39](https://github.com/jeremycab/php-conventional-changelog/issues/39) ([9e4108](https://github.com/jeremycab/php-conventional-changelog/commit/9e41083adb9d898c97c3e5d3d8561e9b84cae410))
+* Add chores to not notable types ([2c4d1c](https://github.com/jeremycab/php-conventional-changelog/commit/2c4d1cdc23455f899922d1796bcd6fa343c6d589))
+* Add current release on history only with commit option flagged ([bac00d](https://github.com/jeremycab/php-conventional-changelog/commit/bac00d478a9a93831af797080841c6991c6d660b))
+* Add git command exists check ([9ecd9e](https://github.com/jeremycab/php-conventional-changelog/commit/9ecd9ebb4979352f93e071a4b74686fe10c3b060))
+* Add git remote repository url format check ([56aff6](https://github.com/jeremycab/php-conventional-changelog/commit/56aff6304296c239aad8646e96d5452927857e84))
+* Add hash check and rename parser to conventional ([3e8996](https://github.com/jeremycab/php-conventional-changelog/commit/3e899655c82737ca363995530ec300d4215c2a64))
+* Add requirements checks at startup [#14](https://github.com/jeremycab/php-conventional-changelog/issues/14) ([b0b124](https://github.com/jeremycab/php-conventional-changelog/commit/b0b1245cfca1bae60950d313fdb6d131c7cd5852))
+* Add tag prefix and suffix con compare url tag [#5](https://github.com/jeremycab/php-conventional-changelog/issues/5) ([db81e0](https://github.com/jeremycab/php-conventional-changelog/commit/db81e0ec63a665d03170165b1623f72b4b70b08e))
+* Array key exists on mixed value check ([4007ab](https://github.com/jeremycab/php-conventional-changelog/commit/4007abe2b325ae7235c69cd4d4f66fb1f2d8d461))
+* Auto bump new version code commit and tag ([bf26ee](https://github.com/jeremycab/php-conventional-changelog/commit/bf26eee06484d2045c7f701f2e4b1f02fd430911))
+* Autobump on specified version ([9e35af](https://github.com/jeremycab/php-conventional-changelog/commit/9e35af66941124a209bbc0c3ea54963c55a2f92c))
+* Auto commit success message ([003b6a](https://github.com/jeremycab/php-conventional-changelog/commit/003b6a95e9d8408f65215f0f8a3ffed5c86ed011))
+* Breaking changes check [#37](https://github.com/jeremycab/php-conventional-changelog/issues/37) ([476ff7](https://github.com/jeremycab/php-conventional-changelog/commit/476ff7f8b2e6d3efffbfa4af152f4d0269491934))
+* Breaking changes indicated by a ! and ignore duplicated or empty message [#1](https://github.com/jeremycab/php-conventional-changelog/issues/1) ([f3ebee](https://github.com/jeremycab/php-conventional-changelog/commit/f3ebeee6bdac4e0fc1010ce3f7d3afd58bfda381))
+* Breaking changes preserving the initial commit and customizable label ([607f6e](https://github.com/jeremycab/php-conventional-changelog/commit/607f6e09026eaee8b1b7e83fa4a7475d7a4f5694))
+* Change repo parse remote url regex ([2dd6c8](https://github.com/jeremycab/php-conventional-changelog/commit/2dd6c87faf67b809a8b37a763a2e33d5357141a4))
+* Check if valid remote url [#14](https://github.com/jeremycab/php-conventional-changelog/issues/14) ([7bc76c](https://github.com/jeremycab/php-conventional-changelog/commit/7bc76cdaa11109efd43699d62ff3e71d1b445a15))
+* Commit changes list generation ([68b1ff](https://github.com/jeremycab/php-conventional-changelog/commit/68b1ff9f424b47d0965702724e3cce5866b88892))
+* Commit properties from protected to public for sorting ([d3b658](https://github.com/jeremycab/php-conventional-changelog/commit/d3b65854ee00139e43577b03d3d2eb04dd489fd3))
+* Commit sorting on changelog [#9](https://github.com/jeremycab/php-conventional-changelog/issues/9) ([0d402c](https://github.com/jeremycab/php-conventional-changelog/commit/0d402cb2904e1aaff19d95616332462fdf519dec))
+* Commits retrieve on ranges and remove additional whitespaces ([c3bffa](https://github.com/jeremycab/php-conventional-changelog/commit/c3bffa74021727937c1f5b4a42efe534c820b943))
+* Conventional commit wakeup class parse [#3](https://github.com/jeremycab/php-conventional-changelog/issues/3) ([9eb3fb](https://github.com/jeremycab/php-conventional-changelog/commit/9eb3fbee01f7e8717be67aaa5199bd51c7a17030))
+* Customize changelog file path ([1795ff](https://github.com/jeremycab/php-conventional-changelog/commit/1795ffba53ea35108c05138054772e3bcde73b09))
+* Explicit compare ([78a084](https://github.com/jeremycab/php-conventional-changelog/commit/78a084dca3f22e82614d2287ec350fe9cc05f539))
+* Get last version with prefix ([2460c8](https://github.com/jeremycab/php-conventional-changelog/commit/2460c81fab175e23260e449e4a4554a2e8d479c6))
+* Git commit add files to the repository ([60daa2](https://github.com/jeremycab/php-conventional-changelog/commit/60daa2b6be59990791a70a872f276e3d650d3ae5))
+* Git commit release message ([42ba56](https://github.com/jeremycab/php-conventional-changelog/commit/42ba566ecab4ddd518026cd5060e3b808a8ed8c1))
+* History version code ([eebfbe](https://github.com/jeremycab/php-conventional-changelog/commit/eebfbea5e02a2e93d36eee3ba8ef357ecb269c79))
+* Incorrect parsing of URLs ([24ca1c](https://github.com/jeremycab/php-conventional-changelog/commit/24ca1c20b579625266ee8de656cb4616bb38fb85))
+* Issues with tag version fetch ([d64f35](https://github.com/jeremycab/php-conventional-changelog/commit/d64f359450bc0b678c90eeb7aa926e2b39bff4b2))
+* Move scope to string method to pretty string ([d64421](https://github.com/jeremycab/php-conventional-changelog/commit/d644210b973b1b16e3feeb140c3da881667888fa))
+* Option commit all ([d84122](https://github.com/jeremycab/php-conventional-changelog/commit/d84122283b244d213c2e5ee7329bce696bf85bc1))
+* Output error on check requirements [#14](https://github.com/jeremycab/php-conventional-changelog/issues/14) ([f020d9](https://github.com/jeremycab/php-conventional-changelog/commit/f020d9e5a79fb355cd92785882eed8f325152d6a))
+* Remove remote url repository requirement [#14](https://github.com/jeremycab/php-conventional-changelog/issues/14) ([dacd7c](https://github.com/jeremycab/php-conventional-changelog/commit/dacd7c3a82c2924047fcf4128e2d604f58c94978))
+* Remove tag prefix and suffix on history release header ([070113](https://github.com/jeremycab/php-conventional-changelog/commit/070113ac76f2f6606bb2acd9a9c6f03d4fc8da07))
+* Replace command constants response for symfony 4 compatibility [#10](https://github.com/jeremycab/php-conventional-changelog/issues/10) ([639aec](https://github.com/jeremycab/php-conventional-changelog/commit/639aec65cdcb86a0d5cfe9715d8a6516594700e6))
+* Repository url format detector [#22](https://github.com/jeremycab/php-conventional-changelog/issues/22) ([63ff44](https://github.com/jeremycab/php-conventional-changelog/commit/63ff443cbc53d2453ee217950d4664a15e9b3dd4))
+* Semantic version extra part split ([183116](https://github.com/jeremycab/php-conventional-changelog/commit/18311683929859060af3c449a76fad41cb2baa52))
+* Skip tags and --not-tag are not working ([7f4d45](https://github.com/jeremycab/php-conventional-changelog/commit/7f4d45886ad2723da11e4cb0073a7d29ead14e2d))
+* Uppercase first char of scope on stringify ([4eaebe](https://github.com/jeremycab/php-conventional-changelog/commit/4eaebe96c84fa74aefa39d60fa1aeb3777316ce9))
+* Using new reference class on changelog generation ([03e3a2](https://github.com/jeremycab/php-conventional-changelog/commit/03e3a2bbaebd26db6fef3a7e699020c30d89511c))
+* Version code format and initialization [#14](https://github.com/jeremycab/php-conventional-changelog/issues/14) ([b65bb6](https://github.com/jeremycab/php-conventional-changelog/commit/b65bb669eaa33964b25b8fff97f0b1901d42b152))
+* Version separator markdown ([08092d](https://github.com/jeremycab/php-conventional-changelog/commit/08092d21e8fa223de2bf4954b5d8f738109c36c1))
+
+##### Bump
+
+* Add lock files to commit [#11](https://github.com/jeremycab/php-conventional-changelog/issues/11) ([4da206](https://github.com/jeremycab/php-conventional-changelog/commit/4da2061af0fb9e8da24215ed174896d5d8f4eb04))
+* Unescape slashes on json encode [#11](https://github.com/jeremycab/php-conventional-changelog/issues/11) ([29a83e](https://github.com/jeremycab/php-conventional-changelog/commit/29a83e243c8fd29df984dfe33253f2836c8f9435))
+
+##### Commit Parser
+
+* Change return to string nullable on getters hash and raw ([5aa565](https://github.com/jeremycab/php-conventional-changelog/commit/5aa565eb18090287e4033a6178acbe0959537d0b))
+
+##### Composer Json
+
+* Composer update change path command ([18bb19](https://github.com/jeremycab/php-conventional-changelog/commit/18bb19395d9c33905786ff1b1d834db369142c20))
+* Disable composer update on bump [#13](https://github.com/jeremycab/php-conventional-changelog/issues/13) ([669262](https://github.com/jeremycab/php-conventional-changelog/commit/669262ba6ceba78f82d6bb557c47564a90710716))
+
+##### Config
+
+* Add isset check on setting ignore types [#4](https://github.com/jeremycab/php-conventional-changelog/issues/4) ([eb5805](https://github.com/jeremycab/php-conventional-changelog/commit/eb58050dd91eadb3eaad2b03f1fb38440ae8a852))
+* Check valid array ([849f43](https://github.com/jeremycab/php-conventional-changelog/commit/849f43dcadef5361a64fa0ed5705a67850cef329))
+* Empty configurations from array [#1](https://github.com/jeremycab/php-conventional-changelog/issues/1) ([481f05](https://github.com/jeremycab/php-conventional-changelog/commit/481f051069f5c9a5ae2ec0f1375fa3ac8e81b9b4))
+* Get configs from project root or working dir ([ee9d65](https://github.com/jeremycab/php-conventional-changelog/commit/ee9d654f3e340575cb69e3fa940083891c150716))
+* Improve configuration and adjusted some settings ([cd6bdf](https://github.com/jeremycab/php-conventional-changelog/commit/cd6bdf1de89c603afce1735487c4264c683473ab))
+* Possibile issues with empty data ([179c1f](https://github.com/jeremycab/php-conventional-changelog/commit/179c1fa95fac3853b24a57d0c933d09e5500c328))
+* Remove empty check of setting ignore types [#4](https://github.com/jeremycab/php-conventional-changelog/issues/4) ([826ece](https://github.com/jeremycab/php-conventional-changelog/commit/826eceb83d81c7d896a59eaadf34633f1564e2d6))
+* Use default settings if is not a valid config return value ([55fd29](https://github.com/jeremycab/php-conventional-changelog/commit/55fd292f3a5d9068502b9ce54997d5015e03ad94))
+
+##### Git
+
+* Add check empty commit on parse ([a26d6a](https://github.com/jeremycab/php-conventional-changelog/commit/a26d6aeeecdd23e76773b5549b06800c4a240e09))
+* Detect is inside work tree check remote url ([cb57a6](https://github.com/jeremycab/php-conventional-changelog/commit/cb57a6e9c2d62e3c4009af6dd060acd6854b2bc2))
+* Footer references detection ([6a40c1](https://github.com/jeremycab/php-conventional-changelog/commit/6a40c1a0a3fa67f088450e1aef45e295371797eb))
+* Format option quotes ([693860](https://github.com/jeremycab/php-conventional-changelog/commit/693860b5ba9c5ddfd13919a48186aeaf22931f12))
+* Format quotes ([0137fa](https://github.com/jeremycab/php-conventional-changelog/commit/0137fae1b73b2560bc05abd02507ba6f42338076))
+* Get commits command compatibility and sorting get tags ([28d6ad](https://github.com/jeremycab/php-conventional-changelog/commit/28d6ad76bb0ebfb1fe21ba70ec4e1b512ef6a3be))
+* Get last tag name ([b265d0](https://github.com/jeremycab/php-conventional-changelog/commit/b265d06b1f857d1f95db27a912fd74bd574c981a))
+* Incorrect user type in Mention ([0c9fc5](https://github.com/jeremycab/php-conventional-changelog/commit/0c9fc5b7f1a4ad610a1429d38550e7a80d8c82a6))
+* Quotes on values exec return ([4e78c4](https://github.com/jeremycab/php-conventional-changelog/commit/4e78c4ea8bd4e0f290d20284a7820d5392c04064))
+
+##### Semver
+
+* Add get version code method ([54599f](https://github.com/jeremycab/php-conventional-changelog/commit/54599fb8e91d6bc06bfc7881978f3a0fcde2602f))
+* Bump major and minor ([fd7485](https://github.com/jeremycab/php-conventional-changelog/commit/fd7485f2b7ce77e32542b4431e37ea271d031878))
+* Bump minor version when breaking change before 1.0.0 ([5b13aa](https://github.com/jeremycab/php-conventional-changelog/commit/5b13aa1408459be415f475a23e55983aaa297111))
+
+##### Shell
+
+* Add is enabled method ([edee7d](https://github.com/jeremycab/php-conventional-changelog/commit/edee7de39313697b3c327a8729cc06c8d0774fb1))
+
+
+---
+
+## [](https://github.com/jeremycab/php-conventional-changelog/compare/...v) (2022-10-07)
+
+
+---
+
 ## [1.15.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.0...v1.15.1) (2022-06-03)
 
 ### Bug Fixes

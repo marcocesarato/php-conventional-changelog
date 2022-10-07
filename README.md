@@ -2,7 +2,7 @@
 
 <h1 align="center">PHP Conventional Changelog</h1>
 
-![Version](https://img.shields.io/badge/version-1.15.1-brightgreen?style=for-the-badge)
+![Version](https://img.shields.io/badge/version--brightgreen?style=for-the-badge)
 ![Requirements](https://img.shields.io/badge/php-%3E%3D%207.1.3-4F5D95?style=for-the-badge)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow?style=for-the-badge)](https://conventionalcommits.org)
 ![License](https://img.shields.io/github/license/marcocesarato/php-conventional-changelog?style=for-the-badge)
@@ -206,6 +206,5 @@ Options:
       --no-verify                    Bypasses the pre-commit and commit-msg hooks
       --no-tag                       Disable release auto tagging
       --annotate-tag[=ANNOTATE-TAG]  Make an unsigned, annotated tag object once changelog is generated [default: false]
-      --merged                       Only include commits whose tips are reachable from HEAD
   -h, --help                         Display help for the given command. When no command is given display help for the changelog command
 ```
