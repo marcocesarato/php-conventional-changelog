@@ -207,9 +207,16 @@ class ConventionalCommit extends Commit
     protected function parseHeader(string $header)
     {
         preg_match(self::PATTERN_HEADER, $header, $matches);
-        $this->setType((string)$matches['type'])
-            ->setScope((string)$matches['scope'])
-            ->setBreakingChange(!empty($matches['breaking_before'] || !empty($matches['breaking_after'])))
-            ->setDescription((string)$matches['description']);
+
+        $type = $matches['type'] ?? '';
+        $scope = $matches['scope'] ?? '';
+        $breakingBefore = $matches['breaking_before'] ?? '';
+        $breakingAfter = $matches['breaking_after'] ?? '';
+        $description = $matches['description'] ?? '';
+
+        $this->setType($type)
+            ->setScope($scope)
+            ->setBreakingChange(!empty($breakingBefore || !empty($breakingAfter)))
+            ->setDescription($description);
     }
 }
