@@ -4,6 +4,11 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.0.1](https://github.com/jeremycab/php-conventional-changelog/compare/v1.0.0...v1.0.1) (2022-10-11)
+
+
+---
+
 ## [1.0.1-rc.3](https://github.com/jeremycab/php-conventional-changelog/compare/v1.0.0...v1.0.1-rc.3) (2022-10-11)
 
 
