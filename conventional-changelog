@@ -27,7 +27,7 @@ $command = new DefaultCommand($config);
 $commandName = $command->getName();
 
 // Run application single command
-$application = new Application('conventional-changelog', '1.0.4');
+$application = new Application('conventional-changelog', '021a49f43ef65ac7a594450374f1772eef1fd8b0');
 $application->add($command);
 $application->setDefaultCommand($commandName, true);
 $application->run();
