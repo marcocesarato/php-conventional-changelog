@@ -14,6 +14,11 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.0.0-rc.2](https://github.com/jeremycab/php-conventional-changelog/compare/v1.0.0...v1.0.0-rc.2) (2022-10-11)
+
+
+---
+
 ## [1.0.0](https://github.com/jeremycab/php-conventional-changelog/compare/021a49f43ef65ac7a594450374f1772eef1fd8b0...v1.0.0) (2022-10-11)
 
 ### ⚠ BREAKING CHANGES
