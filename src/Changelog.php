@@ -141,7 +141,7 @@ class Changelog
         $firstCommit = Repository::getFirstCommit();
 
         if (!$firstRelease) {
-            $lastVersion = Repository::getLastTag(); // Last version
+            $lastVersion = Repository::getLastTag($tagPrefix, $merged); // Last version
 
             $bumpRelease = SemanticVersion::PATCH;
 
