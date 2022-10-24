@@ -153,10 +153,13 @@ class Changelog
                 $bumpRelease = SemanticVersion::PATCH;
             } elseif ($preRelease) {
                 $bumpRelease = SemanticVersion::RC;
+                $autoBump = !$this->config->skipBump();
             } elseif ($betaRelease) {
                 $bumpRelease = SemanticVersion::BETA;
+                $autoBump = !$this->config->skipBump();
             } elseif ($alphaRelease) {
                 $bumpRelease = SemanticVersion::ALPHA;
+                $autoBump = !$this->config->skipBump();
             } else {
                 $autoBump = !$this->config->skipBump();
             }
