@@ -2,6 +2,7 @@
 
 namespace ConventionalChangelog\Git;
 
+use ConventionalChangelog\Helper\SemanticVersion;
 use ConventionalChangelog\Helper\ShellCommand;
 use DateTime;
 
@@ -54,9 +55,27 @@ class Repository
     /**
      * Get last tag.
      */
-    public static function getLastTag(): string
+    public static function getLastTag($prefix = '', $merged = false): string
     {
-        return self::run('git describe --tags --exclude "*-*" --abbrev=0');
+        $tags = self::run("git for-each-ref --sort=-v:refname --format='%(refname:strip=2)" . self::$delimiter . "' {$merged}");
+
+        $tagsArray = explode(self::$delimiter . "\n", $tags);
+        $prefixQuote = preg_quote($prefix);
+        $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*$/', $tagsArray);
+
+        $lastTag = $prefix . '0.0.0';
+        if (count($tagsFound) > 0) {
+            foreach ($tagsFound as $found) {
+                $foundStrip = str_replace($prefix, '', $found);
+                $semver = new SemanticVersion($foundStrip);
+                if ($semver->getVersionCode() !== '0.0.0') {
+                    $lastTag = $found;
+                    break;
+                }
+            }
+        }
+
+        return $lastTag;
     }
 
     /**
