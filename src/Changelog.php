@@ -141,7 +141,7 @@ class Changelog
         $firstCommit = Repository::getFirstCommit();
 
         if (!$firstRelease) {
-            $lastVersion = Repository::getLastTag($tagPrefix, $merged); // Last version
+            $lastVersion = Repository::getLastTag(); // Last version
 
             $bumpRelease = SemanticVersion::PATCH;
 
@@ -153,10 +153,13 @@ class Changelog
                 $bumpRelease = SemanticVersion::PATCH;
             } elseif ($preRelease) {
                 $bumpRelease = SemanticVersion::RC;
+                $autoBump = !$this->config->skipBump();
             } elseif ($betaRelease) {
                 $bumpRelease = SemanticVersion::BETA;
+                $autoBump = !$this->config->skipBump();
             } elseif ($alphaRelease) {
                 $bumpRelease = SemanticVersion::ALPHA;
+                $autoBump = !$this->config->skipBump();
             } else {
                 $autoBump = !$this->config->skipBump();
             }
@@ -165,7 +168,6 @@ class Changelog
             $semver = new SemanticVersion($lastVersion);
             $newVersion = $semver->bump($bumpRelease);
         }
-
         if (!empty($nextVersion)) {
             $newVersion = $nextVersion;
             $autoBump = false;
@@ -329,9 +331,9 @@ class Changelog
                         // Clone commit as breaking with different description message
                         $breakingCommit = new ConventionalCommit();
                         $breakingCommit->setType($breakingType)
-                                       ->setDescription($description)
-                                       ->setScope($scope)
-                                       ->setHash($hash);
+                            ->setDescription($description)
+                            ->setScope($scope)
+                            ->setHash($hash);
                         $changes[$breakingType][$scope][$key][$hash] = $breakingCommit;
                         $summary[$breakingType]++;
                     }
@@ -355,6 +357,27 @@ class Changelog
                 }
 
                 $newVersion = $semver->bump($bumpRelease);
+
+                $releaseType = null;
+                $extraRelease = null;
+                if ($preRelease) {
+                    $extraRelease = Repository::getLastReleaseCandidateTag($newVersion);
+                    $releaseType = SemanticVersion::RC;
+                } elseif ($alphaRelease) {
+                    $extraRelease = Repository::getLastAlphaTag($newVersion);
+                    $releaseType = SemanticVersion::ALPHA;
+                } elseif ($betaRelease) {
+                    $extraRelease = Repository::getLastBetaTag($newVersion);
+                    $releaseType = SemanticVersion::BETA;
+                }
+
+                $newVersion = $extraRelease ?? $newVersion;
+
+                if ($releaseType !== null) {
+                    $semVer2 = new SemanticVersion($newVersion);
+                    $newVersion = $semVer2->bump($releaseType);
+                }
+
                 $params['to'] = $newVersion;
             }
 

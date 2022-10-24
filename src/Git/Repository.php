@@ -54,11 +54,40 @@ class Repository
     /**
      * Get last tag.
      */
-    public static function getLastTag($prefix = '', $merged = false): string
+    public static function getLastTag(): string
     {
-        $merged = $merged ? '--merged' : '';
+        return self::run('git describe --tags --exclude "*-*" --abbrev=0');
+    }
 
-        return self::run('git for-each-ref ' /* 'refs/tags/" . $prefix . "*' */ . " --sort=-v:refname --format='%(refname:strip=2)' --count=1 {$merged}");
+    /**
+     * Get last alpha tag based on a tag pattern.
+     */
+    public static function getLastAlphaTag(string $lastTag = ''): ?string
+    {
+        return self::getTag($lastTag, 'alpha');
+    }
+
+    /**
+     * Get last release candidate tag based on a tag pattern.
+     */
+    public static function getLastReleaseCandidateTag(string $lastTag = ''): ?string
+    {
+        return self::getTag($lastTag, 'rc');
+    }
+
+    /**
+     * Get last beta tag based on a tag pattern.
+     */
+    public static function getLastBetaTag(string $lastTag = ''): ?string
+    {
+        return self::getTag($lastTag, 'beta');
+    }
+
+    private static function getTag(string $tag, string $match): ?string
+    {
+        $find = self::run(sprintf('git describe --tags --match "*%s*-%s*" --abbrev=0', $tag, $match));
+
+        return !empty($find) ? $find : null;
     }
 
     /**
