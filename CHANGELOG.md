@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.15.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.1...v1.15.2) (2022-10-24)
+
+### Bug Fixes
+
+* Enable merged feature with new extra logics ([6a7d70](https://github.com/marcocesarato/php-conventional-changelog/commit/6a7d7090cc754ff73040db408c75bd02e2da2192))
+* Extra release generation ([854599](https://github.com/marcocesarato/php-conventional-changelog/commit/854599bccf45b461e66bfd37a306f9c9a4db09c8))
+* Force autobump on an extra release ([ce5d80](https://github.com/marcocesarato/php-conventional-changelog/commit/ce5d806de1afa01f87dfe73d35b45dead7c530a2))
+
+
+---
+
 ## [1.15.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.0...v1.15.1) (2022-06-03)
 
 ### Bug Fixes
