@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.15.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.2...v1.15.3) (2022-10-27)
+
+### Bug Fixes
+
+* Prefix stripping and merged tags only [#47](https://github.com/marcocesarato/php-conventional-changelog/issues/47) ([60274c](https://github.com/marcocesarato/php-conventional-changelog/commit/60274c9bc220d0285ad535b14dfc630548a701cf))
+* Semantic version prefix remove ([a821c1](https://github.com/marcocesarato/php-conventional-changelog/commit/a821c1366e9a2323d625af958b4196656ef01788))
+
+
+---
+
 ## [1.15.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.1...v1.15.2) (2022-10-24)
 
 ### Bug Fixes
