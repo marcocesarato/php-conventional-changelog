@@ -173,6 +173,7 @@ class Changelog
             $autoBump = false;
         }
         $newVersion = preg_replace('#^v#i', '', $newVersion);
+        $newVersion = preg_replace('/^' . preg_quote($tagPrefix, '/') . '/', '', $newVersion);
 
         $options = []; // Git retrieve options per version
 

@@ -57,18 +57,26 @@ class Repository
      */
     public static function getLastTag($prefix = '', $merged = false): string
     {
-        $tags = self::run("git for-each-ref --sort=-v:refname --format='%(refname:strip=2)" . self::$delimiter . "' {$merged}");
+        $mergedArg = ($merged) ? '--merged' : '';
+        $tags = self::run("git for-each-ref --sort=-v:refname --format='%(refname:strip=2)" . self::$delimiter . "' {$mergedArg}");
 
         $tagsArray = explode(self::$delimiter . "\n", $tags);
         $prefixQuote = preg_quote($prefix);
         $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*$/', $tagsArray);
 
-        $lastTag = $prefix . '0.0.0';
+        $lastTag = '0.0.0';
+        foreach ($tagsFound as $value) {
+            $value = preg_replace('/^' . preg_quote($prefix, '/') . '/', '', $value);
+            if (SemanticVersion::validate($value)) {
+                $lastTag = $value;
+                break;
+            }
+        }
+
         if (count($tagsFound) > 0) {
             foreach ($tagsFound as $found) {
-                $foundStrip = str_replace($prefix, '', $found);
-                $semver = new SemanticVersion($foundStrip);
-                if ($semver->getVersionCode() !== '0.0.0') {
+                $found = preg_replace('/^' . preg_quote($prefix, '/') . '/', '', $value);
+                if (SemanticVersion::validate($found)) {
                     $lastTag = $found;
                     break;
                 }

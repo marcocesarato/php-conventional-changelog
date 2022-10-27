@@ -70,7 +70,7 @@ class SemanticVersion
 
         $newVersion = [0, 0, 0];
 
-        if (!preg_match('/^' . self::PATTERN . '$/', $version)) {
+        if (!self::validate($version)) {
             return $version;
         }
 
@@ -135,5 +135,12 @@ class SemanticVersion
         $this->version = $version;
 
         return $this;
+    }
+
+    public static function validate($version): bool
+    {
+        $version = preg_replace('#^v#i', '', $version);
+
+        return preg_match('/^' . self::PATTERN . '$/', $version);
     }
 }
