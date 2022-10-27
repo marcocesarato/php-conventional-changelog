@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.15.4](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.3...v1.15.4) (2022-10-27)
+
+### Bug Fixes
+
+* Restore last tag with refname method ([ef97fb](https://github.com/marcocesarato/php-conventional-changelog/commit/ef97fb098fb25b6f9c6c285fe2ffb32d8fc06211))
+
+
+---
+
 ## [1.15.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.2...v1.15.3) (2022-10-27)
 
 ### Bug Fixes

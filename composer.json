@@ -1,7 +1,7 @@
 {
     "name": "marcocesarato/php-conventional-changelog",
     "description": "Generate changelogs and release notes from a project's commit messages and metadata and automate versioning with semver.org and conventionalcommits.org",
-    "version": "1.15.3",
+    "version": "1.15.4",
     "type": "library",
     "license": "GPL-3.0-or-later",
     "minimum-stability": "stable",
