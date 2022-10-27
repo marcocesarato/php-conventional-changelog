@@ -53,10 +53,10 @@ class SemanticVersion
      *
      * @param $version
      */
-    public function __construct($version)
+    public function __construct($version, $prefix = 'v')
     {
         $version = trim($version);
-        $version = preg_replace('#^v#i', '', $version);
+        $version = preg_replace('/^' . preg_quote($prefix, '/') . '/', '', $version);
 
         $this->setVersion($version);
     }
@@ -137,9 +137,9 @@ class SemanticVersion
         return $this;
     }
 
-    public static function validate($version): bool
+    public static function validate($version, $prefix = 'v'): bool
     {
-        $version = preg_replace('#^v#i', '', $version);
+        $version = preg_replace('/^' . preg_quote($prefix, '/') . '/', '', $version);
 
         return preg_match('/^' . self::PATTERN . '$/', $version);
     }

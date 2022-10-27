@@ -66,8 +66,7 @@ class Repository
 
         $lastTag = '0.0.0';
         foreach ($tagsFound as $value) {
-            $value = preg_replace('/^' . preg_quote($prefix, '/') . '/', '', $value);
-            if (SemanticVersion::validate($value)) {
+            if (SemanticVersion::validate($value, $prefix)) {
                 $lastTag = $value;
                 break;
             }
@@ -75,8 +74,7 @@ class Repository
 
         if (count($tagsFound) > 0) {
             foreach ($tagsFound as $found) {
-                $found = preg_replace('/^' . preg_quote($prefix, '/') . '/', '', $value);
-                if (SemanticVersion::validate($found)) {
+                if (SemanticVersion::validate($found, $prefix)) {
                     $lastTag = $found;
                     break;
                 }

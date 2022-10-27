@@ -165,14 +165,13 @@ class Changelog
             }
 
             // Generate new version code
-            $semver = new SemanticVersion($lastVersion);
+            $semver = new SemanticVersion($lastVersion, $tagPrefix);
             $newVersion = $semver->bump($bumpRelease);
         }
         if (!empty($nextVersion)) {
             $newVersion = $nextVersion;
             $autoBump = false;
         }
-        $newVersion = preg_replace('#^v#i', '', $newVersion);
         $newVersion = preg_replace('/^' . preg_quote($tagPrefix, '/') . '/', '', $newVersion);
 
         $options = []; // Git retrieve options per version
@@ -344,7 +343,7 @@ class Changelog
             }
 
             if ($params['autoBump']) {
-                $semver = new SemanticVersion($params['from']);
+                $semver = new SemanticVersion($params['from'], $tagPrefix);
                 $bumpRelease = SemanticVersion::PATCH;
 
                 if ($summary['breaking_changes'] > 0) {
@@ -375,7 +374,7 @@ class Changelog
                 $newVersion = $extraRelease ?? $newVersion;
 
                 if ($releaseType !== null) {
-                    $semVer2 = new SemanticVersion($newVersion);
+                    $semVer2 = new SemanticVersion($newVersion, $tagPrefix);
                     $newVersion = $semVer2->bump($releaseType);
                 }
 
