@@ -52,6 +52,15 @@ class Repository
         return self::run('git log -1 --pretty=format:%H');
     }
 
+        /**
+     * Get last tag.
+     */
+    public static function getLastTagRefname($prefix = '', $merged = false): string
+    {
+        $merged = $merged ? '--merged' : '';
+        return self::run('git for-each-ref ' /* 'refs/tags/" . $prefix . "*' */ . " --sort=-v:refname --format='%(refname:strip=2)' --count=1 {$merged}");
+    }
+
     /**
      * Get last tag.
      */
@@ -121,6 +130,16 @@ class Repository
     public static function getLastTagCommit($prefix = ''): string
     {
         $lastTag = self::getLastTag($prefix);
+
+        return self::run("git rev-parse --verify {$lastTag}");
+    }
+
+     /**
+     * Get last tag commit hash.
+     */
+    public static function getLastTagRefnameCommit($prefix = ''): string
+    {
+        $lastTag = self::getLastTagRefname($prefix);
 
         return self::run("git rev-parse --verify {$lastTag}");
     }

@@ -16,8 +16,8 @@ return [
     ],
     'releaseCommitMessageFormat' => "{$releaseMessagePrefix}{{currentTag}}",
     'postRun' => function () use ($releaseMessagePrefix) {
-        $lastTag = Repository::getLastTag();
-        $lastTagCommit = Repository::getLastTagCommit();
+        $lastTag = Repository::getLastTagRefname();
+        $lastTagCommit = Repository::getLastTagRefnameCommit();
         $lastCommit = Repository::getLastCommit();
 
         if ($lastTagCommit !== $lastCommit) {
