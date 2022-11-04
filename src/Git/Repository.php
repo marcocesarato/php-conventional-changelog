@@ -52,35 +52,35 @@ class Repository
         return self::run('git log -1 --pretty=format:%H');
     }
 
-        /**
+    /**
      * Get last tag.
      */
     public static function getLastTagRefname($prefix = '', $merged = false): string
     {
         $merged = $merged ? '--merged' : '';
+
         return self::run('git for-each-ref ' /* 'refs/tags/" . $prefix . "*' */ . " --sort=-v:refname --format='%(refname:strip=2)' --count=1 {$merged}");
     }
 
     /**
      * Get last tag.
      */
-    public static function getLastTag($prefix = '', $merged = false): string
+    public static function getLastTag(string $prefix = '', bool $merged = false, string $extra = ''): string
     {
         $mergedArg = ($merged) ? '--merged' : '';
         $tags = self::run("git for-each-ref --sort=-v:refname --format='%(refname:strip=2)" . self::$delimiter . "' {$mergedArg}");
 
-        $tagsArray = explode(self::$delimiter . "\n", $tags);
+        $tagsFound = explode(self::$delimiter . "\n", $tags);
         $prefixQuote = preg_quote($prefix);
-        $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*$/', $tagsArray);
 
-        $lastTag = '0.0.0';
-        foreach ($tagsFound as $value) {
-            if (SemanticVersion::validate($value, $prefix)) {
-                $lastTag = $value;
-                break;
-            }
+        if (empty($extra)) {
+            $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*$/', $tagsFound);
+        } else {
+            $extraQuote = preg_quote("-${extra}");
+            $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*' . $extraQuote . '/', $tagsFound);
         }
 
+        $lastTag = '0.0.0';
         if (count($tagsFound) > 0) {
             foreach ($tagsFound as $found) {
                 if (SemanticVersion::validate($found, $prefix)) {
@@ -96,25 +96,25 @@ class Repository
     /**
      * Get last alpha tag based on a tag pattern.
      */
-    public static function getLastAlphaTag(string $lastTag = ''): ?string
+    public static function getLastAlphaTag(string $prefix = '', bool $merged = false): ?string
     {
-        return self::getTag($lastTag, 'alpha');
+        return self::getLastTag($prefix, $merged, 'alpha');
     }
 
     /**
      * Get last release candidate tag based on a tag pattern.
      */
-    public static function getLastReleaseCandidateTag(string $lastTag = ''): ?string
+    public static function getLastReleaseCandidateTag(string $prefix = '', bool $merged = false): ?string
     {
-        return self::getTag($lastTag, 'rc');
+        return self::getLastTag($prefix, $merged, 'rc');
     }
 
     /**
      * Get last beta tag based on a tag pattern.
      */
-    public static function getLastBetaTag(string $lastTag = ''): ?string
+    public static function getLastBetaTag(string $prefix = '', bool $merged = false): ?string
     {
-        return self::getTag($lastTag, 'beta');
+        return self::getLastTag($prefix, $merged, 'beta');
     }
 
     private static function getTag(string $tag, string $match): ?string
@@ -134,7 +134,7 @@ class Repository
         return self::run("git rev-parse --verify {$lastTag}");
     }
 
-     /**
+    /**
      * Get last tag commit hash.
      */
     public static function getLastTagRefnameCommit($prefix = ''): string
