@@ -4,6 +4,17 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.15.5](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.4...v1.15.5) (2022-11-04)
+
+### Bug Fixes
+
+* Bump first time with extra version ([22b302](https://github.com/marcocesarato/php-conventional-changelog/commit/22b302aae1490eb78c018db9ed5148669d63c9d9))
+* Extra tag bumping ([b6223f](https://github.com/marcocesarato/php-conventional-changelog/commit/b6223f47171af784e5c2a578db13d8afe49f1904))
+* Semantic version regex compare ([a71a4b](https://github.com/marcocesarato/php-conventional-changelog/commit/a71a4bbaf46a72ffa27b5153a9da60554845ec31))
+
+
+---
+
 ## [1.15.4](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.3...v1.15.4) (2022-10-27)
 
 ### Bug Fixes
