@@ -360,18 +360,18 @@ class Changelog
 
                 if ($preRelease) {
                     $extraRelease = Repository::getLastReleaseCandidateTag($tagPrefix, $merged);
-                    $releaseType = SemanticVersion::RC;
+                    $bumpExtra = SemanticVersion::RC;
                 } elseif ($alphaRelease) {
                     $extraRelease = Repository::getLastAlphaTag($tagPrefix, $merged);
-                    $releaseType = SemanticVersion::ALPHA;
+                    $bumpExtra = SemanticVersion::ALPHA;
                 } elseif ($betaRelease) {
                     $extraRelease = Repository::getLastBetaTag($tagPrefix, $merged);
-                    $releaseType = SemanticVersion::BETA;
+                    $bumpExtra = SemanticVersion::BETA;
                 }
 
-                if (!empty($releaseType)) {
+                if (!empty($bumpExtra)) {
                     $semVer = new SemanticVersion($extraRelease, $tagPrefix);
-                    $newVersion = $semVer->bump($releaseType);
+                    $newVersion = $semVer->bump($bumpRelease, $bumpExtra);
                 }
 
                 $params['to'] = $newVersion;

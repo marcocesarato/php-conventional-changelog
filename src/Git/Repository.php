@@ -70,17 +70,27 @@ class Repository
         $mergedArg = ($merged) ? '--merged' : '';
         $tags = self::run("git for-each-ref --sort=-v:refname --format='%(refname:strip=2)" . self::$delimiter . "' {$mergedArg}");
 
-        $tagsFound = explode(self::$delimiter . "\n", $tags);
+        $tagsArray = explode(self::$delimiter . "\n", $tags);
         $prefixQuote = preg_quote($prefix);
 
-        if (empty($extra)) {
-            $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*$/', $tagsFound);
-        } else {
+        $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*$/', $tagsArray);
+
+        $lastBaseTag = '0.0.0';
+        $lastTag = '0.0.0';
+        if (count($tagsFound) > 0) {
+            foreach ($tagsFound as $found) {
+                if (SemanticVersion::validate($found, $prefix)) {
+                    $lastBaseTag = $found;
+                    break;
+                }
+            }
+        }
+
+        if (!empty($extra)) {
             $extraQuote = preg_quote("-${extra}");
             $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*' . $extraQuote . '/', $tagsFound);
         }
 
-        $lastTag = '0.0.0';
         if (count($tagsFound) > 0) {
             foreach ($tagsFound as $found) {
                 if (SemanticVersion::validate($found, $prefix)) {
@@ -88,6 +98,10 @@ class Repository
                     break;
                 }
             }
+        }
+
+        if (SemanticVersion::compareBase($lastBaseTag, $lastTag) > 0) {
+            return $lastBaseTag;
         }
 
         return $lastTag;

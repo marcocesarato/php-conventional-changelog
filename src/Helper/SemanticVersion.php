@@ -64,7 +64,7 @@ class SemanticVersion
     /**
      * Bump version.
      */
-    public function bump(string $release): string
+    public function bump(string $release, string $extraRelease = ''): string
     {
         $version = $this->getVersion();
 
@@ -78,11 +78,18 @@ class SemanticVersion
         $split = explode('-', $version, 2);
         $extra = empty($split[1]) ? '' : $split[1];
 
+        $skipBumpRelease = false;
         $extraReleases = [self::RC, self::BETA, self::ALPHA];
 
-        if (in_array($release, $extraReleases)) {
+        if (in_array($extraRelease, $extraReleases)) {
             $partsExtra = explode('.', $extra);
             $extraName = $partsExtra[0];
+            $extraVersion = $partsExtra[1];
+            if (empty($extraVersion)) {
+                $extraVersion = 0;
+            } else {
+                $skipBumpRelease = true;
+            }
             $extraVersion = empty($partsExtra[1]) ? 0 : $partsExtra[1];
             if (is_numeric($extraName) && (empty($partsExtra[1]) || !is_numeric($partsExtra[1]))) {
                 $extraVersion = $partsExtra[0];
@@ -90,7 +97,7 @@ class SemanticVersion
                 $extraVersion = 0;
             }
             $extraVersion++;
-            $extra = "{$release}.{$extraVersion}";
+            $extra = "{$extraRelease}.{$extraVersion}";
         }
 
         $parts = explode('.', $split[0]);
@@ -98,15 +105,17 @@ class SemanticVersion
             $newVersion[$key] = (int)$value;
         }
 
-        if ($release === self::MAJOR) {
-            $newVersion[0]++;
-            $newVersion[1] = 0;
-            $newVersion[2] = 0;
-        } elseif ($release === self::MINOR) {
-            $newVersion[1]++;
-            $newVersion[2] = 0;
-        } elseif ($release === self::PATCH) {
-            $newVersion[2]++;
+        if (!$skipBumpRelease) {
+            if ($release === self::MAJOR) {
+                $newVersion[0]++;
+                $newVersion[1] = 0;
+                $newVersion[2] = 0;
+            } elseif ($release === self::MINOR) {
+                $newVersion[1]++;
+                $newVersion[2] = 0;
+            } elseif ($release === self::PATCH) {
+                $newVersion[2]++;
+            }
         }
 
         // Recompose semver
@@ -142,5 +151,13 @@ class SemanticVersion
         $version = preg_replace('/^' . preg_quote($prefix, '/') . '/', '', $version);
 
         return preg_match('/^' . self::PATTERN . '$/', $version);
+    }
+
+    public static function compareBase($v1, $v2)
+    {
+        $v1 = preg_replace('/^.*?(' . self::PATTERN_NO_EXTRA . ').*?$', '$1', $v1);
+        $v2 = preg_replace('/^.*?(' . self::PATTERN_NO_EXTRA . ').*?$', '$1', $v2);
+
+        return version_compare($v1, $v2);
     }
 }
