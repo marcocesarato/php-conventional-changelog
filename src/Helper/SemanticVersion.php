@@ -155,8 +155,8 @@ class SemanticVersion
 
     public static function compareBase($v1, $v2)
     {
-        $v1 = preg_replace('/^.*?(' . self::PATTERN_NO_EXTRA . ').*?$', '$1', $v1);
-        $v2 = preg_replace('/^.*?(' . self::PATTERN_NO_EXTRA . ').*?$', '$1', $v2);
+        $v1 = preg_replace('/^.*?(' . self::PATTERN_NO_EXTRA . ').*?$/', '$1', $v1);
+        $v2 = preg_replace('/^.*?(' . self::PATTERN_NO_EXTRA . ').*?$/', '$1', $v2);
 
         return version_compare($v1, $v2);
     }

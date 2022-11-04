@@ -76,7 +76,6 @@ class Repository
         $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*$/', $tagsArray);
 
         $lastBaseTag = '0.0.0';
-        $lastTag = '0.0.0';
         if (count($tagsFound) > 0) {
             foreach ($tagsFound as $found) {
                 if (SemanticVersion::validate($found, $prefix)) {
@@ -88,9 +87,10 @@ class Repository
 
         if (!empty($extra)) {
             $extraQuote = preg_quote("-${extra}");
-            $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*' . $extraQuote . '/', $tagsFound);
+            $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*' . $extraQuote . '/', $tagsArray);
         }
 
+        $lastTag = '0.0.0';
         if (count($tagsFound) > 0) {
             foreach ($tagsFound as $found) {
                 if (SemanticVersion::validate($found, $prefix)) {
