@@ -91,8 +91,8 @@ class SemanticVersion
                 $skipBumpRelease = true;
             }
             $extraVersion = empty($partsExtra[1]) ? 0 : $partsExtra[1];
-            if (is_numeric($extraName) && (empty($partsExtra[1]) || !is_numeric($partsExtra[1]))) {
-                $extraVersion = $partsExtra[0];
+            if (is_numeric($partsExtra[1]) && (empty($partsExtra[0]) || ! is_numeric($partsExtra[0]))) {
+                $extraVersion = $partsExtra[1];
             } elseif ($extraName !== $release) {
                 $extraVersion = 0;
             }
