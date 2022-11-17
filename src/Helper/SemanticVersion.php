@@ -82,19 +82,15 @@ class SemanticVersion
         $extraReleases = [self::RC, self::BETA, self::ALPHA];
 
         if (in_array($extraRelease, $extraReleases)) {
-            $partsExtra = explode('.', $extra);
-            $extraName = $partsExtra[0];
-            $extraVersion = $partsExtra[1];
-            if (empty($extraVersion)) {
+            $partsExtra = explode('.', $extra, 2);
+            $extraVersion = 0;
+            if (count($partsExtra) > 1) {
+                $extraVersion = $partsExtra[1];
+            }
+            if (empty($extraVersion) || !is_numeric($extraVersion)) {
                 $extraVersion = 0;
             } else {
                 $skipBumpRelease = true;
-            }
-            $extraVersion = empty($partsExtra[1]) ? 0 : $partsExtra[1];
-            if (is_numeric($partsExtra[1]) && (empty($partsExtra[0]) || ! is_numeric($partsExtra[0]))) {
-                $extraVersion = $partsExtra[1];
-            } elseif ($extraName !== $release) {
-                $extraVersion = 0;
             }
             $extraVersion++;
             $extra = "{$extraRelease}.{$extraVersion}";
