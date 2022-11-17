@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.15.6](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.5...v1.15.6) (2022-11-17)
+
+### Bug Fixes
+
+* Resolves problems with bumping alpha, beta and rc releases ([ad9eff](https://github.com/marcocesarato/php-conventional-changelog/commit/ad9efff67b1b83027865a2c1fa583d80370fb433))
+* Resolves with extra releases ([e31c16](https://github.com/marcocesarato/php-conventional-changelog/commit/e31c16bfa180952fa8f10e271e49f4ffdfec8290))
+
+
+---
+
 ## [1.15.5](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.4...v1.15.5) (2022-11-04)
 
 ### Bug Fixes
