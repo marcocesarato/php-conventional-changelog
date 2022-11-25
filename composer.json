@@ -37,6 +37,11 @@
             "ConventionalChangelog\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "scripts": {
         "changelog": "php conventional-changelog",
         "check-cs": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.php-cs-fixer.php",
@@ -51,7 +56,8 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.8",
-        "brainmaestro/composer-git-hooks": "^2.8"
+        "brainmaestro/composer-git-hooks": "^2.8",
+        "phpunit/phpunit": "^9.5"
     },
     "require": {
         "php": ">=7.1.3",
