@@ -53,6 +53,7 @@ class Changelog
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
         $autoCommitAll = $input->getOption('commit-all'); // Commit all changes once changelog is generated
         $autoTag = !($input->getOption('no-tag') || $this->config->skipTag()); // Tag release once is committed
+        $noChangeWithoutCommits = $input->getOption('no-change-without-commits');
         $annotateTag = $input->getOption('annotate-tag');
         $amend = $input->getOption('amend'); // Amend commit
         $hooks = !$input->getOption('no-verify'); // Verify git hooks
@@ -387,6 +388,12 @@ class Changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
         }
         $filesToCommit = [$file];
+
+        if (isset($commits) && ! count($commits) && $noChangeWithoutCommits) {
+            $output->warning('No commits since last version.');
+
+            return 0; // Command::SUCCESS;
+        }
 
         if ($this->config->isPackageBump()) {
             foreach ($packageBumps as $packageBump) {

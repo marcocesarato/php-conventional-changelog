@@ -205,6 +205,7 @@ Options:
       --history                      Generate the entire history of changes of all releases
       --no-verify                    Bypasses the pre-commit and commit-msg hooks
       --no-tag                       Disable release auto tagging
+      --no-change-without-commits    Do not apply change if no commits
       --annotate-tag[=ANNOTATE-TAG]  Make an unsigned, annotated tag object once changelog is generated [default: false]
       --merged                       Only include commits whose tips are reachable from HEAD
   -h, --help                         Display help for the given command. When no command is given display help for the changelog command
