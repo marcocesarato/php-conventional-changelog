@@ -73,7 +73,7 @@ class Repository
         $tagsArray = explode(self::$delimiter . "\n", $tags);
         $prefixQuote = preg_quote($prefix);
 
-        $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*$/', $tagsArray);
+        $tagsFound = preg_grep('/^' . $prefixQuote . '.*$/', $tagsArray);
 
         $lastBaseTag = '0.0.0';
         if (count($tagsFound) > 0) {
