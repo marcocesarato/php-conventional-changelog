@@ -121,17 +121,9 @@ class Changelog
 
         // Get changelogs content
         if (file_exists($file)) {
-            $changelogCurrent = file_get_contents($file);
-            $changelogCurrent = ltrim($changelogCurrent);
-
-            // Remove header
-            $beginHeader = preg_quote($mainHeaderPrefix, '/');
-            $endHeader = preg_quote($mainHeaderSuffix, '/');
-
-            $pattern = '/^(' . $beginHeader . '(.*)' . $endHeader . ')/si';
-            $pattern = preg_replace(['/[\n]+/', '/[\s]+/'], ['[\n]+', '[\s]+'], $pattern);
-
-            $changelogCurrent = preg_replace($pattern, '', $changelogCurrent);
+            $changelogCurrent = $this->extractCurrentChangelogWithoutHeader(
+                file_get_contents($file)
+            );
         }
 
         // Current Dates
@@ -466,6 +458,17 @@ class Changelog
         $this->config->postRun();
 
         return 0; // Command::SUCCESS;
+    }
+
+    protected function extractCurrentChangelogWithoutHeader(string $content): string
+    {
+        $content = ltrim($content);
+
+        return preg_replace(
+            '#<!--- BEGIN HEADER -->.*<!--- END HEADER -->(.*?)#iUs',
+            '\1',
+            $content
+        );
     }
 
     /**
