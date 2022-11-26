@@ -132,8 +132,7 @@ class Changelog
         $firstCommit = Repository::getFirstCommit();
 
         if (!$firstRelease) {
-            $lastVersion = Repository::getLastTag($tagPrefix, $merged); // Last version
-
+            $lastVersion = Repository::getLastTag($tagPrefix, $merged);
             $bumpRelease = SemanticVersion::PATCH;
 
             if ($majorRelease) {
@@ -144,12 +143,15 @@ class Changelog
                 $bumpRelease = SemanticVersion::PATCH;
             } elseif ($preRelease) {
                 $bumpRelease = SemanticVersion::RC;
+                $lastVersion = Repository::getLastTag($tagPrefix, $merged, SemanticVersion::RC);
                 $autoBump = !$this->config->skipBump();
             } elseif ($betaRelease) {
                 $bumpRelease = SemanticVersion::BETA;
+                $lastVersion = Repository::getLastTag($tagPrefix, $merged, SemanticVersion::BETA);
                 $autoBump = !$this->config->skipBump();
             } elseif ($alphaRelease) {
                 $bumpRelease = SemanticVersion::ALPHA;
+                $lastVersion = Repository::getLastTag($tagPrefix, $merged, SemanticVersion::ALPHA);
                 $autoBump = !$this->config->skipBump();
             } else {
                 $autoBump = !$this->config->skipBump();
