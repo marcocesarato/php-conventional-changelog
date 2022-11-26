@@ -4,6 +4,20 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.16.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.6...v1.16.0) (2022-11-26)
+
+### Features
+
+* New option: Do not update CHANGELOG if no commits found. ([00a81e](https://github.com/marcocesarato/php-conventional-changelog/commit/00a81ee59f3f3e3f3b386f454d480a77538892ab))
+
+### Bug Fixes
+
+* Can parse header with carriage return and newline. ([ac4710](https://github.com/marcocesarato/php-conventional-changelog/commit/ac47108d2d1aed3e1e9fd8e7c5ea644a1216f8df))
+* Retrieve last tag with extra [#48](https://github.com/marcocesarato/php-conventional-changelog/issues/48) ([454513](https://github.com/marcocesarato/php-conventional-changelog/commit/45451305801803aedc40cf01397440eea4524c0d))
+
+
+---
+
 ## [1.15.6](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.5...v1.15.6) (2022-11-17)
 
 ### Bug Fixes
