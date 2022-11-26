@@ -8,10 +8,6 @@ use ConventionalChangelog\Git\Commit\Mention;
 use ConventionalChangelog\Git\Commit\Subject;
 use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Type\Stringable;
-use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
-use Exception;
 
 class Commit implements Stringable
 {
@@ -67,7 +63,7 @@ class Commit implements Stringable
     public $hash;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     public $authorDate;
 
@@ -82,7 +78,7 @@ class Commit implements Stringable
     public $authorEmail;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      */
     public $committerDate;
 
@@ -132,7 +128,7 @@ class Commit implements Stringable
     /**
      * From array.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function fromArray(array $array): self
     {
@@ -149,7 +145,7 @@ class Commit implements Stringable
             $this->setAuthorEmail($array['authorEmail']);
         }
         if (isset($array['authorDate'])) {
-            $date = new DateTime($array['authorDate']);
+            $date = new \DateTime($array['authorDate']);
             $this->setAuthorDate($date);
         }
         if (isset($array['committerName'])) {
@@ -159,7 +155,7 @@ class Commit implements Stringable
             $this->setCommitterEmail($array['committerEmail']);
         }
         if (isset($array['committerDate'])) {
-            $date = new DateTime($array['committerDate']);
+            $date = new \DateTime($array['committerDate']);
             $this->setCommitterDate($date);
         }
         $this->parse();
@@ -198,15 +194,15 @@ class Commit implements Stringable
         return substr($this->hash, 0, 6);
     }
 
-    public function getAuthorDate(): DateTime
+    public function getAuthorDate(): \DateTime
     {
         return $this->authorDate;
     }
 
     /**
-     * @param DateTime|DateTimeImmutable $authorDate
+     * @param \DateTime|\DateTimeImmutable $authorDate
      */
-    public function setAuthorDate(DateTimeInterface $authorDate): Commit
+    public function setAuthorDate(\DateTimeInterface $authorDate): Commit
     {
         $this->authorDate = $authorDate;
 
@@ -237,15 +233,15 @@ class Commit implements Stringable
         return $this;
     }
 
-    public function getCommitterDate(): DateTime
+    public function getCommitterDate(): \DateTime
     {
         return $this->committerDate;
     }
 
     /**
-     * @param DateTime|DateTimeImmutable $committerDate
+     * @param \DateTime|\DateTimeImmutable $committerDate
      */
-    public function setCommitterDate(DateTimeInterface $committerDate): Commit
+    public function setCommitterDate(\DateTimeInterface $committerDate): Commit
     {
         $this->committerDate = $committerDate;
 

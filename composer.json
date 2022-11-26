@@ -50,6 +50,7 @@
         "release:patch": "php conventional-changelog --commit --patch",
         "release:minor": "php conventional-changelog --commit --minor",
         "release:major": "php conventional-changelog --commit --major",
+        "test": "phpunit ./tests",
         "hooks": "cghooks",
         "post-install-cmd": "cghooks add --ignore-lock",
         "post-update-cmd": "cghooks update"
@@ -57,7 +58,9 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.8",
         "brainmaestro/composer-git-hooks": "^2.8",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "php-mock/php-mock": "^2.3",
+        "php-mock/php-mock-phpunit": "^2.6"
     },
     "require": {
         "php": ">=7.1.3",

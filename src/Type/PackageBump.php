@@ -2,8 +2,6 @@
 
 namespace ConventionalChangelog\Type;
 
-use Exception;
-
 abstract class PackageBump
 {
     /**
@@ -55,7 +53,7 @@ abstract class PackageBump
                 case 'json':
                     $this->originContent = json_decode($raw);
                     if ($this->originContent === null && json_last_error() !== JSON_ERROR_NONE) {
-                        throw new Exception(json_last_error_msg(), json_last_error());
+                        throw new \Exception(json_last_error_msg(), json_last_error());
                     }
                     $this->content = clone $this->originContent;
                     break;
@@ -159,7 +157,7 @@ abstract class PackageBump
                 case 'json':
                     $content = json_encode($this->content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
                     if ($content === null && json_last_error() !== JSON_ERROR_NONE) {
-                        throw new Exception(json_last_error_msg(), json_last_error());
+                        throw new \Exception(json_last_error_msg(), json_last_error());
                     }
                     break;
                 default:

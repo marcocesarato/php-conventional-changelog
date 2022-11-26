@@ -292,8 +292,6 @@ class Configuration
 
     /**
      * From array.
-     *
-     * @param $array
      */
     public function fromArray(array $array)
     {
@@ -925,8 +923,6 @@ class Configuration
 
     /**
      * Check if is regex.
-     *
-     * @param $pattern
      *
      * @return bool
      */

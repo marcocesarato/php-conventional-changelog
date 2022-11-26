@@ -50,8 +50,6 @@ class SemanticVersion
 
     /**
      * Constructor.
-     *
-     * @param $version
      */
     public function __construct($version, $prefix = 'v')
     {

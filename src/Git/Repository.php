@@ -4,7 +4,6 @@ namespace ConventionalChangelog\Git;
 
 use ConventionalChangelog\Helper\SemanticVersion;
 use ConventionalChangelog\Helper\ShellCommand;
-use DateTime;
 
 class Repository
 {
@@ -86,7 +85,7 @@ class Repository
         }
 
         if (!empty($extra)) {
-            $extraQuote = preg_quote("-${extra}");
+            $extraQuote = preg_quote("-{$extra}");
             $tagsFound = preg_grep('/^' . $prefixQuote . '[^-]*' . $extraQuote . '/', $tagsArray);
         }
 
@@ -169,11 +168,11 @@ class Repository
     /**
      * Get commit date.
      */
-    public static function getCommitDate($hash): DateTime
+    public static function getCommitDate($hash): \DateTime
     {
         $date = self::run("git log -1 --format=%aI {$hash}");
 
-        return new DateTime($date);
+        return new \DateTime($date);
     }
 
     /**
@@ -320,9 +319,6 @@ class Repository
 
     /**
      * Parse shortcode.
-     *
-     * @param $content
-     * @param $shortcodes
      *
      * @return array
      */

@@ -9,8 +9,6 @@ use ConventionalChangelog\Helper\SemanticVersion;
 use ConventionalChangelog\PackageBump\ComposerJson;
 use ConventionalChangelog\PackageBump\PackageJson;
 use ConventionalChangelog\Type\PackageBump;
-use DateTime;
-use Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -121,13 +119,13 @@ class Changelog
 
         // Get changelogs content
         if (file_exists($file)) {
-            $changelogCurrent = $this->extractCurrentChangelogWithoutHeader(
+            $changelogCurrent = $this->removeHeader(
                 file_get_contents($file)
             );
         }
 
         // Current Dates
-        $today = new DateTime();
+        $today = new \DateTime();
         // First release
         $newVersion = '1.0.0';
         // First commit
@@ -381,7 +379,7 @@ class Changelog
         }
         $filesToCommit = [$file];
 
-        if (isset($commits) && ! count($commits) && $noChangeWithoutCommits) {
+        if (isset($commits) && !count($commits) && $noChangeWithoutCommits) {
             $output->warning('No commits since last version.');
 
             return 0; // Command::SUCCESS;
@@ -402,7 +400,7 @@ class Changelog
                             $filesToCommit = array_merge($filesToCommit, $bumper->getExistingLockFiles());
                         }
                     }
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $output->error('An error occurred bumping package version: ' . $e->getMessage());
                 }
             }
@@ -460,15 +458,13 @@ class Changelog
         return 0; // Command::SUCCESS;
     }
 
-    protected function extractCurrentChangelogWithoutHeader(string $content): string
+    protected function removeHeader(string $content): string
     {
-        $content = ltrim($content);
-
-        return preg_replace(
+        return ltrim(preg_replace(
             '#<!--- BEGIN HEADER -->.*<!--- END HEADER -->(.*?)#iUs',
             '\1',
             $content
-        );
+        ));
     }
 
     /**
