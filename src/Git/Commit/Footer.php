@@ -49,7 +49,7 @@ class Footer implements Stringable
 
         $refs = [];
         $tokenLower = strtolower($this->token);
-        $values = preg_split('/[,\s]/', $this->value);
+        $values = preg_split('/[,\s]+/', $this->value, -1, PREG_SPLIT_NO_EMPTY);
         foreach ($values as $val) {
             if (isset($val[0]) && $val[0] === '#') {
                 $ref = ltrim($val, '#');
