@@ -327,10 +327,10 @@ class Changelog
                             ->setDescription($description)
                             ->setScope($scope)
                             ->setHash($hash);
-                        $changes[$breakingType][$scope][$key][$hash] = $breakingCommit;
+                        $changes[$breakingType][(string)$scope][$key][$hash] = $breakingCommit;
                         $summary[$breakingType]++;
                     }
-                    $changes[$type][$scope][$itemKey][$hash] = $commit;
+                    $changes[$type][(string)$scope][$itemKey][$hash] = $commit;
                     $summary[$type]++;
                 }
             }
