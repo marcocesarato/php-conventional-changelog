@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.17.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.16.0...v1.17.0) (2023-03-26)
+
+### Bug Fixes
+
+* Cast `Scope` as string to use it as array key ([aff96f](https://github.com/marcocesarato/php-conventional-changelog/commit/aff96f70c05dec4191190eaf32951930f2b2570c))
+* Check string offset exists before using it ([1fe715](https://github.com/marcocesarato/php-conventional-changelog/commit/1fe7152382ea5719a6a39067e4d8ce6e154f31f2))
+
+
+---
+
 ## [1.16.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.15.6...v1.16.0) (2022-11-26)
 
 ### Features
