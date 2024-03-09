@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.17.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.17.0...v1.17.1) (2024-03-09)
+
+### Bug Fixes
+
+* Symfony 7 compatibility command ([1926ac](https://github.com/marcocesarato/php-conventional-changelog/commit/1926ac42c365d1ab625155aca33b97a3f239ff19))
+
+
+---
+
 ## [1.17.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.16.0...v1.17.0) (2023-03-26)
 
 ### Bug Fixes
