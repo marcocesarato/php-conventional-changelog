@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.17.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.17.1...v1.17.2) (2024-05-19)
+
+### Bug Fixes
+
+* Wrong commits with non-latin description grouping ([ead95f](https://github.com/marcocesarato/php-conventional-changelog/commit/ead95f2ec5df3a8e1dbdc087b58e676cd7466fc7))
+
+
+---
+
 ## [1.17.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.17.0...v1.17.1) (2024-03-09)
 
 ### Bug Fixes
