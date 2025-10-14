@@ -129,6 +129,23 @@ return [
 ];
 ```
 
+#### Example with Author Information
+
+To show author information in your changelog:
+
+```php
+<?php
+
+return [
+    // Show author information in changelog entries (default: true = hidden)
+    'hiddenAuthor' => false,
+    // Optionally also show other metadata
+    'hiddenHash' => false,      // Show commit hash
+    'hiddenMentions' => false,  // Show @mentions
+    'hiddenReferences' => false, // Show issue references
+];
+```
+
 #### Full Example
 
 ```php
