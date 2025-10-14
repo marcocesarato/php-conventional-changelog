@@ -40,6 +40,40 @@ class Changelog
     {
         $this->config = $config;
         $this->remote = Repository::parseRemoteUrl();
+
+        // Auto-configure Azure DevOps URL formats
+        if ($this->isAzureDevOps()) {
+            $this->configureAzureDevOpsUrls();
+        }
+    }
+
+    /**
+     * Check if remote is Azure DevOps.
+     */
+    protected function isAzureDevOps(): bool
+    {
+        return isset($this->remote['host']) &&
+               (strpos($this->remote['host'], 'dev.azure.com') !== false ||
+                strpos($this->remote['host'], 'ssh.dev.azure.com') !== false);
+    }
+
+    /**
+     * Configure URL formats for Azure DevOps.
+     */
+    protected function configureAzureDevOpsUrls(): void
+    {
+        // Azure DevOps uses a different URL structure
+        // Commit: https://dev.azure.com/{org}/{project}/_git/{repo}/commit/{hash}
+        $this->config->setCommitUrlFormat('{{host}}/{{owner}}/{{project}}/_git/{{repository}}/commit/{{hash}}');
+
+        // Compare: https://dev.azure.com/{org}/{project}/_git/{repo}/branchCompare?baseVersion=GT{base}&targetVersion=GT{target}
+        $this->config->setCompareUrlFormat('{{host}}/{{owner}}/{{project}}/_git/{{repository}}/branchCompare?baseVersion=GT{{previousTag}}&targetVersion=GT{{currentTag}}');
+
+        // Issue/Work Item: https://dev.azure.com/{org}/{project}/_workitems/edit/{id}
+        $this->config->setIssueUrlFormat('{{host}}/{{owner}}/{{project}}/_workitems/edit/{{id}}');
+
+        // User: https://dev.azure.com/{org}/_user/{user}
+        $this->config->setUserUrlFormat('{{host}}/{{owner}}/_user/{{user}}');
     }
 
     /**
