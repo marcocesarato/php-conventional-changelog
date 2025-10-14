@@ -66,11 +66,11 @@ class ChangelogTest extends TestCase
         $method->setAccessible(true);
 
         $content = <<<EOF
-<!--- BEGIN HEADER -->
+<!-- BEGIN HEADER -->
 # Changelog
 
 All notable changes to this project will be documented in this file.
-<!--- END HEADER -->
+<!-- END HEADER -->
 
 ## 0.0.1 (1970-01-01)
 

@@ -112,8 +112,8 @@ class Changelog
         $changelogCurrent = '';
         $changelogNew = '';
 
-        $mainHeaderPrefix = "<!--- BEGIN HEADER -->\n# ";
-        $mainHeaderSuffix = "\n<!--- END HEADER -->\n\n";
+        $mainHeaderPrefix = "<!-- BEGIN HEADER -->\n# ";
+        $mainHeaderSuffix = "\n<!-- END HEADER -->\n\n";
         $mainHeaderContent = $this->config->getHeaderTitle() . "\n\n" . $this->config->getHeaderDescription();
         $mainHeader = $mainHeaderPrefix . $mainHeaderContent . $mainHeaderSuffix;
 
@@ -463,7 +463,7 @@ class Changelog
     protected function removeHeader(string $content): string
     {
         return ltrim(preg_replace(
-            '#<!--- BEGIN HEADER -->.*<!--- END HEADER -->(.*?)#iUs',
+            '#<!-- BEGIN HEADER -->.*<!-- END HEADER -->(.*?)#iUs',
             '\1',
             $content
         ));
