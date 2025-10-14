@@ -29,6 +29,7 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Skip Verify:** Skip the pre-commit and commit-msg hooks
 - **Disable Links:** Render text instead of link in changelog
 - **Hidden Hash:** Hide commit hash from changelog
+- **Hidden Author:** Hide commit author from changelog (default: true)
 - **Hidden Mentions:** Hide users mentions from changelog
 - **Hidden References:** Hide issue references from changelog
 - **Pretty Scope:** Prettify the scope commit part (section name) on changelog *(ex. UserManager => User Manager or
@@ -90,6 +91,7 @@ return [
   'skipVerify' => false,
   'disableLinks' => false,
   'hiddenHash' => false,
+  'hiddenAuthor' => true,
   'hiddenMentions' => false,
   'hiddenReferences' => false,
   'prettyScope' => true,
