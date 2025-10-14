@@ -99,7 +99,7 @@ class Repository
             }
         }
 
-        if (SemanticVersion::compareBase($lastBaseTag, $lastTag) > 0) {
+        if (SemanticVersion::compareBase($lastBaseTag, $lastTag) >= 0) {
             return $lastBaseTag;
         }
 
