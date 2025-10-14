@@ -202,4 +202,36 @@ EOF;
         $this->assertStringContainsString('_git', $config->getCommitUrlFormat());
         $this->assertStringContainsString('_workitems', $config->getIssueUrlFormat());
     }
+
+    /** @test */
+    public function testAzureDevOpsHostNormalization()
+    {
+        // Test that SSH host is normalized to dev.azure.com
+        $config = new Configuration();
+        $changelog = new Changelog($config);
+
+        $class = new \ReflectionClass($changelog);
+        $remoteProperty = $class->getProperty('remote');
+        $remoteProperty->setAccessible(true);
+
+        $method = $class->getMethod('configureAzureDevOpsUrls');
+        $method->setAccessible(true);
+
+        // Set Azure SSH remote
+        $remoteProperty->setValue($changelog, [
+            'host' => 'ssh.dev.azure.com',
+            'owner' => 'myorg',
+            'project' => 'myproject',
+            'repository' => 'myrepo',
+        ]);
+
+        // Apply Azure configuration
+        $method->invoke($changelog);
+
+        // Get the updated remote
+        $remote = $remoteProperty->getValue($changelog);
+
+        // Verify host was normalized to dev.azure.com
+        $this->assertEquals('dev.azure.com', $remote['host']);
+    }
 }

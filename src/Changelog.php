@@ -62,6 +62,11 @@ class Changelog
      */
     protected function configureAzureDevOpsUrls(): void
     {
+        // Normalize host for SSH URLs (ssh.dev.azure.com -> dev.azure.com)
+        if (isset($this->remote['host']) && $this->remote['host'] === 'ssh.dev.azure.com') {
+            $this->remote['host'] = 'dev.azure.com';
+        }
+
         // Azure DevOps uses a different URL structure
         // Commit: https://dev.azure.com/{org}/{project}/_git/{repo}/commit/{hash}
         $this->config->setCommitUrlFormat('{{host}}/{{owner}}/{{project}}/_git/{{repository}}/commit/{{hash}}');
