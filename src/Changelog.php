@@ -569,9 +569,11 @@ class Changelog
                     $sha = '';
                     $references = '';
                     $mentions = '';
+                    $author = '';
                     $shaGroup = [];
                     $refsGroup = [];
                     $mentionsGroup = [];
+                    $authorGroup = [];
                     foreach ($itemsList as $item) {
                         $description = ucfirst($item->getDescription());
                         // Hashes
@@ -600,6 +602,11 @@ class Changelog
                                 $mentionsGroup[] = $text;
                             }
                         }
+                        // Author
+                        if (!$this->config->isHiddenAuthor() && !empty($item->getAuthorName())) {
+                            $authorName = $item->getAuthorName();
+                            $authorGroup[] = $authorName;
+                        }
                     }
 
                     if (!$this->config->isHiddenHash() && !empty($shaGroup)) {
@@ -611,7 +618,10 @@ class Changelog
                     if (!$this->config->isHiddenMentions() && !empty($mentionsGroup)) {
                         $mentions = '*[*' . implode(', ', $mentionsGroup) . '*]*';
                     }
-                    $changelog .= Formatter::clean("* {$description} {$references} {$sha} {$mentions}");
+                    if (!$this->config->isHiddenAuthor() && !empty($authorGroup)) {
+                        $author = '*by ' . implode(', ', array_unique($authorGroup)) . '*';
+                    }
+                    $changelog .= Formatter::clean("* {$description} {$references} {$sha} {$author} {$mentions}");
                     $changelog .= PHP_EOL;
                 }
             }

@@ -112,6 +112,20 @@ EOF;
     }
 
     /** @test */
+    public function testHiddenAuthorConfigurationDefault()
+    {
+        $config = new Configuration();
+        // By default, author should be hidden (true)
+        $this->assertTrue($config->isHiddenAuthor());
+    }
+
+    /** @test */
+    public function testHiddenAuthorConfiguration()
+    {
+        $config = new Configuration(['hiddenAuthor' => false]);
+        // Author should not be hidden when set to false
+        $this->assertFalse($config->isHiddenAuthor());
+      
     public function testAzureDevOpsHttpsUrlPatternMatching()
     {
         // Test Azure DevOps HTTPS URL pattern directly

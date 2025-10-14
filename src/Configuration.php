@@ -167,6 +167,13 @@ class Configuration
     protected $hiddenHash = false;
 
     /**
+     * Hidden author.
+     *
+     * @var bool
+     */
+    protected $hiddenAuthor = true;
+
+    /**
      * Tag suffix.
      *
      * @var string
@@ -315,6 +322,7 @@ class Configuration
             'skipVerify' => $this->skipVerify(),
             'disableLinks' => $this->isDisableLinks(),
             'hiddenHash' => $this->isHiddenHash(),
+            'hiddenAuthor' => $this->isHiddenAuthor(),
             'hiddenMentions' => $this->isHiddenMentions(),
             'hiddenReferences' => $this->isHiddenReferences(),
             'prettyScope' => $this->isPrettyScope(),
@@ -382,6 +390,7 @@ class Configuration
             ->setDisableLinks($params['disableLinks'])
             // Hidden
             ->setHiddenHash($params['hiddenHash'])
+            ->setHiddenAuthor($params['hiddenAuthor'])
             ->setHiddenMentions($params['hiddenMentions'])
             ->setHiddenReferences($params['hiddenReferences'])
             ->setHiddenVersionSeparator($params['hiddenVersionSeparator'])
@@ -763,6 +772,18 @@ class Configuration
     public function setHiddenHash(bool $hiddenHash): self
     {
         $this->hiddenHash = $hiddenHash;
+
+        return $this;
+    }
+
+    public function isHiddenAuthor(): bool
+    {
+        return $this->hiddenAuthor;
+    }
+
+    public function setHiddenAuthor(bool $hiddenAuthor): self
+    {
+        $this->hiddenAuthor = $hiddenAuthor;
 
         return $this;
     }
