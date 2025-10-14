@@ -125,5 +125,127 @@ EOF;
         $config = new Configuration(['hiddenAuthor' => false]);
         // Author should not be hidden when set to false
         $this->assertFalse($config->isHiddenAuthor());
+      
+    public function testAzureDevOpsHttpsUrlPatternMatching()
+    {
+        // Test Azure DevOps HTTPS URL pattern directly
+        $url = 'https://dev.azure.com/myorg/myproject/_git/myrepo';
+        $pattern = '#^(?P<protocol>https?)://(?P<host>dev\.azure\.com)/(?P<owner>[^/]+)/(?P<project>[^/]+)/_git/(?P<repository>[^/]+?)(?:\.git)?/?$#smi';
+
+        $this->assertEquals(1, preg_match($pattern, $url, $match));
+        $result = array_filter($match, 'is_string', ARRAY_FILTER_USE_KEY);
+
+        $this->assertEquals('dev.azure.com', $result['host']);
+        $this->assertEquals('myorg', $result['owner']);
+        $this->assertEquals('myproject', $result['project']);
+        $this->assertEquals('myrepo', $result['repository']);
+    }
+
+    /** @test */
+    public function testAzureDevOpsSshUrlPatternMatching()
+    {
+        // Test Azure DevOps SSH URL pattern directly
+        $url = 'git@ssh.dev.azure.com:v3/myorg/myproject/myrepo';
+        $pattern = '#^(?P<user>[^@]+)@(?P<host>ssh\.dev\.azure\.com):v3/(?P<owner>[^/]+)/(?P<project>[^/]+)/(?P<repository>[^/]+?)(?:\.git)?/?$#smi';
+
+        $this->assertEquals(1, preg_match($pattern, $url, $match));
+        $result = array_filter($match, 'is_string', ARRAY_FILTER_USE_KEY);
+
+        $this->assertEquals('ssh.dev.azure.com', $result['host']);
+        $this->assertEquals('myorg', $result['owner']);
+        $this->assertEquals('myproject', $result['project']);
+        $this->assertEquals('myrepo', $result['repository']);
+    }
+
+    /** @test */
+    public function testAzureDevOpsDetection()
+    {
+        // Use reflection to test the isAzureDevOps method
+        $config = new Configuration();
+        $changelog = new Changelog($config);
+
+        $class = new \ReflectionClass($changelog);
+        $remoteProperty = $class->getProperty('remote');
+        $remoteProperty->setAccessible(true);
+
+        $method = $class->getMethod('isAzureDevOps');
+        $method->setAccessible(true);
+
+        // Test with Azure DevOps host
+        $remoteProperty->setValue($changelog, ['host' => 'dev.azure.com']);
+        $this->assertTrue($method->invoke($changelog));
+
+        $remoteProperty->setValue($changelog, ['host' => 'ssh.dev.azure.com']);
+        $this->assertTrue($method->invoke($changelog));
+
+        // Test with non-Azure host
+        $remoteProperty->setValue($changelog, ['host' => 'github.com']);
+        $this->assertFalse($method->invoke($changelog));
+    }
+
+    /** @test */
+    public function testAzureDevOpsUrlConfiguration()
+    {
+        // Test that Azure DevOps URL formats are configured correctly
+        $config = new Configuration();
+        $changelog = new Changelog($config);
+
+        $class = new \ReflectionClass($changelog);
+        $remoteProperty = $class->getProperty('remote');
+        $remoteProperty->setAccessible(true);
+
+        $method = $class->getMethod('configureAzureDevOpsUrls');
+        $method->setAccessible(true);
+
+        // Set Azure remote
+        $remoteProperty->setValue($changelog, [
+            'host' => 'dev.azure.com',
+            'owner' => 'myorg',
+            'project' => 'myproject',
+            'repository' => 'myrepo',
+        ]);
+
+        // Apply Azure configuration
+        $method->invoke($changelog);
+
+        // Verify Azure DevOps URL formats were applied
+        $this->assertStringContainsString('branchCompare', $config->getCompareUrlFormat());
+        $this->assertStringContainsString('baseVersion=GT', $config->getCompareUrlFormat());
+        $this->assertStringContainsString('targetVersion=GT', $config->getCompareUrlFormat());
+        $this->assertStringContainsString('{{project}}', $config->getCompareUrlFormat());
+        $this->assertStringContainsString('_git', $config->getCommitUrlFormat());
+        $this->assertStringContainsString('_workitems', $config->getIssueUrlFormat());
+    }
+
+    /** @test */
+    public function testAzureDevOpsHostNormalization()
+    {
+        // Test that SSH host is normalized to dev.azure.com
+        $config = new Configuration();
+        $changelog = new Changelog($config);
+
+        $class = new \ReflectionClass($changelog);
+        $remoteProperty = $class->getProperty('remote');
+        $remoteProperty->setAccessible(true);
+
+        $method = $class->getMethod('configureAzureDevOpsUrls');
+        $method->setAccessible(true);
+
+        // Set Azure SSH remote
+        $remoteProperty->setValue($changelog, [
+            'host' => 'ssh.dev.azure.com',
+            'owner' => 'myorg',
+            'project' => 'myproject',
+            'repository' => 'myrepo',
+        ]);
+
+        // Apply Azure configuration
+        $method->invoke($changelog);
+
+        // Get the updated remote
+        $remote = $remoteProperty->getValue($changelog);
+
+        // Verify host was normalized to dev.azure.com
+        $this->assertEquals('dev.azure.com', $remote['host']);
     }
 }

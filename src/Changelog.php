@@ -40,6 +40,45 @@ class Changelog
     {
         $this->config = $config;
         $this->remote = Repository::parseRemoteUrl();
+
+        // Auto-configure Azure DevOps URL formats
+        if ($this->isAzureDevOps()) {
+            $this->configureAzureDevOpsUrls();
+        }
+    }
+
+    /**
+     * Check if remote is Azure DevOps.
+     */
+    protected function isAzureDevOps(): bool
+    {
+        return isset($this->remote['host']) &&
+               (strpos($this->remote['host'], 'dev.azure.com') !== false ||
+                strpos($this->remote['host'], 'ssh.dev.azure.com') !== false);
+    }
+
+    /**
+     * Configure URL formats for Azure DevOps.
+     */
+    protected function configureAzureDevOpsUrls(): void
+    {
+        // Normalize host for SSH URLs (ssh.dev.azure.com -> dev.azure.com)
+        if (isset($this->remote['host']) && $this->remote['host'] === 'ssh.dev.azure.com') {
+            $this->remote['host'] = 'dev.azure.com';
+        }
+
+        // Azure DevOps uses a different URL structure
+        // Commit: https://dev.azure.com/{org}/{project}/_git/{repo}/commit/{hash}
+        $this->config->setCommitUrlFormat('{{host}}/{{owner}}/{{project}}/_git/{{repository}}/commit/{{hash}}');
+
+        // Compare: https://dev.azure.com/{org}/{project}/_git/{repo}/branchCompare?baseVersion=GT{base}&targetVersion=GT{target}
+        $this->config->setCompareUrlFormat('{{host}}/{{owner}}/{{project}}/_git/{{repository}}/branchCompare?baseVersion=GT{{previousTag}}&targetVersion=GT{{currentTag}}');
+
+        // Issue/Work Item: https://dev.azure.com/{org}/{project}/_workitems/edit/{id}
+        $this->config->setIssueUrlFormat('{{host}}/{{owner}}/{{project}}/_workitems/edit/{{id}}');
+
+        // User: https://dev.azure.com/{org}/_user/{user}
+        $this->config->setUserUrlFormat('{{host}}/{{owner}}/_user/{{user}}');
     }
 
     /**
@@ -190,11 +229,13 @@ class Changelog
                 $previousTag = $toTag;
             }
             if ($autoCommit) {
+                // Use firstCommit if lastVersion is the default '0.0.0' (no tags found)
+                $fromRevision = ($lastVersion === '0.0.0') ? $firstCommit : $lastVersion;
                 $options[$newVersion] = [
                     'from' => $lastVersion,
                     'to' => $newVersion,
                     'date' => $today->format($dateFormat),
-                    'options' => "{$lastVersion}...HEAD",
+                    'options' => "{$fromRevision}...HEAD",
                     'autoBump' => false,
                 ];
             }
@@ -209,7 +250,9 @@ class Changelog
                 }
             } else {
                 // Get latest commits from last version date
-                $additionalParams = "{$lastVersion}...HEAD";
+                // Use firstCommit if lastVersion is the default '0.0.0' (no tags found)
+                $fromRevision = ($lastVersion === '0.0.0') ? $firstCommit : $lastVersion;
+                $additionalParams = "{$fromRevision}...HEAD";
                 if (empty($fromTag)) {
                     $fromTag = $lastVersion;
                 }
@@ -228,7 +271,9 @@ class Changelog
                 if (empty($toTag)) {
                     $toTag = 'HEAD';
                 }
-                $additionalParams = "{$fromTag}...{$toTag}";
+                // Use firstCommit if fromTag is the default '0.0.0' (no tags found)
+                $fromRevision = ($fromTag === '0.0.0') ? $firstCommit : $fromTag;
+                $additionalParams = "{$fromRevision}...{$toTag}";
             }
 
             // Date range

@@ -99,7 +99,7 @@ class Repository
             }
         }
 
-        if (SemanticVersion::compareBase($lastBaseTag, $lastTag) > 0) {
+        if (SemanticVersion::compareBase($lastBaseTag, $lastTag) >= 0) {
             return $lastBaseTag;
         }
 
@@ -347,6 +347,10 @@ class Repository
     {
         $url = self::getRemoteUrl();
         $patterns = [
+            // Azure DevOps HTTPS: https://dev.azure.com/{organization}/{project}/_git/{repository}
+            '#^(?P<protocol>https?)://(?P<host>dev\.azure\.com)/(?P<owner>[^/]+)/(?P<project>[^/]+)/_git/(?P<repository>[^/]+?)(?:\.git)?/?$#smi',
+            // Azure DevOps SSH: git@ssh.dev.azure.com:v3/{organization}/{project}/{repository}
+            '#^(?P<user>[^@]+)@(?P<host>ssh\.dev\.azure\.com):v3/(?P<owner>[^/]+)/(?P<project>[^/]+)/(?P<repository>[^/]+?)(?:\.git)?/?$#smi',
             '#^(?P<protocol>https?|git|ssh|rsync)\://(?:(?P<user>.+)@)*(?P<host>[a-z0-9_.-]*)[:/]*(?P<port>[\d]+){0,1}(?P<pathname>\/((?P<owner>.+)\/)?((?P<repository>.+?)(\.git|\/)?)?)$#smi',
             '#(git\+)?((?P<protocol>\w+)://)((?P<user>\w+)@)?((?P<host>[\w\.\-]+))(:(?P<port>\d+))?(?P<pathname>(\/(?P<owner>.+)/)?(\/?(?P<repository>.+)(\.git|\/)?)?)$#smi',
             '#^(?:(?P<user>.+)@)*(?P<host>[a-z0-9_.-]*)[:]*(?P<port>[\d]+){0,1}(?P<pathname>\/?(?P<owner>.+)/(?P<repository>.+).git)$#smi',
