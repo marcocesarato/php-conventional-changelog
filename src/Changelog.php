@@ -190,11 +190,13 @@ class Changelog
                 $previousTag = $toTag;
             }
             if ($autoCommit) {
+                // Use firstCommit if lastVersion is the default '0.0.0' (no tags found)
+                $fromRevision = ($lastVersion === '0.0.0') ? $firstCommit : $lastVersion;
                 $options[$newVersion] = [
                     'from' => $lastVersion,
                     'to' => $newVersion,
                     'date' => $today->format($dateFormat),
-                    'options' => "{$lastVersion}...HEAD",
+                    'options' => "{$fromRevision}...HEAD",
                     'autoBump' => false,
                 ];
             }
@@ -209,7 +211,9 @@ class Changelog
                 }
             } else {
                 // Get latest commits from last version date
-                $additionalParams = "{$lastVersion}...HEAD";
+                // Use firstCommit if lastVersion is the default '0.0.0' (no tags found)
+                $fromRevision = ($lastVersion === '0.0.0') ? $firstCommit : $lastVersion;
+                $additionalParams = "{$fromRevision}...HEAD";
                 if (empty($fromTag)) {
                     $fromTag = $lastVersion;
                 }
@@ -228,7 +232,9 @@ class Changelog
                 if (empty($toTag)) {
                     $toTag = 'HEAD';
                 }
-                $additionalParams = "{$fromTag}...{$toTag}";
+                // Use firstCommit if fromTag is the default '0.0.0' (no tags found)
+                $fromRevision = ($fromTag === '0.0.0') ? $firstCommit : $fromTag;
+                $additionalParams = "{$fromRevision}...{$toTag}";
             }
 
             // Date range
