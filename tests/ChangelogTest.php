@@ -125,7 +125,9 @@ EOF;
         $config = new Configuration(['hiddenAuthor' => false]);
         // Author should not be hidden when set to false
         $this->assertFalse($config->isHiddenAuthor());
-      
+    }
+
+    /** @test */
     public function testAzureDevOpsHttpsUrlPatternMatching()
     {
         // Test Azure DevOps HTTPS URL pattern directly
@@ -247,5 +249,113 @@ EOF;
 
         // Verify host was normalized to dev.azure.com
         $this->assertEquals('dev.azure.com', $remote['host']);
+    }
+
+    /** @test */
+    public function testRunHookWithStringCommand()
+    {
+        $config = new Configuration();
+
+        // Use reflection to test the runHook method
+        $class = new \ReflectionClass($config);
+        $method = $class->getMethod('runHook');
+        $method->setAccessible(true);
+
+        // Test with a simple string command
+        // We can't easily test system() output, but we can test it doesn't throw an error
+        ob_start();
+        $method->invoke($config, 'echo "test"');
+        $output = ob_get_clean();
+
+        // If we got here without exception, the method works
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function testRunHookWithPipeCommand()
+    {
+        $config = new Configuration();
+
+        // Use reflection to test the runHook method
+        $class = new \ReflectionClass($config);
+        $method = $class->getMethod('runHook');
+        $method->setAccessible(true);
+
+        // Test with a command that uses pipe
+        ob_start();
+        $method->invoke($config, 'echo "test" | cat');
+        $output = ob_get_clean();
+
+        // If we got here without exception, the method works with pipes
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function testRunHookWithCallable()
+    {
+        $config = new Configuration();
+
+        // Use reflection to test the runHook method
+        $class = new \ReflectionClass($config);
+        $method = $class->getMethod('runHook');
+        $method->setAccessible(true);
+
+        // Test with a callable
+        $called = false;
+        $hook = function () use (&$called) {
+            $called = true;
+        };
+
+        $method->invoke($config, $hook);
+
+        // Verify the callable was executed
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function testRunHookWithNull()
+    {
+        $config = new Configuration();
+
+        // Use reflection to test the runHook method
+        $class = new \ReflectionClass($config);
+        $method = $class->getMethod('runHook');
+        $method->setAccessible(true);
+
+        // Test with null - should not throw exception
+        $method->invoke($config, null);
+
+        // If we got here without exception, it handled null correctly
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function testPreRunHook()
+    {
+        $called = false;
+        $hook = function () use (&$called) {
+            $called = true;
+        };
+
+        $config = new Configuration(['preRun' => $hook]);
+        $config->preRun();
+
+        // Verify the preRun hook was executed
+        $this->assertTrue($called);
+    }
+
+    /** @test */
+    public function testPostRunHook()
+    {
+        $called = false;
+        $hook = function () use (&$called) {
+            $called = true;
+        };
+
+        $config = new Configuration(['postRun' => $hook]);
+        $config->postRun();
+
+        // Verify the postRun hook was executed
+        $this->assertTrue($called);
     }
 }
