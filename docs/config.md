@@ -27,6 +27,8 @@ dir or use the `--config` option to specify the location of your configuration f
 - **Package Bumps:** Array of files to replace version, defaults to `['ConventionalChangelog\PackageBump\ComposerJson', 'ConventionalChangelog\PackageBump\PackageJson']`
 - **Skip Tag:** Skip automatic commit tagging
 - **Skip Verify:** Skip the pre-commit and commit-msg hooks
+- **Annotate Tag:** Create annotated tags instead of lightweight tags (can also be set via `--annotate-tag` option)
+- **Sign Tag:** Create GPG-signed tags (can also be set via `--sign-tag` option)
 - **Disable Links:** Render text instead of link in changelog
 - **Hidden Hash:** Hide commit hash from changelog
 - **Hidden Author:** Hide commit author from changelog (default: true)
@@ -89,6 +91,8 @@ return [
   'skipBump' => false,
   'skipTag' => false,
   'skipVerify' => false,
+  'annotateTag' => false,
+  'signTag' => false,
   'disableLinks' => false,
   'hiddenHash' => false,
   'hiddenAuthor' => true,
@@ -145,6 +149,28 @@ return [
     'hiddenReferences' => false, // Show issue references
 ];
 ```
+
+#### Example with Annotated and Signed Tags
+
+To create annotated or GPG-signed tags:
+
+```php
+<?php
+
+return [
+    // Create annotated tags instead of lightweight tags
+    'annotateTag' => true,
+    
+    // Create GPG-signed tags (requires GPG setup)
+    'signTag' => true,
+    
+    // Note: signTag will also create annotated tags automatically
+];
+```
+
+You can also use command-line options:
+- `--annotate-tag` or `--annotate-tag="Custom message"` for annotated tags
+- `--sign-tag` for GPG-signed tags
 
 #### Full Example
 

@@ -137,6 +137,35 @@ or to amend at an existing commit you can run:
 php vendor/bin/conventional-changelog --amend
 ```
 
+#### Annotated and Signed Tags
+
+By default, the tool creates lightweight tags. You can create annotated or GPG-signed tags:
+
+**Create an annotated tag:**
+```shell
+php vendor/bin/conventional-changelog --commit --annotate-tag
+```
+
+**Create a GPG-signed tag** (requires GPG configuration):
+```shell
+php vendor/bin/conventional-changelog --commit --sign-tag
+```
+
+**Create an annotated tag with a custom message:**
+```shell
+php vendor/bin/conventional-changelog --commit --annotate-tag="Release version"
+```
+
+You can also configure this in your `.changelog` configuration file:
+```php
+return [
+    'annotateTag' => true,  // Create annotated tags by default
+    'signTag' => true,      // Create GPG-signed tags by default
+];
+```
+
+> **Note:** GPG-signed tags (`--sign-tag`) are automatically annotated, so you don't need to use both options together.
+
 #### History
 
 To generate your changelog with the entire history of changes of all releases
@@ -207,6 +236,7 @@ Options:
       --no-tag                       Disable release auto tagging
       --no-change-without-commits    Do not apply change if no commits
       --annotate-tag[=ANNOTATE-TAG]  Make an unsigned, annotated tag object once changelog is generated [default: false]
+      --sign-tag                     Make a GPG-signed tag object once changelog is generated
       --merged                       Only include commits whose tips are reachable from HEAD
   -h, --help                         Display help for the given command. When no command is given display help for the changelog command
 ```

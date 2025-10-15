@@ -85,6 +85,7 @@ class DefaultCommand extends Command
                 new InputOption('no-tag', null, InputOption::VALUE_NONE, 'Disable release auto tagging'),
                 new InputOption('no-change-without-commits', null, InputOption::VALUE_NONE, 'Do not apply change if no commits'),
                 new InputOption('annotate-tag', null, InputOption::VALUE_OPTIONAL, 'Make an unsigned, annotated tag object once changelog is generated', false),
+                new InputOption('sign-tag', null, InputOption::VALUE_NONE, 'Make a GPG-signed tag object once changelog is generated'),
                 new InputOption('merged', null, InputOption::VALUE_NONE, 'Only include commits whose tips are reachable from HEAD'),
             ]);
     }
