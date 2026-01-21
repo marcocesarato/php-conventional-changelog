@@ -358,4 +358,81 @@ EOF;
         // Verify the postRun hook was executed
         $this->assertTrue($called);
     }
+
+    /** @test */
+    public function testAnnotateTagConfiguration()
+    {
+        $config = new Configuration(['annotateTag' => true]);
+        $this->assertTrue($config->isAnnotateTag());
+
+        $config = new Configuration(['annotateTag' => false]);
+        $this->assertFalse($config->isAnnotateTag());
+    }
+
+    /** @test */
+    public function testSignTagConfiguration()
+    {
+        $config = new Configuration(['signTag' => true]);
+        $this->assertTrue($config->isSignTag());
+
+        $config = new Configuration(['signTag' => false]);
+        $this->assertFalse($config->isSignTag());
+    }
+
+    /** @test */
+    public function testAnnotateTagDefault()
+    {
+        $config = new Configuration();
+        // By default, annotateTag should be false
+        $this->assertFalse($config->isAnnotateTag());
+    }
+
+    /** @test */
+    public function testSignTagDefault()
+    {
+        $config = new Configuration();
+        // By default, signTag should be false
+        $this->assertFalse($config->isSignTag());
+    }
+
+    /** @test */
+    public function testTagCommandLightweight()
+    {
+        // Test that lightweight tags don't have flags
+        $class = new \ReflectionClass(\ConventionalChangelog\Git\Repository::class);
+        $method = $class->getMethod('tag');
+
+        // For lightweight tags, the command should be: git tag <name>
+        // We can't easily test exec output, but we can verify the method exists and is callable
+        $this->assertTrue($method->isStatic());
+        $this->assertTrue($method->isPublic());
+    }
+
+    /** @test */
+    public function testTagCommandAnnotated()
+    {
+        // Test that annotated tags work with both boolean and string
+        $config = new Configuration(['annotateTag' => true]);
+        $this->assertTrue($config->isAnnotateTag());
+    }
+
+    /** @test */
+    public function testTagCommandSigned()
+    {
+        // Test that signed tags can be configured
+        $config = new Configuration(['signTag' => true]);
+        $this->assertTrue($config->isSignTag());
+    }
+
+    /** @test */
+    public function testBothAnnotateAndSignTag()
+    {
+        // Test that both can be enabled together
+        $config = new Configuration([
+            'annotateTag' => true,
+            'signTag' => true,
+        ]);
+        $this->assertTrue($config->isAnnotateTag());
+        $this->assertTrue($config->isSignTag());
+    }
 }

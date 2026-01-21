@@ -139,6 +139,20 @@ class Configuration
     protected $skipVerify = false;
 
     /**
+     * Annotate tag.
+     *
+     * @var bool
+     */
+    protected $annotateTag = false;
+
+    /**
+     * Sign tag.
+     *
+     * @var bool
+     */
+    protected $signTag = false;
+
+    /**
      * Render text instead of links.
      *
      * @var bool
@@ -320,6 +334,8 @@ class Configuration
             'skipBump' => $this->skipBump(),
             'skipTag' => $this->skipTag(),
             'skipVerify' => $this->skipVerify(),
+            'annotateTag' => $this->isAnnotateTag(),
+            'signTag' => $this->isSignTag(),
             'disableLinks' => $this->isDisableLinks(),
             'hiddenHash' => $this->isHiddenHash(),
             'hiddenAuthor' => $this->isHiddenAuthor(),
@@ -386,6 +402,8 @@ class Configuration
             ->setSkipBump($params['skipBump'])
             ->setSkipTag($params['skipTag'])
             ->setSkipVerify($params['skipVerify'])
+            ->setAnnotateTag($params['annotateTag'])
+            ->setSignTag($params['signTag'])
             // Links
             ->setDisableLinks($params['disableLinks'])
             // Hidden
@@ -620,6 +638,30 @@ class Configuration
     public function setSkipVerify(bool $skipVerify): self
     {
         $this->skipVerify = $skipVerify;
+
+        return $this;
+    }
+
+    public function isAnnotateTag(): bool
+    {
+        return $this->annotateTag;
+    }
+
+    public function setAnnotateTag(bool $annotateTag): self
+    {
+        $this->annotateTag = $annotateTag;
+
+        return $this;
+    }
+
+    public function isSignTag(): bool
+    {
+        return $this->signTag;
+    }
+
+    public function setSignTag(bool $signTag): self
+    {
+        $this->signTag = $signTag;
 
         return $this;
     }

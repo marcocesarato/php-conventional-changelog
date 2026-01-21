@@ -297,12 +297,31 @@ class Repository
     /**
      * Tag.
      *
+     * @param string $name Tag name
+     * @param bool|string $annotate Whether to create an annotated tag, or a custom annotation message
+     * @param bool $sign Whether to create a GPG-signed tag
+     *
      * @return string
      */
-    public static function tag(string $name, $annotation = false)
+    public static function tag(string $name, $annotate = false, bool $sign = false)
     {
-        $message = $annotation ?: $name;
-        $flags = $annotation !== false ? "-a -m {$message}" : '';
+        $flags = '';
+
+        // Determine the message to use
+        $message = $name;
+        if (is_string($annotate) && !empty($annotate)) {
+            $message = $annotate;
+        }
+
+        // Build flags based on annotation and signing
+        if ($sign) {
+            // GPG-signed tags (-s) are always annotated
+            $flags = "-s -m \"{$message}\"";
+        } elseif ($annotate !== false) {
+            // Annotated tag without signing
+            $flags = "-a -m \"{$message}\"";
+        }
+        // Otherwise, create a lightweight tag (no flags)
 
         return exec("git tag {$flags} {$name}");
     }
