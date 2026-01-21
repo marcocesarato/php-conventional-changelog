@@ -4,6 +4,14 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.17.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.17.2...v1.17.3) (2026-01-21)
+
+### Features
+
+* Add support for Symfony 8 ([df24e4a](https://github.com/marcocesarato/php-conventional-changelog/commit/df24e4a2495b10986fc89e0be0369e64e65f2056))
+
+---
+
 ## [1.17.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.17.1...v1.17.2) (2024-05-19)
 
 ### Bug Fixes
@@ -855,4 +863,3 @@ All notable changes to this project will be documented in this file.
 - Generate changelogs and release notes from a project's commit messages and metadata using php composer and automate versioning with semver.org and conventionalcommits.org
 
 ---
-
