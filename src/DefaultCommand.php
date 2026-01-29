@@ -57,7 +57,7 @@ class DefaultCommand extends Command
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription("Generate changelogs and release notes from a project's commit messages" .
