@@ -28,6 +28,11 @@ $commandName = $command->getName();
 
 // Run application single command
 $application = new Application('conventional-changelog', '1.17.3');
-$application->add($command);
+// Symfony Console 8.0+ removed add() in favor of addCommand()
+if (method_exists($application, 'addCommand')) {
+    $application->addCommand($command);
+} else {
+    $application->add($command);
+}
 $application->setDefaultCommand($commandName, true);
 $application->run();
