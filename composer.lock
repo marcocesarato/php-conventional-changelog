@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c53ad5d8994ba867396f937338b0d9fa",
+    "content-hash": "e9998f2830f66362915f77a177edd696",
     "packages": [
         {
             "name": "psr/container",
@@ -1727,16 +1727,16 @@
         },
         {
             "name": "php-mock/php-mock",
-            "version": "2.4.0",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-mock/php-mock.git",
-                "reference": "6f71999665d27fbdf684c1639981e96eff540b5f"
+                "reference": "6240b6f0a76d7b9d1ee4d70e686a7cc711619a9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-mock/php-mock/zipball/6f71999665d27fbdf684c1639981e96eff540b5f",
-                "reference": "6f71999665d27fbdf684c1639981e96eff540b5f",
+                "url": "https://api.github.com/repos/php-mock/php-mock/zipball/6240b6f0a76d7b9d1ee4d70e686a7cc711619a9d",
+                "reference": "6240b6f0a76d7b9d1ee4d70e686a7cc711619a9d",
                 "shasum": ""
             },
             "require": {
@@ -1786,11 +1786,12 @@
                 "mock",
                 "stub",
                 "test",
-                "test double"
+                "test double",
+                "testing"
             ],
             "support": {
                 "issues": "https://github.com/php-mock/php-mock/issues",
-                "source": "https://github.com/php-mock/php-mock/tree/2.4.0"
+                "source": "https://github.com/php-mock/php-mock/tree/2.4.1"
             },
             "funding": [
                 {
@@ -1798,7 +1799,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-02-13T08:51:05+00:00"
+            "time": "2023-06-12T20:48:52+00:00"
         },
         {
             "name": "php-mock/php-mock-integration",
