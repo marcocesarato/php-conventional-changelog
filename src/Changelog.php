@@ -52,9 +52,9 @@ class Changelog
      */
     protected function isAzureDevOps(): bool
     {
-        return isset($this->remote['host']) &&
-               (strpos($this->remote['host'], 'dev.azure.com') !== false ||
-                strpos($this->remote['host'], 'ssh.dev.azure.com') !== false);
+        return isset($this->remote['host'])
+               && (strpos($this->remote['host'], 'dev.azure.com') !== false
+                || strpos($this->remote['host'], 'ssh.dev.azure.com') !== false);
     }
 
     /**
@@ -152,8 +152,8 @@ class Changelog
         $changelogCurrent = '';
         $changelogNew = '';
 
-        $mainHeaderPrefix = "<!--- BEGIN HEADER -->\n# ";
-        $mainHeaderSuffix = "\n<!--- END HEADER -->\n\n";
+        $mainHeaderPrefix = "<!-- BEGIN HEADER -->\n# ";
+        $mainHeaderSuffix = "\n<!-- END HEADER -->\n\n";
         $mainHeaderContent = $this->config->getHeaderTitle() . "\n\n" . $this->config->getHeaderDescription();
         $mainHeader = $mainHeaderPrefix . $mainHeaderContent . $mainHeaderSuffix;
 
@@ -208,43 +208,55 @@ class Changelog
         $newVersion = preg_replace('/^' . preg_quote($tagPrefix, '/') . '/', '', $newVersion);
 
         $options = []; // Git retrieve options per version
+        $hasCurrentRelease = !$history;
 
         if ($history) {
             $changelogCurrent = ''; // Clean changelog file
             $tags = Repository::getTags($tagPrefix);
 
             $previousTag = null;
+            $excludedTags = [];
             foreach ($tags as $key => $toTag) {
                 $fromTag = $firstCommit;
+                $commitRange = escapeshellarg($toTag);
                 if (!empty($previousTag) && $key !== 0) {
                     $fromTag = $previousTag;
+                    $excludedRevisions = array_map('escapeshellarg', $excludedTags);
+                    $commitRange .= ' --not ' . implode(' ', $excludedRevisions);
                 }
                 $commitDate = Repository::getCommitDate($toTag);
                 $options[$toTag] = [
                     'from' => $fromTag,
                     'to' => $toTag,
                     'date' => $commitDate->format($dateFormat),
-                    'options' => "{$fromTag}...{$toTag}",
+                    'options' => $commitRange,
                     'autoBump' => false,
                 ];
                 $previousTag = $toTag;
+                $excludedTags[] = $toTag;
             }
-            if ($autoCommit) {
-                // Use firstCommit if lastVersion is the default '0.0.0' (no tags found)
-                $fromRevision = ($lastVersion === '0.0.0') ? $firstCommit : $lastVersion;
+            $fromRevision = $previousTag ?: null;
+            $commitRange = escapeshellarg('HEAD');
+            if (!empty($excludedTags)) {
+                $excludedRevisions = array_map('escapeshellarg', $excludedTags);
+                $commitRange .= ' --not ' . implode(' ', $excludedRevisions);
+            }
+            if (Repository::hasCommits($commitRange)) {
                 $options[$newVersion] = [
-                    'from' => $lastVersion,
+                    'from' => $fromRevision ?: $lastVersion,
                     'to' => $newVersion,
                     'date' => $today->format($dateFormat),
-                    'options' => "{$fromRevision}...HEAD",
-                    'autoBump' => false,
+                    'options' => $commitRange,
+                    'autoBump' => $autoBump,
+                    'skipIfEmpty' => true,
+                    'currentRelease' => true,
                 ];
             }
             $options = array_reverse($options);
         } else {
             if ($firstRelease) {
                 // Get all commits from the first one
-                $additionalParams = "{$firstCommit}...HEAD";
+                $additionalParams = escapeshellarg("{$firstCommit}...HEAD");
                 $lastVersion = $firstCommit;
                 if (empty($fromTag)) {
                     $fromTag = $firstCommit;
@@ -253,39 +265,39 @@ class Changelog
                 // Get latest commits from last version date
                 // Use firstCommit if lastVersion is the default '0.0.0' (no tags found)
                 $fromRevision = ($lastVersion === '0.0.0') ? $firstCommit : $lastVersion;
-                $additionalParams = "{$fromRevision}...HEAD";
+                $additionalParams = escapeshellarg("{$fromRevision}...HEAD");
                 if (empty($fromTag)) {
                     $fromTag = $lastVersion;
                 }
             }
 
             // Clean ranges
-            if ((!empty($fromDate) || !empty($toDate)) &&
-                empty($fromTag) &&
-                empty($toTag)) {
+            if ((!empty($fromDate) || !empty($toDate))
+                && empty($fromTag)
+                && empty($toTag)) {
                 $additionalParams = '';
             }
 
             // Tag range
-            if (!empty($fromTag) ||
-                !empty($toTag)) {
+            if (!empty($fromTag)
+                || !empty($toTag)) {
                 if (empty($toTag)) {
                     $toTag = 'HEAD';
                 }
                 // Use firstCommit if fromTag is the default '0.0.0' (no tags found)
                 $fromRevision = ($fromTag === '0.0.0') ? $firstCommit : $fromTag;
-                $additionalParams = "{$fromRevision}...{$toTag}";
+                $additionalParams = escapeshellarg("{$fromRevision}...{$toTag}");
             }
 
             // Date range
-            if (!empty($fromDate) ||
-                !empty($toDate)) {
+            if (!empty($fromDate)
+                || !empty($toDate)) {
                 if (!empty($fromDate)) {
-                    $additionalParams .= ' --since="' . date('Y-m-d', strtotime($fromDate)) . '"';
+                    $additionalParams .= ' --since=' . escapeshellarg(date('Y-m-d', strtotime($fromDate)));
                 }
                 if (!empty($toDate)) {
                     $time = strtotime($toDate);
-                    $additionalParams .= ' --before="' . date('Y-m-d', $time) . '"';
+                    $additionalParams .= ' --before=' . escapeshellarg(date('Y-m-d', $time));
                     $today->setTimestamp($time);
                 }
             }
@@ -344,8 +356,10 @@ class Changelog
 
             // Changes groups sorting
             $changes = [];
+            $releaseSummary = [];
             foreach ($this->config->getTypes() as $type) {
                 $changes[$type] = [];
+                $releaseSummary[$type] = 0;
             }
 
             // Group all changes to lists by type
@@ -375,23 +389,34 @@ class Changelog
                             ->setHash($hash);
                         $changes[$breakingType][(string)$scope][$key][$hash] = $breakingCommit;
                         $summary[$breakingType]++;
+                        $releaseSummary[$breakingType]++;
                     }
                     $changes[$type][(string)$scope][$itemKey][$hash] = $commit;
                     $summary[$type]++;
+                    $releaseSummary[$type]++;
                 }
+            }
+
+            if (!empty($params['skipIfEmpty']) && array_sum($releaseSummary) === 0) {
+                continue;
+            }
+            if (!empty($params['currentRelease'])) {
+                $hasCurrentRelease = true;
             }
 
             if ($params['autoBump']) {
                 $semver = new SemanticVersion($params['from'], $tagPrefix);
                 $bumpRelease = SemanticVersion::PATCH;
+                $bumpExtra = null;
+                $extraRelease = null;
 
-                if ($summary['breaking_changes'] > 0) {
+                if ($releaseSummary['breaking_changes'] > 0) {
                     $bumpRelease = SemanticVersion::MAJOR;
 
                     if (version_compare($semver->getVersion(), '1.0.0', '<')) {
                         $bumpRelease = SemanticVersion::MINOR;
                     }
-                } elseif ($summary['feat'] > 0) {
+                } elseif ($releaseSummary['feat'] > 0) {
                     $bumpRelease = SemanticVersion::MINOR;
                 }
 
@@ -426,6 +451,9 @@ class Changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
         }
         $filesToCommit = [$file];
+        if ($history && !$hasCurrentRelease) {
+            $autoCommit = false;
+        }
 
         if (isset($commits) && !count($commits) && $noChangeWithoutCommits) {
             $output->warning('No commits since last version.');
@@ -433,7 +461,7 @@ class Changelog
             return 0; // Command::SUCCESS;
         }
 
-        if ($this->config->isPackageBump()) {
+        if ($this->config->isPackageBump() && (!$history || $hasCurrentRelease)) {
             foreach ($packageBumps as $packageBump) {
                 try {
                     /**
@@ -474,8 +502,10 @@ class Changelog
 
         // Create commit
         if ($autoCommit) {
-            if ($autoCommitAll) {
-                Repository::addAll();
+            if ($autoCommitAll && !Repository::addAll()) {
+                $output->error('An error occurred staging the release changes!');
+
+                return 1; // Command::FAILURE;
             }
             $message = $this->getReleaseCommitMessage($newVersion);
             $result = Repository::commit($message, $filesToCommit, $amend, $hooks);
@@ -518,7 +548,7 @@ class Changelog
     protected function removeHeader(string $content): string
     {
         return ltrim(preg_replace(
-            '#<!--- BEGIN HEADER -->.*<!--- END HEADER -->(.*?)#iUs',
+            '#<!---? BEGIN HEADER -->.*<!---? END HEADER -->(.*?)#iUs',
             '\1',
             $content
         ));

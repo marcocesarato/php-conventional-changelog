@@ -52,6 +52,89 @@ You can install it easily with composer
 
 `composer require --dev marcocesarato/php-conventional-changelog`
 
+### GitHub Action
+
+The GitHub Action runs the changelog generator in a checked-out repository. Fetch the complete history so the
+generator can read all commits and tags:
+
+```yaml
+name: Changelog
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: marcocesarato/php-conventional-changelog@v1
+        with:
+          arguments: |
+            --no-change-without-commits
+```
+
+Pass one command argument per line. Keep an option value on the same line as its option, for example
+`--ver=2.0.1` or `--annotate-tag=Release 2.0.1`. Use `working-directory` for a project in a subdirectory:
+
+```yaml
+      - uses: marcocesarato/php-conventional-changelog@v1
+        with:
+          working-directory: packages/application
+          arguments: |
+            --history
+```
+
+The Action configures PHP for the whole job. It uses PHP 8.4 by default; set `php-version` to another version
+supported by the lockfile (currently PHP 8.2 or newer) when later steps need the same runtime.
+
+To create and push a release commit and tag, grant write access, configure the Git author, and push the local changes
+created by the Action:
+
+```yaml
+permissions:
+  contents: write
+
+steps:
+  - uses: actions/checkout@v7
+    with:
+      fetch-depth: 0
+
+  - name: Configure Git author
+    run: |
+      git config user.name "github-actions[bot]"
+      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+  - uses: marcocesarato/php-conventional-changelog@v1
+    with:
+      arguments: |
+        --commit
+        --no-change-without-commits
+
+  - name: Push release
+    run: git push --follow-tags
+```
+
+The Action executes the repository's `.changelog` PHP configuration and any configured hooks. Do not run a release
+job with write permissions or secrets against code from an untrusted pull request.
+
+#### Publish to GitHub Marketplace
+
+After this file and `action.yml` are on the public repository's default branch:
+
+1. Open `action.yml` on GitHub and select **Draft a release** in the Marketplace banner.
+2. Check **Publish this Action to the GitHub Marketplace**, choose a category, and accept the Marketplace Developer Agreement if GitHub asks.
+3. Create a semantic version tag such as `v1.18.0`, then publish the release.
+4. Create or update the moving `v1` tag so workflows using `@v1` receive compatible updates.
+
+GitHub publishes the Marketplace listing from the root `action.yml`; no separate upload is required.
+
 #### Scripts *(Optional)*
 
 For easy use the changelog generator or release faster your new version you can add to your `composer.json` the scripts:
@@ -93,6 +176,10 @@ You can have more info about reading the [config documentation](./docs/config.md
 The changelog generator will generate a log of changes from the date of the last tag to the current date, and it will
 put all commit logs in the latest version just created.
 
+The examples below use Composer's executable proxy on Linux and macOS. On Windows, replace
+`vendor/bin/conventional-changelog` with `vendor\bin\conventional-changelog.bat`. You can also run the portable
+`php vendor/bin/conventional-changelog` form on every platform.
+
 ![](docs/images/usage.gif)
 
 > **Notes:**<br>
@@ -112,7 +199,7 @@ put all commit logs in the latest version just created.
 To generate your changelog for the first version run:
 
 ```shell
-php vendor/bin/conventional-changelog --first-release
+vendor/bin/conventional-changelog --first-release
 ```
 
 #### New version
@@ -120,7 +207,7 @@ php vendor/bin/conventional-changelog --first-release
 To generate your changelog *(without committing files)*
 
 ```shell
-php vendor/bin/conventional-changelog
+vendor/bin/conventional-changelog
 ```
 
 #### New release (with commit and tag)
@@ -128,13 +215,13 @@ php vendor/bin/conventional-changelog
 To generate your changelog with auto commit and auto versioning tagging run:
 
 ```shell
-php vendor/bin/conventional-changelog --commit
+vendor/bin/conventional-changelog --commit
 ```
 
 or to amend at an existing commit you can run:
 
 ```shell
-php vendor/bin/conventional-changelog --amend
+vendor/bin/conventional-changelog --amend
 ```
 
 #### Annotated and Signed Tags
@@ -143,17 +230,17 @@ By default, the tool creates lightweight tags. You can create annotated or GPG-s
 
 **Create an annotated tag:**
 ```shell
-php vendor/bin/conventional-changelog --commit --annotate-tag
+vendor/bin/conventional-changelog --commit --annotate-tag
 ```
 
 **Create a GPG-signed tag** (requires GPG configuration):
 ```shell
-php vendor/bin/conventional-changelog --commit --sign-tag
+vendor/bin/conventional-changelog --commit --sign-tag
 ```
 
 **Create an annotated tag with a custom message:**
 ```shell
-php vendor/bin/conventional-changelog --commit --annotate-tag="Release version"
+vendor/bin/conventional-changelog --commit --annotate-tag="Release version"
 ```
 
 You can also configure this in your `.changelog` configuration file:
@@ -170,10 +257,13 @@ return [
 
 To generate your changelog with the entire history of changes of all releases
 
+Commits after the newest tag are included in the next release section. If the repository has no tags, the complete
+history through `HEAD` is included.
+
 > **Warn:** this operation will overwrite the `CHANGELOG.md` file if it already exists
 
 ```shell
-php vendor/bin/conventional-changelog --history
+vendor/bin/conventional-changelog --history
 ```
 
 #### Date range
@@ -181,7 +271,7 @@ php vendor/bin/conventional-changelog --history
 To generate your changelog from a specified date to another specified date
 
 ```shell
-php vendor/bin/conventional-changelog --from-date="2020-12-01" --to-date="2021-01-01"
+vendor/bin/conventional-changelog --from-date="2020-12-01" --to-date="2021-01-01"
 ```
 
 #### Tag range
@@ -189,7 +279,7 @@ php vendor/bin/conventional-changelog --from-date="2020-12-01" --to-date="2021-0
 To generate your changelog from a specified tag to another specified tag
 
 ```shell
-php vendor/bin/conventional-changelog --from-tag="v1.0.2" --to-tag="1.0.4"
+vendor/bin/conventional-changelog --from-tag="v1.0.2" --to-tag="1.0.4"
 ```
 
 #### Specific version
@@ -197,12 +287,12 @@ php vendor/bin/conventional-changelog --from-tag="v1.0.2" --to-tag="1.0.4"
 To generate your changelog with a specific version code
 
 ```shell
-php vendor/bin/conventional-changelog --ver="2.0.1"
+vendor/bin/conventional-changelog --ver="2.0.1"
 ```
 
 ### Commands List
 
-> **Info:** You can have more info about running  `php vendor/bin/conventional-changelog --help`
+> **Info:** You can have more info by running `vendor/bin/conventional-changelog --help`
 
 ```
 Description:

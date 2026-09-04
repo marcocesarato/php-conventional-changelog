@@ -1,0 +1,54 @@
+name: PHP Conventional Changelog
+author: Marco Cesarato
+description: Generate changelogs and release commits from Conventional Commits
+
+inputs:
+  arguments:
+    description: Command arguments, with one argument per line
+    required: false
+    default: ''
+  php-version:
+    description: PHP version used to run the changelog generator (8.2 or newer)
+    required: false
+    default: '8.4'
+  working-directory:
+    description: Repository directory where the changelog will be generated
+    required: false
+    default: '.'
+
+runs:
+  using: composite
+  steps:
+    - name: Set up PHP
+      uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      with:
+        php-version: ${{ inputs.php-version }}
+        extensions: mbstring
+        tools: composer:v2
+        coverage: none
+
+    - name: Install action dependencies
+      shell: bash
+      run: >-
+        composer install --working-dir="$GITHUB_ACTION_PATH"
+        --no-dev --no-scripts --prefer-dist --no-interaction --no-progress
+
+    - name: Generate changelog
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        INPUT_ARGUMENTS: ${{ inputs.arguments }}
+      run: |
+        arguments=()
+        while IFS= read -r argument; do
+          argument="${argument%$'\r'}"
+          if [[ -n "$argument" ]]; then
+            arguments+=("$argument")
+          fi
+        done <<< "$INPUT_ARGUMENTS"
+
+        php "$GITHUB_ACTION_PATH/conventional-changelog" "${arguments[@]}"
+
+branding:
+  icon: file-text
+  color: blue

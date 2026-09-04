@@ -4,9 +4,12 @@ jobs:
   conventional:
     name: Conventional PR
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2-beta
-      - uses: beemojs/conventional-pr-action@v2
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+      - uses: beemojs/conventional-pr-action@v3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

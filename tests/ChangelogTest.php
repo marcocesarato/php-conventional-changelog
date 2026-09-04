@@ -4,6 +4,8 @@ namespace Tests;
 
 use ConventionalChangelog\Changelog;
 use ConventionalChangelog\Configuration;
+use ConventionalChangelog\Git\ConventionalCommit;
+use ConventionalChangelog\Git\Repository;
 use PHPUnit\Framework\TestCase;
 
 class ChangelogTest extends TestCase
@@ -59,7 +61,7 @@ class ChangelogTest extends TestCase
     }
 
     /** @test */
-    public function testRemoveHeader(): void
+    public function testRemoveLegacyHeader(): void
     {
         $class = new \ReflectionClass($this->changelog);
         $method = $class->getMethod('removeHeader');
@@ -93,6 +95,80 @@ EOF;
         );
 
         $this->assertEquals($expectedContent, $actualContent);
+    }
+
+    /** @test */
+    public function testRemoveStandardHeader(): void
+    {
+        $class = new \ReflectionClass($this->changelog);
+        $method = $class->getMethod('removeHeader');
+        $method->setAccessible(true);
+
+        $content = <<<EOF
+<!-- BEGIN HEADER -->
+# Changelog
+
+All notable changes to this project will be documented in this file.
+<!-- END HEADER -->
+
+## 0.0.1 (1970-01-01)
+EOF;
+
+        $actualContent = $method->invokeArgs(
+            $this->changelog,
+            [$content]
+        );
+
+        $this->assertEquals('## 0.0.1 (1970-01-01)', $actualContent);
+    }
+
+    /** @test */
+    public function testMarkdownLinkRemovesDoubleSlashAfterHost(): void
+    {
+        $class = new \ReflectionClass($this->changelog);
+        $method = $class->getMethod('getMarkdownLink');
+        $method->setAccessible(true);
+
+        $actualLink = $method->invokeArgs($this->changelog, [
+            '1.0.1',
+            'https://github.com//repository/compare/1.0.0...1.0.1',
+        ]);
+
+        $this->assertEquals(
+            '[1.0.1](https://github.com/repository/compare/1.0.0...1.0.1)',
+            $actualLink
+        );
+    }
+
+    /** @test */
+    public function testParseRemoteUrlWithCredentialsPortAndNestedOwner(): void
+    {
+        $remote = Repository::parseRemoteUrl(
+            'http://username@fontes.domain.com.br:7990/scm/site/name-of-repo.git'
+        );
+
+        $this->assertEquals('fontes.domain.com.br', $remote['host']);
+        $this->assertEquals('7990', $remote['port']);
+        $this->assertEquals('scm/site', $remote['owner']);
+        $this->assertEquals('name-of-repo', $remote['repository']);
+    }
+
+    /** @test */
+    public function testReferencesAreExtractedFromMultipleFooters(): void
+    {
+        $commit = new ConventionalCommit(
+            <<<EOF
+feat: helpdesk url 2
+
+Ref: #11645
+Signed-off-by: Vladimir Pak <rrrrrrr@rrrrr.com>
+EOF
+        );
+
+        $references = $commit->getReferences();
+
+        $this->assertCount(1, $references);
+        $this->assertEquals('11645', $references[0]->getId());
     }
 
     /** @test */
@@ -283,7 +359,8 @@ EOF;
 
         // Test with a command that uses pipe
         ob_start();
-        $method->invoke($config, 'echo "test" | cat');
+        $pipeCommand = DIRECTORY_SEPARATOR === '\\' ? 'findstr test' : 'cat';
+        $method->invoke($config, 'echo "test" | ' . $pipeCommand);
         $output = ob_get_clean();
 
         // If we got here without exception, the method works with pipes
@@ -399,7 +476,7 @@ EOF;
     public function testTagCommandLightweight()
     {
         // Test that lightweight tags don't have flags
-        $class = new \ReflectionClass(\ConventionalChangelog\Git\Repository::class);
+        $class = new \ReflectionClass(Repository::class);
         $method = $class->getMethod('tag');
 
         // For lightweight tags, the command should be: git tag <name>

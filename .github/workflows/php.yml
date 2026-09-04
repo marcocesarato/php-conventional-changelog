@@ -6,40 +6,154 @@ on:
   pull_request:
     branches: [ main ]
 
-jobs:
-  build:
+permissions:
+  contents: read
 
+jobs:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v7.0.1
 
-    - name: Update composer
-      run: composer update
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring
+          tools: composer:v2
+          coverage: none
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate
+      - name: Validate Composer files
+        run: composer validate --strict --no-check-version
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        uses: actions/cache@v6.1.0
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-8.4-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-8.4-
 
-    - name: Install dependencies
-      if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
 
-    - name: PHP Lint
-      uses: davidlienhard/php-simple-lint@1
-      with:
-        folder: './'
-        ignore: './vendor/\*'
+      - name: PHP lint
+        uses: davidlienhard/php-simple-lint@1.0.1
+        with:
+          folder: './'
+          ignore: './vendor/\*'
 
-    - name: Run PHPUnit tests
-      run: composer test
+      - name: Run PHPUnit tests
+        run: composer test
 
-    - uses: symfonycorp/security-checker-action@v5
+      - uses: symfonycorp/security-checker-action@v5
+
+  compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php-version: '7.1'
+            composer-version: '2.2'
+            symfony-version: '^3.4'
+          - php-version: '7.1'
+            composer-version: '2.2'
+            symfony-version: '^4.4'
+          - php-version: '7.2'
+            composer-version: '2.2'
+            symfony-version: '^5.4'
+          - php-version: '8.1'
+            composer-version: 'v2'
+            symfony-version: '^6.4'
+          - php-version: '8.2'
+            composer-version: 'v2'
+            symfony-version: '^7.4'
+          - php-version: '8.4'
+            composer-version: 'v2'
+            symfony-version: '^8.1'
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring
+          tools: composer:${{ matrix.composer-version }}
+          coverage: none
+
+      - name: Test Symfony Console ${{ matrix.symfony-version }}
+        run: |
+          consumer_dir="${RUNNER_TEMP}/compatibility-consumer"
+          mkdir -p "${consumer_dir}"
+          cd "${consumer_dir}"
+          composer init --name=tests/compatibility --no-interaction
+          composer config repositories.local path "${GITHUB_WORKSPACE}"
+          composer require --no-scripts --no-interaction --no-progress \
+            "marcocesarato/php-conventional-changelog:*" \
+            "symfony/console:${{ matrix.symfony-version }}"
+          php vendor/bin/conventional-changelog --help
+
+  windows-smoke:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring
+          tools: composer:v2
+          coverage: none
+
+      - name: Test Windows executable proxy with Symfony Console 8
+        run: |
+          $consumerDirectory = Join-Path $env:RUNNER_TEMP 'compatibility-consumer'
+          New-Item -ItemType Directory -Force -Path $consumerDirectory | Out-Null
+          Set-Location $consumerDirectory
+          composer init --name=tests/compatibility --no-interaction
+          composer config repositories.local path $env:GITHUB_WORKSPACE
+          composer require --no-scripts --no-interaction --no-progress `
+            "marcocesarato/php-conventional-changelog:*" `
+            "symfony/console:^8.1"
+          & vendor\bin\conventional-changelog.bat --help
+
+  action-smoke:
+    name: GitHub Action smoke test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Create Git fixture
+        shell: bash
+        run: |
+          fixture="$RUNNER_TEMP/action-fixture"
+          mkdir -p "$fixture"
+          git -C "$fixture" init --quiet
+          git -C "$fixture" config user.email "action@example.com"
+          git -C "$fixture" config user.name "Action Test"
+          printf 'fixture\n' > "$fixture/tracked.txt"
+          git -C "$fixture" add tracked.txt
+          git -C "$fixture" commit --quiet -m "chore: initial commit"
+          printf 'feature\n' >> "$fixture/tracked.txt"
+          git -C "$fixture" commit --quiet -am "feat: action smoke test"
+
+      - name: Generate changelog with local Action
+        uses: ./
+        with:
+          working-directory: ${{ runner.temp }}/action-fixture
+          arguments: |
+            --first-release
+
+      - name: Verify generated changelog
+        shell: bash
+        run: |
+          changelog="$RUNNER_TEMP/action-fixture/CHANGELOG.md"
+          test -f "$changelog"
+          grep --fixed-strings --quiet "Action smoke test" "$changelog"
