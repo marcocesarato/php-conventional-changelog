@@ -4,12 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!-- END HEADER -->
 
-## [1.18.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.17.4...v1.18.0) (2026-09-04)
+## [1.18.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.17.4...v1.18.1) (2026-09-05)
 
 ### Bug Fixes
 
 * Correct GitHub Action runtime requirements ([008f70](https://github.com/marcocesarato/php-conventional-changelog/commit/008f703422b4965fdd8025ce3dce04ddf75b4be8))
+* Enable SSH in Codespaces ([31a0cf](https://github.com/marcocesarato/php-conventional-changelog/commit/31a0cf752e9c7b0d2e8adb2f89e5d8e611e738b5))
+* Load the Composer proxy autoloader ([6dacbe](https://github.com/marcocesarato/php-conventional-changelog/commit/6dacbed84466d8bb78405bfcb4e27377d116e67e))
 * Resolve outstanding compatibility issues [#16](https://github.com/marcocesarato/php-conventional-changelog/issues/16), [#27](https://github.com/marcocesarato/php-conventional-changelog/issues/27), [#35](https://github.com/marcocesarato/php-conventional-changelog/issues/35), [#75](https://github.com/marcocesarato/php-conventional-changelog/issues/75), [#22](https://github.com/marcocesarato/php-conventional-changelog/issues/22), [#24](https://github.com/marcocesarato/php-conventional-changelog/issues/24), [#29](https://github.com/marcocesarato/php-conventional-changelog/issues/29), [#43](https://github.com/marcocesarato/php-conventional-changelog/issues/43), [#56](https://github.com/marcocesarato/php-conventional-changelog/issues/56), [#74](https://github.com/marcocesarato/php-conventional-changelog/issues/74), [#90](https://github.com/marcocesarato/php-conventional-changelog/issues/90), [#93](https://github.com/marcocesarato/php-conventional-changelog/issues/93) ([616091](https://github.com/marcocesarato/php-conventional-changelog/commit/61609110c0817dd9c4ae0c847b4df96fdcf40935))
+* Restore the PHP Codespace image ([3ab768](https://github.com/marcocesarato/php-conventional-changelog/commit/3ab76812ddfd4a22fdb2fd02c3841fa3f6d3f594))
 
 
 ---
