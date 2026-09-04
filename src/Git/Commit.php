@@ -92,7 +92,7 @@ class Commit implements Stringable
      */
     public $committerEmail;
 
-    public function __construct(string $commit = null)
+    public function __construct(?string $commit = null)
     {
         // New commit or empty commit
         if (empty($commit)) {
