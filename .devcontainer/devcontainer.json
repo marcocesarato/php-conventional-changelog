@@ -10,6 +10,9 @@
 			"NODE_VERSION": "lts/*"
 		}
 	},
+	"features": {
+		"ghcr.io/devcontainers/features/sshd:1": {}
+	},
 		
 	// Configure tool-specific properties.
 	"customizations": {

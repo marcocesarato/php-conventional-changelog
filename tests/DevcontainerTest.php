@@ -16,6 +16,7 @@ class DevcontainerTest extends TestCase
         $this->assertIsString($configuration);
         $this->assertIsString($dockerfile);
         $this->assertMatchesRegularExpression('/"VARIANT"\s*:\s*"8\.4-bookworm"/', $configuration);
+        $this->assertStringContainsString('"ghcr.io/devcontainers/features/sshd:1"', $configuration);
         $this->assertMatchesRegularExpression('/^ARG VARIANT=8\.4-bookworm\r?$/m', $dockerfile);
     }
 }
