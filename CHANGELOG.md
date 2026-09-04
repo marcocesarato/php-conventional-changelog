@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 <!-- END HEADER -->
 
+## [1.18.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.17.4...v1.18.0) (2026-09-04)
+
+### Bug Fixes
+
+* Correct GitHub Action runtime requirements ([008f70](https://github.com/marcocesarato/php-conventional-changelog/commit/008f703422b4965fdd8025ce3dce04ddf75b4be8))
+* Resolve outstanding compatibility issues [#16](https://github.com/marcocesarato/php-conventional-changelog/issues/16), [#27](https://github.com/marcocesarato/php-conventional-changelog/issues/27), [#35](https://github.com/marcocesarato/php-conventional-changelog/issues/35), [#75](https://github.com/marcocesarato/php-conventional-changelog/issues/75), [#22](https://github.com/marcocesarato/php-conventional-changelog/issues/22), [#24](https://github.com/marcocesarato/php-conventional-changelog/issues/24), [#29](https://github.com/marcocesarato/php-conventional-changelog/issues/29), [#43](https://github.com/marcocesarato/php-conventional-changelog/issues/43), [#56](https://github.com/marcocesarato/php-conventional-changelog/issues/56), [#74](https://github.com/marcocesarato/php-conventional-changelog/issues/74), [#90](https://github.com/marcocesarato/php-conventional-changelog/issues/90), [#93](https://github.com/marcocesarato/php-conventional-changelog/issues/93) ([616091](https://github.com/marcocesarato/php-conventional-changelog/commit/61609110c0817dd9c4ae0c847b4df96fdcf40935))
+
+
+---
+
 ## [1.17.3](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.17.2...v1.17.3) (2026-01-21)
 
 ### Features
