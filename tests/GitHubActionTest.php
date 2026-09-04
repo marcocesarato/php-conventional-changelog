@@ -21,6 +21,7 @@ class GitHubActionTest extends TestCase
         $this->assertStringContainsString('using: composite', $metadata);
         $this->assertStringContainsString('arguments:', $metadata);
         $this->assertStringContainsString("  php-version:\n    description:", $metadata);
+        $this->assertStringContainsString('8.4.1 or newer', $metadata);
         $this->assertStringContainsString('php-version: ${{ inputs.php-version }}', $metadata);
         $this->assertStringContainsString('working-directory:', $metadata);
         $this->assertStringContainsString('--no-dev --no-scripts', $metadata);

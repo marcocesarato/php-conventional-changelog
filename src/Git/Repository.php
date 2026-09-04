@@ -261,7 +261,7 @@ class Repository
     /**
      * Add all.
      *
-        * @return bool
+     * @return bool
      */
     public static function addAll()
     {
@@ -273,7 +273,7 @@ class Repository
     /**
      * Add files.
      *
-        * @return bool
+     * @return bool
      */
     public static function add($files)
     {

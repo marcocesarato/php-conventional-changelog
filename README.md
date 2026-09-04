@@ -92,7 +92,7 @@ Pass one command argument per line. Keep an option value on the same line as its
 ```
 
 The Action configures PHP for the whole job. It uses PHP 8.4 by default; set `php-version` to another version
-supported by the lockfile (currently PHP 8.2 or newer) when later steps need the same runtime.
+supported by the lockfile (currently PHP 8.4.1 or newer) when later steps need the same runtime.
 
 To create and push a release commit and tag, grant write access, configure the Git author, and push the local changes
 created by the Action:

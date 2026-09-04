@@ -8,7 +8,7 @@ inputs:
     required: false
     default: ''
   php-version:
-    description: PHP version used to run the changelog generator (8.2 or newer)
+    description: PHP version used to run the changelog generator (8.4.1 or newer)
     required: false
     default: '8.4'
   working-directory:
