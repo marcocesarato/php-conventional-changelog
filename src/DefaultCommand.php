@@ -80,6 +80,7 @@ class DefaultCommand extends Command
                 new InputOption('beta', null, InputOption::VALUE_NONE, 'Beta release'),
                 new InputOption('alpha', null, InputOption::VALUE_NONE, 'Alpha release'),
                 new InputOption('ver', null, InputOption::VALUE_REQUIRED, 'Specify the next release version code (semver)'),
+                new InputOption('calver', null, InputOption::VALUE_OPTIONAL, 'Use calendar versioning [YYYY.MM.DD.PATCH]', false),
                 new InputOption('history', null, InputOption::VALUE_NONE, 'Generate the entire history of changes of all releases'),
                 new InputOption('no-verify', null, InputOption::VALUE_NONE, 'Bypasses the pre-commit and commit-msg hooks'),
                 new InputOption('no-tag', null, InputOption::VALUE_NONE, 'Disable release auto tagging'),

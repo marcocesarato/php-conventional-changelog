@@ -16,4 +16,13 @@ class DefaultCommandTest extends TestCase
         $this->assertEquals('void', (string)$configure->getReturnType());
         $this->assertEquals('int', (string)$execute->getReturnType());
     }
+
+    /** @test */
+    public function testCalverOptionIsAvailable(): void
+    {
+        $option = (new DefaultCommand())->getDefinition()->getOption('calver');
+
+        $this->assertTrue($option->isValueOptional());
+        $this->assertFalse($option->getDefault());
+    }
 }

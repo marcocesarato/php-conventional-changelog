@@ -57,8 +57,9 @@ class Repository
     public static function getLastTagRefname($prefix = '', $merged = false): string
     {
         $merged = $merged ? '--merged' : '';
+        $pattern = escapeshellarg("refs/tags/{$prefix}*");
 
-        return self::run('git for-each-ref ' /* 'refs/tags/" . $prefix . "*' */ . " --sort=-v:refname --format='%(refname:strip=2)' --count=1 {$merged}");
+        return self::run("git for-each-ref --sort=-v:refname --format='%(refname:strip=2)' --count=1 {$merged} {$pattern}");
     }
 
     /**

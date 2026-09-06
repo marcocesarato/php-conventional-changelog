@@ -290,6 +290,21 @@ To generate your changelog with a specific version code
 vendor/bin/conventional-changelog --ver="2.0.1"
 ```
 
+#### Calendar versioning
+
+Use `--calver` to generate versions in `YYYY.MM.DD.PATCH` format. `PATCH` starts at `0` and increments when another
+release is created on the same day:
+
+```shell
+vendor/bin/conventional-changelog --calver --commit
+```
+
+Pass a custom format using the `YYYY`, `YY`, `MM`, `DD`, and `PATCH` tokens:
+
+```shell
+vendor/bin/conventional-changelog --calver="YY.MM.PATCH" --commit
+```
+
 ### Commands List
 
 > **Info:** You can have more info by running `vendor/bin/conventional-changelog --help`
@@ -321,6 +336,7 @@ Options:
       --beta                         Beta release
       --alpha                        Alpha release
       --ver=VER                      Specify the next release version code (semver)
+      --calver[=CALVER]              Use calendar versioning [YYYY.MM.DD.PATCH] [default: false]
       --history                      Generate the entire history of changes of all releases
       --no-verify                    Bypasses the pre-commit and commit-msg hooks
       --no-tag                       Disable release auto tagging

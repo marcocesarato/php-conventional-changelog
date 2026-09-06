@@ -4,6 +4,7 @@ namespace ConventionalChangelog;
 
 use ConventionalChangelog\Git\ConventionalCommit;
 use ConventionalChangelog\Git\Repository;
+use ConventionalChangelog\Helper\CalendarVersion;
 use ConventionalChangelog\Helper\Formatter;
 use ConventionalChangelog\Helper\SemanticVersion;
 use ConventionalChangelog\PackageBump\ComposerJson;
@@ -87,6 +88,7 @@ class Changelog
     public function generate(string $root, InputInterface $input, SymfonyStyle $output): int
     {
         $nextVersion = $input->getOption('ver');
+        $calverFormat = $input->getOption('calver');
         $autoCommit = $input->getOption('commit'); // Commit once changelog is generated
         $autoCommitAll = $input->getOption('commit-all'); // Commit all changes once changelog is generated
         $autoTag = !($input->getOption('no-tag') || $this->config->skipTag()); // Tag release once is committed
@@ -168,7 +170,26 @@ class Changelog
         // First commit
         $firstCommit = Repository::getFirstCommit();
 
-        if (!$firstRelease) {
+        if ($calverFormat !== false) {
+            $lastVersion = Repository::getLastTagRefname($tagPrefix, $merged);
+            if (empty($lastVersion)) {
+                $lastVersion = '0.0.0';
+            }
+            $versions = array_map(function ($tag) use ($tagPrefix, $tagSuffix) {
+                return $this->getVersionCode($tag, $tagPrefix, $tagSuffix);
+            }, Repository::getTags($tagPrefix));
+            try {
+                $newVersion = CalendarVersion::generate(
+                    $versions,
+                    is_string($calverFormat) ? $calverFormat : CalendarVersion::DEFAULT_FORMAT,
+                    $today
+                );
+            } catch (\InvalidArgumentException $exception) {
+                $output->error($exception->getMessage());
+
+                return 1; // Command::FAILURE;
+            }
+        } elseif (!$firstRelease) {
             $lastVersion = Repository::getLastTag($tagPrefix, $merged);
             $bumpRelease = SemanticVersion::PATCH;
 
