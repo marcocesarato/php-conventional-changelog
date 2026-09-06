@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 <!-- END HEADER -->
 
+## [1.18.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.18.1...v1.18.2) (2026-09-06)
+
+### Bug Fixes
+
+* Preserve changelog header compatibility ([512d41](https://github.com/marcocesarato/php-conventional-changelog/commit/512d41e293e56b06a0d24a1e51ac377010c501f4))
+* Remove PHP 8.4 deprecation ([b6966f](https://github.com/marcocesarato/php-conventional-changelog/commit/b6966ff074ba3a70614e707738a57340b38b7e4d))
+
+
+---
+
 ## [1.18.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.17.4...v1.18.1) (2026-09-05)
 
 ### Bug Fixes
