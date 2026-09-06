@@ -123,6 +123,20 @@ EOF;
     }
 
     /** @test */
+    public function testGeneratedHeaderUsesStandardTwoDashMarkers(): void
+    {
+        $configuration = new Configuration();
+        $changelog = new Changelog($configuration);
+        $method = (new \ReflectionClass($changelog))->getMethod('getMainHeader');
+        $method->setAccessible(true);
+
+        $header = $method->invoke($changelog);
+
+        $this->assertStringStartsWith("<!-- BEGIN HEADER -->\n", $header);
+        $this->assertStringEndsWith("\n<!-- END HEADER -->\n\n", $header);
+    }
+
+    /** @test */
     public function testMarkdownLinkRemovesDoubleSlashAfterHost(): void
     {
         $class = new \ReflectionClass($this->changelog);

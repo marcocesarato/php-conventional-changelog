@@ -152,10 +152,7 @@ class Changelog
         $changelogCurrent = '';
         $changelogNew = '';
 
-        $mainHeaderPrefix = "<!-- BEGIN HEADER -->\n# ";
-        $mainHeaderSuffix = "\n<!-- END HEADER -->\n\n";
-        $mainHeaderContent = $this->config->getHeaderTitle() . "\n\n" . $this->config->getHeaderDescription();
-        $mainHeader = $mainHeaderPrefix . $mainHeaderContent . $mainHeaderSuffix;
+        $mainHeader = $this->getMainHeader();
 
         // Get changelogs content
         if (file_exists($file)) {
@@ -552,6 +549,13 @@ class Changelog
             '\1',
             $content
         ));
+    }
+
+    protected function getMainHeader(): string
+    {
+        return "<!-- BEGIN HEADER -->\n# "
+            . $this->config->getHeaderTitle() . "\n\n"
+            . $this->config->getHeaderDescription() . "\n<!-- END HEADER -->\n\n";
     }
 
     /**
