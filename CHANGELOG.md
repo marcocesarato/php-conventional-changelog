@@ -4,6 +4,15 @@
 All notable changes to this project will be documented in this file.
 <!-- END HEADER -->
 
+## [1.19.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.18.2...v1.19.0) (2026-09-06)
+
+### Features
+
+* Add calendar versioning ([4f6617](https://github.com/marcocesarato/php-conventional-changelog/commit/4f6617ddbd0b0026f571a8c9f3cac7901a400f44))
+
+
+---
+
 ## [1.18.2](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.18.1...v1.18.2) (2026-09-06)
 
 ### Bug Fixes
