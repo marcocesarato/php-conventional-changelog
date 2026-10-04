@@ -185,6 +185,20 @@ The executable and its autoloader live in `bin/` following the PDS skeleton conv
 Distribution archives include `bin/`, `src/`, Composer metadata, the license, README and changelog;
 development tooling, tests and the repository's own `.changelog` configuration are excluded.
 
+### Publishing this package
+
+Maintainers generate the release commit and tag with `composer release:patch` (or the minor/major script),
+then push the commit to `main` and push its `vMAJOR.MINOR.PATCH` tag. Add the GitHub Release workflow to
+`main` before tagging a release.
+
+The **GitHub Release** workflow checks that the tagged commit belongs to `main`, runs PHPUnit, and verifies
+that the Composer and CLI versions match the tag. It publishes the matching `CHANGELOG.md` section as release
+notes, with lean ZIP and tar.gz archives and a `SHA256SUMS` file. These archives contain the package files
+listed above; GitHub's default source downloads also follow `.gitattributes`.
+
+To retry publishing an existing stable tag, run **GitHub Release** from the Actions tab and enter the tag.
+A rerun updates that release's notes and replaces its generated assets. Prerelease tags are not supported.
+
 ![](docs/images/usage.gif)
 
 > **Notes:**<br>

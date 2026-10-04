@@ -1,0 +1,109 @@
+name: GitHub Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*.[0-9]*.[0-9]*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing stable version tag to publish (for example, v1.19.1)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - name: Validate release tag
+        id: tag
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          if [[ ! "$RELEASE_TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo '::error::Only stable vMAJOR.MINOR.PATCH tags can be published.'
+            exit 1
+          fi
+          echo "tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: refs/tags/${{ steps.tag.outputs.tag }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify tag belongs to main
+        run: git merge-base --is-ancestor HEAD origin/main
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.4'
+          extensions: mbstring
+          tools: composer:v2
+          coverage: none
+
+      - name: Validate and install dependencies
+        run: |
+          composer validate --strict --no-check-version
+          composer install --prefer-dist --no-scripts --no-interaction --no-progress
+
+      - name: Run tests and verify versions
+        env:
+          RELEASE_TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          composer test
+          php -r '$package = json_decode(file_get_contents("composer.json"), true); if ($package["version"] !== substr(getenv("RELEASE_TAG"), 1)) { fwrite(STDERR, "Composer version does not match the tag.\n"); exit(1); }'
+          test "$(php bin/conventional-changelog --version)" = "conventional-changelog ${RELEASE_TAG#v}"
+
+      - name: Build distribution archives and release notes
+        env:
+          RELEASE_TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          mkdir dist
+          php .github/scripts/release-notes.php "$RELEASE_TAG" > dist/RELEASE_NOTES.md
+          prefix="php-conventional-changelog-${RELEASE_TAG#v}"
+          git archive --format=zip --prefix="$prefix/" --output="dist/$prefix.zip" "$RELEASE_TAG"
+          git archive --format=tar.gz --prefix="$prefix/" --output="dist/$prefix.tar.gz" "$RELEASE_TAG"
+          (cd dist && sha256sum ./*.zip ./*.tar.gz > SHA256SUMS)
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-files
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-files
+          path: dist
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.build.outputs.tag }}
+        run: |
+          if gh release view "$RELEASE_TAG" > /dev/null 2>&1; then
+            gh release edit "$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file dist/RELEASE_NOTES.md
+            gh release upload "$RELEASE_TAG" dist/*.zip dist/*.tar.gz dist/SHA256SUMS --clobber
+          else
+            gh release create "$RELEASE_TAG" dist/*.zip dist/*.tar.gz dist/SHA256SUMS \
+              --verify-tag --title "$RELEASE_TAG" --notes-file dist/RELEASE_NOTES.md
+          fi
