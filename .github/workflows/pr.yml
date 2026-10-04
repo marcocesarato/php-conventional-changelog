@@ -8,8 +8,13 @@ jobs:
       contents: read
       pull-requests: read
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@v7.0.0
-      - uses: beemojs/conventional-pr-action@v3.0.0
+      - name: Validate Conventional Commit title
+        shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([^)]+\))?!?: .+'
+          if [[ ! "$PR_TITLE" =~ $pattern ]]; then
+            echo '::error::PR title must follow Conventional Commits (for example: fix(cli): handle missing configuration).'
+            exit 1
+          fi
