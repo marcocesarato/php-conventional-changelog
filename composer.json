@@ -6,7 +6,7 @@
     "license": "GPL-3.0-or-later",
     "minimum-stability": "stable",
     "bin": [
-        "conventional-changelog"
+        "bin/conventional-changelog"
     ],
     "keywords": [
         "conventional-changelog",
@@ -43,13 +43,13 @@
         }
     },
     "scripts": {
-        "changelog": "php conventional-changelog",
+        "changelog": "php bin/conventional-changelog",
         "check-cs": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --config=.php-cs-fixer.php",
         "fix-cs": "php-cs-fixer fix --config=.php-cs-fixer.php --verbose",
-        "release": "php conventional-changelog --commit",
-        "release:patch": "php conventional-changelog --commit --patch",
-        "release:minor": "php conventional-changelog --commit --minor",
-        "release:major": "php conventional-changelog --commit --major",
+        "release": "php bin/conventional-changelog --commit",
+        "release:patch": "php bin/conventional-changelog --commit --patch",
+        "release:minor": "php bin/conventional-changelog --commit --minor",
+        "release:major": "php bin/conventional-changelog --commit --major",
         "test": "phpunit ./tests",
         "hooks": "cghooks",
         "post-install-cmd": "cghooks add --ignore-lock",

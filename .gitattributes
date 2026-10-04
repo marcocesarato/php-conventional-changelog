@@ -1,1 +1,12 @@
-eol=lf
+* text=auto eol=lf
+
+* export-ignore
+
+/bin -export-ignore
+/bin/** -export-ignore
+/src -export-ignore
+/src/** -export-ignore
+/composer.json -export-ignore
+/LICENSE -export-ignore
+/README.md -export-ignore
+/CHANGELOG.md -export-ignore

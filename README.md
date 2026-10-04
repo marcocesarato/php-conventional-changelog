@@ -18,16 +18,16 @@
 
 ## Description
 
-When a new release of a software project is announced, it is convenient to generate documents that let the project 
+When a new release of a software project is announced, it is convenient to generate documents that let the project
 users know what were the changes and other relevant notes about the new project release.
 
-This package can help to automatically generate changelog and release note files, so the developers of the project 
+This package can help to automatically generate changelog and release note files, so the developers of the project
 reduce the work that is necessary to finalize and check the new release of the project.
 
 This package can generate a changelog from a project's committing history messages and metadata using composer and automate versioning
 with [**semver**](https://semver.org) and [**conventional-commits**](https://conventionalcommits.org).
 
-It provides a command that can be run from the terminal, or using composer scripts, 
+It provides a command that can be run from the terminal, or using composer scripts,
 to generate a changelog file in **markdown** for the current project.
 
 The command may take parameters that define the releases of the project that will be considered to extract the changes
@@ -179,6 +179,11 @@ put all commit logs in the latest version just created.
 The examples below use Composer's executable proxy on Linux and macOS. On Windows, replace
 `vendor/bin/conventional-changelog` with `vendor\bin\conventional-changelog.bat`. You can also run the portable
 `php vendor/bin/conventional-changelog` form on every platform.
+
+When running from a source checkout, use `php bin/conventional-changelog` or `composer changelog`.
+The executable and its autoloader live in `bin/` following the PDS skeleton convention.
+Distribution archives include `bin/`, `src/`, Composer metadata, the license, README and changelog;
+development tooling, tests and the repository's own `.changelog` configuration are excluded.
 
 ![](docs/images/usage.gif)
 

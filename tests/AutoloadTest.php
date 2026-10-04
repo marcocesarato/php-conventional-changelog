@@ -13,7 +13,7 @@ class AutoloadTest extends TestCase
         file_put_contents($autoloadPath, '<?php $GLOBALS["composerProxyAutoloaded"] = true;');
         $_composer_autoload_path = $autoloadPath;
 
-        require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'autoload.php';
+        require dirname(__DIR__) . '/bin/autoload.php';
 
         $this->assertTrue($GLOBALS['composerProxyAutoloaded'] ?? false);
 
