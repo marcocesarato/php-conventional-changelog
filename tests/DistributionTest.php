@@ -19,6 +19,32 @@ class DistributionTest extends TestCase
         }
     }
 
+    public function testArchiveContainsOnlyRuntimeAndDocumentationFiles(): void
+    {
+        $archivePath = tempnam(sys_get_temp_dir(), 'changelog-dist-');
+        unlink($archivePath);
+        $archivePath .= '.tar';
+
+        try {
+            exec('git -C ' . escapeshellarg(dirname(__DIR__)) . ' archive --format=tar --worktree-attributes --output=' . escapeshellarg($archivePath) . ' HEAD 2>&1', $output, $status);
+            $this->assertSame(0, $status, implode(PHP_EOL, $output));
+
+            $archive = new \PharData($archivePath);
+            foreach (['bin/conventional-changelog', 'bin/autoload.php', 'src/DefaultCommand.php', 'composer.json', 'LICENSE', 'README.md', 'CHANGELOG.md'] as $path) {
+                $this->assertTrue(isset($archive[$path]), $path . ' must be shipped');
+            }
+            foreach (new \RecursiveIteratorIterator($archive) as $file) {
+                $path = str_replace('phar://' . str_replace('\\', '/', $archivePath) . '/', '', str_replace('\\', '/', $file->getPathname()));
+                $this->assertMatchesRegularExpression('#^(bin/|src/|composer\\.json$|LICENSE$|README\\.md$|CHANGELOG\\.md$)#', $path);
+            }
+            unset($archive);
+        } finally {
+            if (is_file($archivePath)) {
+                unlink($archivePath);
+            }
+        }
+    }
+
     public function testSourceExecutableRuns(): void
     {
         exec(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(dirname(__DIR__) . '/bin/conventional-changelog') . ' --version 2>&1', $output, $status);
