@@ -24,7 +24,7 @@ return [
             return;
         }
 
-        $binFile = __DIR__ . '/conventional-changelog';
+        $binFile = __DIR__ . '/bin/conventional-changelog';
         $readmeFile = __DIR__ . '/README.md';
         $semverRegex = SemanticVersion::PATTERN;
 

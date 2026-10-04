@@ -47,7 +47,7 @@ runs:
           fi
         done <<< "$INPUT_ARGUMENTS"
 
-        php "$GITHUB_ACTION_PATH/conventional-changelog" "${arguments[@]}"
+        php "$GITHUB_ACTION_PATH/bin/conventional-changelog" "${arguments[@]}"
 
 branding:
   icon: file-text
