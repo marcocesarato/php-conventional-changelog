@@ -4,6 +4,28 @@
 All notable changes to this project will be documented in this file.
 <!-- END HEADER -->
 
+## [1.19.1](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.19.0...v1.19.1) (2026-10-04)
+
+### Bug Fixes
+
+
+##### Ci
+
+* Validate conventional PR titles without broken preset ([a5bf88](https://github.com/marcocesarato/php-conventional-changelog/commit/a5bf88fd4bc2c75ad4c3bc8b37d08b2b9f998c29))
+
+##### Dist
+
+* Preserve required files and follow PDS layout [#96](https://github.com/marcocesarato/php-conventional-changelog/issues/96) ([eb9359](https://github.com/marcocesarato/php-conventional-changelog/commit/eb93596de3441e594601998fdd0895e9f500cb4b))
+
+
+### Maintenance
+
+* Publish validated GitHub Releases from version tags, with changelog notes, lean ZIP and tar.gz archives, and SHA-256 checksums ([564867](https://github.com/marcocesarato/php-conventional-changelog/commit/564867ee4400ba6b837e034af54004c95baa6154))
+* Verify distribution archive contents with regression tests ([ff5291](https://github.com/marcocesarato/php-conventional-changelog/commit/ff5291becb93f10d5a4213ccbf1aef7697d73af0))
+
+
+---
+
 ## [1.19.0](https://github.com/marcocesarato/php-conventional-changelog/compare/v1.18.2...v1.19.0) (2026-09-06)
 
 ### Features
