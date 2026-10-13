@@ -68,7 +68,8 @@ class ConventionalCommit extends Commit
      */
     public function isValid(): bool
     {
-        return (bool)preg_match(self::PATTERN_HEADER, $this->raw);
+        // Only the subject line is the header; a body line such as "Note: ..." must not count.
+        return (bool)preg_match(self::PATTERN_HEADER, (string)($this->subject ?? ''));
     }
 
     public function getType(): Type
