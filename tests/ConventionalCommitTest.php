@@ -23,4 +23,11 @@ class ConventionalCommitTest extends TestCase
         $this->assertFalse((new ConventionalCommit("Update readme\n\nNote: this is not conventional"))->isValid());
         $this->assertFalse((new ConventionalCommit("Merge branch 'x'\n\nfix: something in the body"))->isValid());
     }
+
+    /** @test */
+    public function testIsValidFollowsSetRaw(): void
+    {
+        $this->assertTrue((new ConventionalCommit())->setRaw('feat: added')->isValid());
+        $this->assertFalse((new ConventionalCommit('feat: added'))->setRaw('not conventional')->isValid());
+    }
 }
