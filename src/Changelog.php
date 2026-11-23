@@ -93,6 +93,7 @@ class Changelog
         $autoCommitAll = $input->getOption('commit-all'); // Commit all changes once changelog is generated
         $autoTag = !($input->getOption('no-tag') || $this->config->skipTag()); // Tag release once is committed
         $noChangeWithoutCommits = $input->getOption('no-change-without-commits');
+        $noEmptyReleases = $input->getOption('no-empty-releases');
         $annotateTag = $input->getOption('annotate-tag');
         $signTag = $input->getOption('sign-tag');
         $amend = $input->getOption('amend'); // Amend commit
@@ -326,6 +327,7 @@ class Changelog
                 'date' => $today->format($dateFormat),
                 'options' => $additionalParams,
                 'autoBump' => $autoBump,
+                'skipIfEmpty' => (bool) $noEmptyReleases,
             ];
         }
 
@@ -334,7 +336,12 @@ class Changelog
             $summary[$type] = 0;
         }
 
+        // total count of commits that resulted in a changelog record (breaking, feat, fix)
+        $totalSensibleCommitsCount = 0;
+        
         foreach ($options as $params) {
+            // $options is a list of versions to process (version => params hashmap) 
+            
             $commitsRaw = Repository::getCommits($params['options']);
             usort($commitsRaw, function ($x, $y) use ($sortBy, $sortOrientation) {
                 if (property_exists($x, $sortBy)) {
@@ -414,8 +421,11 @@ class Changelog
                     $releaseSummary[$type]++;
                 }
             }
-
-            if (!empty($params['skipIfEmpty']) && array_sum($releaseSummary) === 0) {
+            
+            $versionSensibleCommitsCount = array_sum($releaseSummary);
+            $totalSensibleCommitsCount += $versionSensibleCommitsCount;
+            
+            if (!empty($params['skipIfEmpty']) && !$versionSensibleCommitsCount) {
                 continue;
             }
             if (!empty($params['currentRelease'])) {
@@ -468,6 +478,7 @@ class Changelog
             // Add all changes list to new changelog
             $changelogNew .= $this->getMarkdownChanges($changes);
         }
+        
         $filesToCommit = [$file];
         if ($history && !$hasCurrentRelease) {
             $autoCommit = false;
@@ -476,6 +487,12 @@ class Changelog
         if (isset($commits) && !count($commits) && $noChangeWithoutCommits) {
             $output->warning('No commits since last version.');
 
+            return 0; // Command::SUCCESS;
+        }
+        
+        if ($noEmptyReleases && !$totalSensibleCommitsCount) {
+            $output->warning('No sensible commits since last version.');
+            
             return 0; // Command::SUCCESS;
         }
 

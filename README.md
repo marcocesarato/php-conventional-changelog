@@ -360,6 +360,7 @@ Options:
       --no-verify                    Bypasses the pre-commit and commit-msg hooks
       --no-tag                       Disable release auto tagging
       --no-change-without-commits    Do not apply change if no commits
+      --no-empty-releases            Do not apply change if it will result in empty release notes (no sensible commits)
       --annotate-tag[=ANNOTATE-TAG]  Make an unsigned, annotated tag object once changelog is generated [default: false]
       --sign-tag                     Make a GPG-signed tag object once changelog is generated
       --merged                       Only include commits whose tips are reachable from HEAD
