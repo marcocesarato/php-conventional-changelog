@@ -422,7 +422,7 @@ class Changelog
                 }
             }
             
-            $versionSensibleCommitsCount = array_sum($releaseSummary);
+            $versionSensibleCommitsCount = (int) array_sum($releaseSummary);
             $totalSensibleCommitsCount += $versionSensibleCommitsCount;
             
             if (!empty($params['skipIfEmpty']) && !$versionSensibleCommitsCount) {
